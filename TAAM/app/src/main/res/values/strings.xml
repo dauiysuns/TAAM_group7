@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TAAM</string>
+    <string name="detail">Detail</string>
+    <string name="for_item">For item:</string>
+    <string name="generate_report_by">Generate Report By</string>
+    <string name="generate">Generate</string>
 </resources>
