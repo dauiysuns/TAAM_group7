@@ -1,13 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.example.taam"
+    namespace = "com.b07group7.taam"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.taam"
+        applicationId = "com.b07group7.taam"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -40,4 +41,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-analytics")
 }
