@@ -1,5 +1,7 @@
 package com.example.taam;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -7,6 +9,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 class FirebaseModel {
     private FirebaseDatabase db;
@@ -16,14 +21,15 @@ class FirebaseModel {
                 .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/");
     }
 
-    protected void getValue(TaamItem item, String key) {
+    private CompletableFuture<String> getValue(String path) {
+        CompletableFuture<String> future = new CompletableFuture<>();
 
-        db.getReference("items/" + item.lotNumber + "/" + key)
+        db.getReference(path)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String data = snapshot.getValue(String.class);
-                        //process data
+                        Boolean completed = future.complete(data);
                     }
 
                     @Override
@@ -31,7 +37,22 @@ class FirebaseModel {
                         throw new RuntimeException(error.getMessage());
                     }
                 });
+        return future;
+    }
 
+    public void displayValue(String path){
+        getValue(path).thenAccept(data -> {
+            if (data != null) {
+                // TODO:Process the data
+                Log.v("main activity", data);
+                } else {
+                Log.v("main activity", "no data");
+            }
+        });
+    }
+
+    public void setValue(String path, String value) {
+        db.getReference().child(path).setValue(value);
     }
 
     private FirebaseDatabase firebaseSchema() {
