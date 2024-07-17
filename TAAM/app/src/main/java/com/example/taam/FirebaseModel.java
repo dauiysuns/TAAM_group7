@@ -18,7 +18,7 @@ class FirebaseModel {
 
     protected void getValue(TaamItem item, String key) {
 
-        db.getReference("item/123/category")
+        db.getReference("items/" + item.lotNumber + "/" + key)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

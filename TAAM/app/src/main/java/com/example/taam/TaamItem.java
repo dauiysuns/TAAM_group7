@@ -8,7 +8,7 @@ public class TaamItem {
     String description;
     //missing field for file
 
-    public TaamItem() {
-
+    public TaamItem(int lotNumber) {
+        this.lotNumber = lotNumber;
     }
 }
