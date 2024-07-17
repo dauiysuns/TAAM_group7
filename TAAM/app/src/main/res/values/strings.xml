@@ -8,4 +8,10 @@
     <string name="collection_management">Collection Management</string>
     <string name="report">Report</string>
     <string name="add">Add</string>
+    <string name="lot">Lot#: </string>
+    <string name="name">Name: </string>
+    <string name="category">Category: </string>
+    <string name="period">Period: </string>
+    <string name="description">Description: </string>
+    <string name="pictureOrVideo">Picture/Video: </string>
 </resources>

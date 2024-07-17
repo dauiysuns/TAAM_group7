@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,15 +36,19 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        if (savedInstanceState == null) {
+            loadFragment(new MainScreenFragment());
+        }
     }
 
     protected FirebaseDatabase firebaseSetup() {
-        db = FirebaseDatabase.getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/");
+        db = FirebaseDatabase.getInstance("https://taam-application-default-rtdb.firebaseio.com/");
 
 
         DatabaseReference ref = db.getReference("items/lotNumber (integer)");
         //uncomment to see database schema
-        /* db.getReference().removeValue();
+        db.getReference().removeValue();
         ref.child("name").setValue("string");
         ref.child("category").setValue("string");
         ref.child("period").setValue("string");
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         ref = db.getReference("period");
         ref.child("period (string)/lotNumber").setValue("null");
-        */
+
         return db;
     }
 
@@ -85,5 +91,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         return value;
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            getSupportFragmentManager().popBackStack(); // reverses last fragment change
+        } else {
+            super.onBackPressed(); // takes user back to home screen
+        }
     }
 }

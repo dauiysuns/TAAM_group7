@@ -15,11 +15,11 @@
         app:layout_constraintEnd_toStartOf="@+id/buttonBack"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/buttonView"
-        app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_container"
         app:layout_constraintVertical_bias="0.5" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
+        android:id="@+id/recycler_view_container"
         android:layout_width="356dp"
         android:layout_height="538dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonSearch"
@@ -63,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/buttonSearch"
-        app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_container"
         app:layout_constraintVertical_bias="0.5" />
 
     <Button
@@ -75,7 +75,7 @@
         app:layout_constraintEnd_toStartOf="@+id/buttonSearch"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_container"
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
