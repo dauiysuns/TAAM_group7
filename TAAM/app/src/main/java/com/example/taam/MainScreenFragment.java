@@ -42,7 +42,6 @@ public class MainScreenFragment extends Fragment {
             }
         });
 
-        loadRecyclerView(new RecyclerViewFragment());
         return view;
     }
 
@@ -50,12 +49,6 @@ public class MainScreenFragment extends Fragment {
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    private void loadRecyclerView(RecyclerViewFragment fragment){
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.recycler_view_container, fragment);
         transaction.commit();
     }
 }
