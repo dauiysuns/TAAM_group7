@@ -2,6 +2,13 @@
     <string name="app_name">TAAM</string>
     <string name="detail">Detail</string>
     <string name="for_item">For item:</string>
-    <string name="generate_report_by">Generate Report By</string>
+    <string name="generate_report_by">Generate by:</string>
     <string name="generate">Generate</string>
+    <string name="generate_report">Generate Report</string>
+
+    <string-array name="categories_array">
+        <item>Category</item>
+        <item>Period</item>
+    </string-array>
+
 </resources>
