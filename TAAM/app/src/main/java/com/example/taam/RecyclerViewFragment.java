@@ -41,19 +41,13 @@ public class RecyclerViewFragment extends Fragment {
 
         itemList = new ArrayList<>();
 
-        //db = FirebaseDatabase.getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/");
-        //fetchItemsFromDatabase();
-        loadStaticItems();
+        //FirebaseModel db = new FirebaseModel();
+        db = FirebaseDatabase.getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/");
+        fetchItemsFromDatabase();
 
         itemAdapter = new ItemAdapter(itemList);
         recyclerView.setAdapter(itemAdapter);
         return view;
-    }
-
-    private void loadStaticItems() {
-        // Load static items from strings.xml or hardcoded values
-        itemList.add(new TaamItem(123, "name1", "category1", "period1", "Static Description 1"));
-        itemList.add(new TaamItem(456, "name2", "category2", "period2", "Static Description 2"));
     }
 
     private void fetchItemsFromDatabase() {

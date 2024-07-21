@@ -47,7 +47,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewLot= itemView.findViewById(R.id.textViewLot);
+            textViewLot = itemView.findViewById(R.id.textViewLot);
             textViewName = itemView.findViewById(R.id.textViewName);
             textViewCategory = itemView.findViewById(R.id.textViewCategory);
             textViewPeriod = itemView.findViewById(R.id.textViewPeriod);
