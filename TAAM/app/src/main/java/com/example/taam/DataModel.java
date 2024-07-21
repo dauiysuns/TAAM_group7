@@ -26,11 +26,59 @@ public class DataModel {
         this.view = view;
     }
 
-    public void fetchData(DatabaseReference reference) {
+    public interface DataListener {
+        void onDataChange(DataSnapshot snapshot);
+        void onError(DatabaseError error);
+    }
+
+    public void fetchData(DatabaseReference reference, DataListener listener) {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<TaamItem> items = new ArrayList<>();
+                if (listener != null) {
+                    listener.onDataChange(snapshot);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener != null) {
+                    listener.onError(error);
+                }
+            }
+        });
+    }
+
+    public void displayItem(String lotNumber){
+        fetchData(ref.child("items/" + lotNumber).getRef(), new DataListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                TaamItem item = new TaamItem();
+                item.setLot(snapshot.getKey());
+                Field[] fields = item.getClass().getFields();
+                for (Field field : fields) {
+                    try {
+                        field.set(item, snapshot.child(field.getName()).getValue());
+                    } catch (IllegalAccessException e) {
+                        Log.v("error", Objects.requireNonNull(e.getMessage()));
+                    }
+                }
+                view.updateView(item);
+
+            }
+
+            @Override
+            public void onError(@NonNull DatabaseError error) {
+                view.showError(error.getMessage());
+            }
+        });
+    }
+
+    public void displayAllItems(){
+        fetchData(ref.child("items").getRef(), new DataListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     TaamItem item = new TaamItem();
                     item.setLot(dataSnapshot.getKey());
@@ -42,24 +90,14 @@ public class DataModel {
                             Log.v("error", Objects.requireNonNull(e.getMessage()));
                         }
                     }
-                    items.add(item);
+                    view.updateView(item);
                 }
-
-                view.updateView(items);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onError(@NonNull DatabaseError error) {
                 view.showError(error.getMessage());
             }
         });
-    }
-
-    public void displayItem(){
-        fetchData(ref.child("items").getRef());
-    }
-
-    public void displayAllItems(){
-
     }
 }

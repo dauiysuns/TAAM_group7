@@ -27,14 +27,16 @@ implements DataView
         });
 
         DataModel model = new DataModel(this);
-        model.displayItem();
+        model.displayItem("123");
+        Log.v("main activity", "all items");
+        model.displayAllItems();
 
     }
 
     @Override
-    public void updateView(ArrayList<TaamItem> items) {
-        Log.v("main activity", "name: " + items.get(0).name);
-        Log.v("main activity", "category: " + items.get(0).category);
+    public void updateView(TaamItem item) {
+        Log.v("main activity", "name: " + item.name);
+        Log.v("main activity", "category: " + item.category);
     }
 
     public void showError(String error) {
