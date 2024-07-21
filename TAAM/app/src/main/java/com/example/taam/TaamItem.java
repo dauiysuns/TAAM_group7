@@ -1,15 +1,15 @@
 package com.example.taam;
 
 public class TaamItem {
-    int lotNumber;
-    String name;
-    String category;
-    String period;
-    String description;
+    private String lotNumber;
+    public String name;
+    public String category;
+    public String period;
+    public String description;
     //missing field for file
 
     public TaamItem(
-            int lotNumber,
+            String lotNumber,
             String name,
             String category,
             String period,
@@ -21,11 +21,19 @@ public class TaamItem {
         this.description = description;
     }
 
-    public TaamItem(int lotNumber) {
+    public TaamItem(String lotNumber) {
         this.lotNumber = lotNumber;
     }
 
-    private TaamItem() {
+    public TaamItem() {
 
+    }
+
+    public void setLot(String lotNumber) {
+        this.lotNumber = lotNumber;
+    }
+
+    public String getLot() {
+        return this.lotNumber;
     }
 }
