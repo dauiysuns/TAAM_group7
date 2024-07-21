@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class DataModel {
@@ -29,17 +30,22 @@ public class DataModel {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                TaamItem item = new TaamItem();
-                item.setLot(snapshot.getKey());
-                Field[] fields = item.getClass().getFields();
-                for (Field field : fields) {
-                    try {
-                        field.set(item, snapshot.child(field.getName()).getValue());
-                    } catch (IllegalAccessException e) {
-                        Log.v("error", Objects.requireNonNull(e.getMessage()));
+                ArrayList<TaamItem> items = new ArrayList<>();
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    TaamItem item = new TaamItem();
+                    item.setLot(dataSnapshot.getKey());
+                    Field[] fields = item.getClass().getFields();
+                    for (Field field : fields) {
+                        try {
+                            field.set(item, dataSnapshot.child(field.getName()).getValue());
+                        } catch (IllegalAccessException e) {
+                            Log.v("error", Objects.requireNonNull(e.getMessage()));
+                        }
                     }
+                    items.add(item);
                 }
-                view.updateView(item);
+
+                view.updateView(items);
             }
 
             @Override
@@ -49,7 +55,11 @@ public class DataModel {
         });
     }
 
-    public void displayItem(String lotNumber){
-        fetchData(ref.child("items").child(lotNumber).getRef());
+    public void displayItem(){
+        fetchData(ref.child("items").getRef());
+    }
+
+    public void displayAllItems(){
+
     }
 }

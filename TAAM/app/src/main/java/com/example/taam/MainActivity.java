@@ -9,8 +9,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
-//implements DataView
+implements DataView
 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,21 +26,18 @@ public class MainActivity extends AppCompatActivity
             return insets;
         });
 
-        /*DataModel model = new DataModel(this);
-        model.displayItem("123");
+        DataModel model = new DataModel(this);
+        model.displayItem();
 
-         */
     }
 
-    /*@Override
-    public void updateView(TaamItem item) {
-        Log.v("main activity", "name" + item.name);
-        Log.v("main activity", "category" + item.category);
+    @Override
+    public void updateView(ArrayList<TaamItem> items) {
+        Log.v("main activity", "name: " + items.get(0).name);
+        Log.v("main activity", "category: " + items.get(0).category);
     }
 
     public void showError(String error) {
         Log.v("main activity", error);
     }
-
-     */
 }
