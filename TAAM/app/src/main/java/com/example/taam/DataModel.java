@@ -97,4 +97,15 @@ public class DataModel {
             }
         });
     }
+
+    public void addItemToDatabase(Item item) {
+        Field[] fields = item.getClass().getFields();
+        for (Field field: fields) {
+            try {
+                ref.child("items").child(item.getLot()).setValue(field.get(String.class));
+            } catch (IllegalAccessException e) {
+                Log.v("error", "null value in item");
+            }
+        }
+    }
 }
