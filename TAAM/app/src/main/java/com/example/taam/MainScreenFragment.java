@@ -5,14 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.List;
+
 
 public class MainScreenFragment extends Fragment {
+    private RecyclerViewFragment recyclerView = new RecyclerViewFragment();
+    private List<TaamItem> itemList = recyclerView.itemList;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,7 +37,7 @@ public class MainScreenFragment extends Fragment {
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  loadFragment(new ViewItemFragment());
+                checkOneBoxSelected();
             }
         });
 
@@ -42,7 +48,7 @@ public class MainScreenFragment extends Fragment {
             }
         });
 
-        loadRecyclerViewFragment(new RecyclerViewFragment());
+        loadRecyclerViewFragment(recyclerView);
         return view;
     }
 
@@ -57,5 +63,27 @@ public class MainScreenFragment extends Fragment {
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
         transaction.replace(R.id.recycler_view_container, fragment);
         transaction.commit();
+    }
+
+    private void checkOneBoxSelected(){
+        int count = 0;
+        TaamItem selected = null;
+        for(TaamItem item : itemList){
+            if(item.isSelected()){
+                count++;
+                selected = item;
+            }
+            if(count > 1){
+                Toast.makeText(getContext(), "More than 1 check box is selected.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        if(count == 1){
+            loadFragment(new ViewFragment(selected.getLotNumber()));
+        }
+        else{
+            Toast.makeText(getContext(), "No check boxes are selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 }

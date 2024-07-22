@@ -26,11 +26,14 @@ import java.util.List;
 public class RecyclerViewFragment extends Fragment {
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
-    private List<TaamItem> itemList;
-
+     List<TaamItem> itemList;
     private FirebaseDatabase db;
+    private DataModel dm;
     private DatabaseReference itemsRef;
 
+    public RecyclerViewFragment(){
+        itemList = new ArrayList<>();
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,13 +43,15 @@ public class RecyclerViewFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         itemList = new ArrayList<>();
-
-        //FirebaseModel db = new FirebaseModel();
-        db = FirebaseDatabase.getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/");
-        fetchItemsFromDatabase();
-
         itemAdapter = new ItemAdapter(itemList);
         recyclerView.setAdapter(itemAdapter);
+
+        dm = new DataModel();
+        dm.displayAllItems(itemList, itemAdapter);
+//        db = FirebaseDatabase
+//                .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/");
+//        fetchItemsFromDatabase();
+
         return view;
     }
 

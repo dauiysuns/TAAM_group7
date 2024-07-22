@@ -1,33 +1,33 @@
 package com.example.taam;
 
-import android.net.Uri;
-
 public class TaamItem {
-    private int lotNumber;
+    private String lotNumber;
     private String name;
     private String category;
     private String period;
     private String description;
     //missing field for file
+    private boolean isSelected;
 
     public TaamItem(){
 
     }
-    public TaamItem(int lotNumber, String name, String category, String period, String description) {
+    public TaamItem(String lotNumber, String name, String category, String period, String description) {
         this.lotNumber = lotNumber;
         this.name = name;
         this.category = category;
         this.period = period;
         this.description = description;
        // image
+        this.isSelected = false;
     }
 
     // Getters and setters
-    public int getLotNumber() {
+    public String getLotNumber() {
         return lotNumber;
     }
 
-    public void setLotNumber(int lotNumber) {
+    public void setLotNumber(String lotNumber) {
         this.lotNumber = lotNumber;
     }
 
@@ -61,5 +61,13 @@ public class TaamItem {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected){
+        this.isSelected = selected;
     }
 }

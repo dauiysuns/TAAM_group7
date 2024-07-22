@@ -75,12 +75,13 @@
 
     <TextView
         android:id="@+id/textViewDescription"
-        android:layout_width="244dp"
-        android:layout_height="145dp"
-        android:layout_marginTop="23dp"
-        android:text="some info..."
-        app:layout_constraintStart_toEndOf="@+id/textViewDescriptionLabel"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPeriod" />
+        android:layout_width="287dp"
+        android:layout_height="148dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="8dp"
+        android:text="shortened info to display..."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDescriptionLabel" />
 
     <TextView
         android:id="@+id/textViewPeriodLabel"
@@ -106,10 +107,10 @@
         android:id="@+id/imageViewPicOrVid"
         android:layout_width="161dp"
         android:layout_height="140dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="18dp"
-        app:layout_constraintStart_toEndOf="@+id/textViewPictureOrVideoLabel"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPictureOrVideoLabel"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
