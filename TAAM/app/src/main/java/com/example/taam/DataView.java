@@ -1,7 +1,5 @@
 package com.example.taam;
 
-import java.util.ArrayList;
-
 /**
  * Implement when you need to access the database to do some processing
  *
@@ -14,6 +12,6 @@ import java.util.ArrayList;
  * displayAllData will call updateView for all items
  */
 public interface DataView {
-    void updateView(TaamItem item);
+    void updateView(Item item);
     void showError(String errorMessage);
 }

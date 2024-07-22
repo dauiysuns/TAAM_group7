@@ -9,8 +9,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity
 implements DataView
 {
@@ -34,7 +32,7 @@ implements DataView
     }
 
     @Override
-    public void updateView(TaamItem item) {
+    public void updateView(Item item) {
         Log.v("main activity", "name: " + item.name);
         Log.v("main activity", "category: " + item.category);
     }

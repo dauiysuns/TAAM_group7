@@ -8,12 +8,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class DataModel {
@@ -31,7 +28,7 @@ public class DataModel {
         void onError(DatabaseError error);
     }
 
-    public void fetchData(DatabaseReference reference, DataListener listener) {
+    private void fetchData(DatabaseReference reference, DataListener listener) {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -54,7 +51,7 @@ public class DataModel {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                TaamItem item = new TaamItem();
+                Item item = new Item();
                 item.setLot(snapshot.getKey());
                 Field[] fields = item.getClass().getFields();
                 for (Field field : fields) {
@@ -80,7 +77,7 @@ public class DataModel {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                    TaamItem item = new TaamItem();
+                    Item item = new Item();
                     item.setLot(dataSnapshot.getKey());
                     Field[] fields = item.getClass().getFields();
                     for (Field field : fields) {

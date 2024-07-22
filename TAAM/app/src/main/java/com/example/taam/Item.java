@@ -1,14 +1,17 @@
 package com.example.taam;
 
-public class TaamItem {
+import android.util.Log;
+
+public class Item {
     private String lotNumber;
     public String name;
     public String category;
     public String period;
     public String description;
     //missing field for file
+    private Boolean isSelected;
 
-    public TaamItem(
+    public Item(
             String lotNumber,
             String name,
             String category,
@@ -21,16 +24,20 @@ public class TaamItem {
         this.description = description;
     }
 
-    public TaamItem(String lotNumber) {
+    public Item(String lotNumber) {
         this.lotNumber = lotNumber;
     }
 
-    public TaamItem() {
+    public Item() {
 
     }
 
     public void setLot(String lotNumber) {
-        this.lotNumber = lotNumber;
+        if (this.lotNumber == null) {
+            this.lotNumber = lotNumber;
+        } else {
+            Log.v("error", "cannot change an initialized lot number");
+        }
     }
 
     public String getLot() {
