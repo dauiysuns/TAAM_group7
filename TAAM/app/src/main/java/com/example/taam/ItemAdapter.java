@@ -35,14 +35,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         holder.textViewLot.setText(item.getLot());
 
         if (holder.isExpanded) {
-//            holder.textViewCategory.setVisibility(View.VISIBLE);
-//            holder.textViewPeriod.setVisibility(View.VISIBLE);
-//            holder.textViewDescription.setVisibility(View.VISIBLE);
             holder.groupExpand.setVisibility(View.VISIBLE);
         } else {
-//            holder.textViewCategory.setVisibility(View.GONE);
-//            holder.textViewPeriod.setVisibility(View.GONE);
-//            holder.textViewDescription.setVisibility(View.GONE);
             holder.groupExpand.setVisibility(View.GONE);
         }
 
@@ -61,8 +55,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         // getting image/video code missing here
 
-        item.setSelected(holder.checkBox.isChecked());
-
+//        item.setSelected(holder.checkBox.isChecked());
+        holder.checkBox.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                item.setSelected(holder.checkBox.isChecked());
+            }
+        });
     }
 
     @Override
@@ -87,12 +86,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
            // imageViewPicOrVid = itemView.findViewById(R.id.imageViewPicOrVid);
             checkBox = itemView.findViewById(R.id.checkBox);
-            checkBox.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view){
 
-                }
-            });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
