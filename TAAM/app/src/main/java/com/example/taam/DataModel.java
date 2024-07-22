@@ -77,11 +77,11 @@ public class DataModel {
         });
     }
 
-    public void displayAllItems(List<TaamItem> itemList, ItemAdapter itemAdapter){
+    public void displayAllItems(){
         fetchData(ref.child("items").getRef(), new DataListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                itemList.clear();
+                //itemList.clear();
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     TaamItem item = new TaamItem();
                     item.setLotNumber(dataSnapshot.getKey());
@@ -93,10 +93,10 @@ public class DataModel {
                             Log.v("error", Objects.requireNonNull(e.getMessage()));
                         }
                     }
-                    //view.updateView(item);
-                    itemList.add(item);
+                    view.updateView(item);
+                    //itemList.add(item);
                 }
-                itemAdapter.notifyDataSetChanged();
+                //itemAdapter.notifyDataSetChanged();
             }
 
             @Override

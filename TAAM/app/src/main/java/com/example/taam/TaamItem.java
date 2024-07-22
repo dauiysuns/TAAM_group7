@@ -2,10 +2,10 @@ package com.example.taam;
 
 public class TaamItem {
     private String lotNumber;
-    private String name;
-    private String category;
-    private String period;
-    private String description;
+    public String name;
+    public String category;
+    public String period;
+    public String description;
     //missing field for file
     private boolean isSelected;
 

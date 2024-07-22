@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewFragment extends Fragment {
+public class RecyclerViewFragment extends Fragment implements DataView{
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
      List<TaamItem> itemList;
@@ -46,8 +46,8 @@ public class RecyclerViewFragment extends Fragment {
         itemAdapter = new ItemAdapter(itemList);
         recyclerView.setAdapter(itemAdapter);
 
-        dm = new DataModel();
-        dm.displayAllItems(itemList, itemAdapter);
+        dm = new DataModel(this);
+        dm.displayAllItems();
 //        db = FirebaseDatabase
 //                .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/");
 //        fetchItemsFromDatabase();
@@ -73,5 +73,16 @@ public class RecyclerViewFragment extends Fragment {
                 // Handle possible errors
             }
         });
+    }
+
+    @Override
+    public void updateView(TaamItem item) {
+        itemList.add(item);
+        itemAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+
     }
 }
