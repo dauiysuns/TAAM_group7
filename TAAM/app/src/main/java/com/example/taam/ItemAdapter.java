@@ -4,10 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
-    private List<TaamItem> itemList;
+    private List<Item> itemList;
     private final int maxDescriptionLength = 350;
 
-    public ItemAdapter(List<TaamItem> itemList) {
+    public ItemAdapter(List<Item> itemList) {
         this.itemList = itemList;
     }
 
@@ -31,13 +28,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        TaamItem item = itemList.get(position);
-        holder.textViewLot.setText(item.getLotNumber());
-        holder.textViewName.setText(item.getName());
-        holder.textViewCategory.setText(item.getCategory());
-        holder.textViewPeriod.setText(item.getPeriod());
+        Item item = itemList.get(position);
+        holder.textViewLot.setText(item.getLot());
+        holder.textViewName.setText(item.name);
+        holder.textViewCategory.setText(item.category);
+        holder.textViewPeriod.setText(item.period);
 
-        String itemDescription = item.getDescription();
+        String itemDescription = item.description;
         if(itemDescription.length() > maxDescriptionLength){
             String shortened = itemDescription.substring(0, maxDescriptionLength - 3) + "...";
             holder.textViewDescription.setText(shortened);

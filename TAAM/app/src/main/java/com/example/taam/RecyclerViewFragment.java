@@ -4,9 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +23,7 @@ import java.util.List;
 public class RecyclerViewFragment extends Fragment implements DataView{
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
-     List<TaamItem> itemList;
+     List<Item> itemList;
     private FirebaseDatabase db;
     private DataModel dm;
     private DatabaseReference itemsRef;
@@ -62,7 +59,7 @@ public class RecyclerViewFragment extends Fragment implements DataView{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 itemList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    TaamItem item = snapshot.getValue(TaamItem.class);
+                    Item item = snapshot.getValue(Item.class);
                     itemList.add(item);
                 }
                 itemAdapter.notifyDataSetChanged();
@@ -76,7 +73,7 @@ public class RecyclerViewFragment extends Fragment implements DataView{
     }
 
     @Override
-    public void updateView(TaamItem item) {
+    public void updateView(Item item) {
         itemList.add(item);
         itemAdapter.notifyDataSetChanged();
     }

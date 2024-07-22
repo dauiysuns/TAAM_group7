@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MainScreenFragment extends Fragment {
     private RecyclerViewFragment recyclerView = new RecyclerViewFragment();
-    private List<TaamItem> itemList = recyclerView.itemList;
+    private List<Item> itemList = recyclerView.itemList;
 
     @Nullable
     @Override
@@ -67,8 +67,8 @@ public class MainScreenFragment extends Fragment {
 
     private void checkOneBoxSelected(){
         int count = 0;
-        TaamItem selected = null;
-        for(TaamItem item : itemList){
+        Item selected = null;
+        for(Item item : itemList){
             if(item.isSelected()){
                 count++;
                 selected = item;
@@ -79,7 +79,7 @@ public class MainScreenFragment extends Fragment {
             }
         }
         if(count == 1){
-            loadFragment(new ViewFragment(selected.getLotNumber()));
+            loadFragment(new ViewFragment(selected.getLot()));
         }
         else{
             Toast.makeText(getContext(), "No check boxes are selected", Toast.LENGTH_SHORT).show();

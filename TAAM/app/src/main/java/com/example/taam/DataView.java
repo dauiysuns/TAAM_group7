@@ -12,6 +12,6 @@ package com.example.taam;
  * displayAllData will call updateView for all items
  */
 public interface DataView {
-    void updateView(TaamItem item);
+    void updateView(Item item);
     void showError(String errorMessage);
 }
