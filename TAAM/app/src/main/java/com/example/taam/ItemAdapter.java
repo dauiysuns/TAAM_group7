@@ -4,8 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,6 +70,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
            // imageViewPicOrVid = itemView.findViewById(R.id.imageViewPicOrVid);
             checkBox = itemView.findViewById(R.id.checkBox);
+            checkBox.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+
+                }
+            });
         }
     }
 }
