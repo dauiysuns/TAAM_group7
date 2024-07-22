@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
     android:padding="8dp">
 
     <TextView
@@ -132,4 +134,10 @@
         android:text="Period"
         app:layout_constraintStart_toEndOf="@+id/textViewPeriodLabel"
         app:layout_constraintTop_toBottomOf="@+id/textViewCategory" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupExpand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="imageViewPicOrVid,textViewCategoryLabel,textViewCategory,textViewPeriodLabel,textViewDescriptionLabel,textViewDescription,textViewPeriod,textViewPictureOrVideoLabel" />
 </androidx.constraintlayout.widget.ConstraintLayout>

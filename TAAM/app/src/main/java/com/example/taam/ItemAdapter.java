@@ -1,12 +1,15 @@
 package com.example.taam;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -30,6 +33,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Item item = itemList.get(position);
         holder.textViewLot.setText(item.getLot());
+
+        if (holder.isExpanded) {
+//            holder.textViewCategory.setVisibility(View.VISIBLE);
+//            holder.textViewPeriod.setVisibility(View.VISIBLE);
+//            holder.textViewDescription.setVisibility(View.VISIBLE);
+            holder.groupExpand.setVisibility(View.VISIBLE);
+        } else {
+//            holder.textViewCategory.setVisibility(View.GONE);
+//            holder.textViewPeriod.setVisibility(View.GONE);
+//            holder.textViewDescription.setVisibility(View.GONE);
+            holder.groupExpand.setVisibility(View.GONE);
+        }
+
         holder.textViewName.setText(item.name);
         holder.textViewCategory.setText(item.category);
         holder.textViewPeriod.setText(item.period);
@@ -46,6 +62,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         // getting image/video code missing here
 
         item.setSelected(holder.checkBox.isChecked());
+
     }
 
     @Override
@@ -53,13 +70,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         return itemList.size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView textViewLot, textViewName, textViewCategory, textViewPeriod, textViewDescription;
         //ImageView imageViewPicOrVid;
         CheckBox checkBox;
+        boolean isExpanded = false;
+        Group groupExpand;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
+            groupExpand = itemView.findViewById(R.id.groupExpand);
             textViewLot = itemView.findViewById(R.id.textViewLot);
             textViewName = itemView.findViewById(R.id.textViewName);
             textViewCategory = itemView.findViewById(R.id.textViewCategory);
@@ -71,6 +91,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 @Override
                 public void onClick(View view){
 
+                }
+            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isExpanded = !isExpanded;
+                    Log.v("test activity", "clicked" + textViewLot.getText()+isExpanded);
+                    ItemAdapter.this.notifyDataSetChanged();
                 }
             });
         }
