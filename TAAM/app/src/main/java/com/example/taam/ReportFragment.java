@@ -24,7 +24,7 @@ public class ReportFragment extends Fragment {
         spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //loadFragment(new SpinnerFragment());
+                loadFragment(new SpinnerFragment());
             }
         });
 
