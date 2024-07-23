@@ -1,6 +1,8 @@
 package com.example.taam;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -96,4 +98,31 @@ public class DataModel {
             }
         });
     }
+
+    public void removeItem(String lotNumber, Context context) {
+        fetchData(ref.child("items/" + lotNumber).getRef(), new DataListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Item item = snapshot.getValue(Item.class);
+                    if (item != null && item.getLot().equals(lotNumber)) {
+                        snapshot.getRef().removeValue().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(context, "Item removed successfully.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, "Failed to remove item.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onError(@NonNull DatabaseError error) {
+                Log.v("removeItem", error.getMessage());
+            }
+        });
+    }
+
 }

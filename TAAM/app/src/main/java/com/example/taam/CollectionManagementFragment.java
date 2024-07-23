@@ -5,13 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+
 // NOT COMPLETE!!!
 public class CollectionManagementFragment extends Fragment {
+    private RecyclerViewFragment recyclerViewFragment = RecyclerViewFragment.getInstance();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -21,31 +24,33 @@ public class CollectionManagementFragment extends Fragment {
         Button buttonRemove = view.findViewById(R.id.buttonRemove);
         Button buttonBack = view.findViewById(R.id.buttonBack);
 
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //loadFragment(new AddItemFragment());
-            }
-        });
-
-        //buttonRemove.setOnClickListener(v -> loadFragment(new RemoveItemFragment()));
-
+        //buttonAdd.setOnClickListener(v -> loadFragment(new AddItemFragment());
+        buttonRemove.setOnClickListener(v -> checkOneItemSelected());
         buttonBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
-        loadRecyclerViewFragment(new RecyclerViewFragment());
+
+        FragmentLoader.loadRecyclerViewFragment(getParentFragmentManager(), recyclerViewFragment);
 
         return view;
     }
 
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    private void loadRecyclerViewFragment(Fragment fragment) {
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.recycler_view_container, fragment);
-        transaction.commit();
+    private void checkOneItemSelected(){
+        int count = 0;
+        Item selected = null;
+        for(Item item : recyclerViewFragment.itemList){
+            if(item.isSelected()){
+                count += 1;
+                selected = item;
+            }
+            if(count > 1){
+                Toast.makeText(getContext(), "More than 1 item is selected.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        if(count == 1){
+            FragmentLoader.loadFragment(getParentFragmentManager(), new RemoveFragment(selected.getLot()));
+        }
+        else{
+            Toast.makeText(getContext(), "Please first select an item to remove.", Toast.LENGTH_SHORT).show();
+        }
     }
 }

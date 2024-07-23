@@ -4,7 +4,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,12 +59,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         // getting image/video code missing here
 
-        holder.checkBox.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                item.setSelected(holder.checkBox.isChecked());
-            }
-        });
+        holder.checkBox.setOnClickListener(v -> item.setSelected(holder.checkBox.isChecked()));
     }
 
     @Override

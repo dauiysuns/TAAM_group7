@@ -14,4 +14,6 @@
     <string name="period">Period: </string>
     <string name="description">Description: </string>
     <string name="pictureOrVideo">Picture/Video: </string>
+    <string name="yes">YES</string>
+    <string name="cancel">CANCEL</string>
 </resources>

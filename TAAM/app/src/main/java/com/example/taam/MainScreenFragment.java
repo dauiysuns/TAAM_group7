@@ -1,7 +1,6 @@
 package com.example.taam;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +10,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import java.util.List;
-
 
 public class MainScreenFragment extends Fragment {
-    private RecyclerViewFragment recyclerView = new RecyclerViewFragment();
+    private RecyclerViewFragment recyclerViewFragment = RecyclerViewFragment.getInstance();
 
     @Nullable
     @Override
@@ -27,48 +22,21 @@ public class MainScreenFragment extends Fragment {
         Button buttonAdmin = view.findViewById(R.id.buttonAdmin);
         Button buttonView = view.findViewById(R.id.buttonView);
         Button buttonSearch = view.findViewById(R.id.buttonSearch);
-        buttonAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // loadFragment(new AdminFragment());
-            }
-        });
+        //buttonAdmin.setOnClickListener(v -> loadFragment(new AdminFragment());
+        buttonAdmin.setOnClickListener(v -> FragmentLoader.loadFragment(getParentFragmentManager(), new CollectionManagementFragment()));
 
-        buttonView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkOneBoxSelected();
-            }
-        });
+        buttonView.setOnClickListener(v -> checkOneBoxSelected());
 
-        buttonSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // loadFragment(new SearchFragment());
-            }
-        });
+        //buttonSearch.setOnClickListener(v -> loadFragment(new SearchFragment());
 
-        loadRecyclerViewFragment(recyclerView);
+        FragmentLoader.loadRecyclerViewFragment(getParentFragmentManager(), recyclerViewFragment);
         return view;
-    }
-
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    private void loadRecyclerViewFragment(Fragment fragment) {
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.recycler_view_container, fragment);
-        transaction.commit();
     }
 
     private void checkOneBoxSelected(){
         int count = 0;
         Item selected = null;
-        for(Item item : recyclerView.itemList){
+        for(Item item : recyclerViewFragment.itemList){
             if(item.isSelected()){
                 count += 1;
                 selected = item;
@@ -79,7 +47,7 @@ public class MainScreenFragment extends Fragment {
             }
         }
         if(count == 1){
-            loadFragment(new ViewFragment(selected.getLot()));
+            FragmentLoader.loadFragment(getParentFragmentManager(), new ViewFragment(selected.getLot()));
         }
         else{
             Toast.makeText(getContext(), "No check boxes are selected", Toast.LENGTH_SHORT).show();

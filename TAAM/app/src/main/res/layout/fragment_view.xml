@@ -10,6 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageButton
+            android:id="@+id/closeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+        <TextView
+            android:id="@+id/textViewLotLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/lot"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/textViewLot"
             android:layout_width="wrap_content"
@@ -21,44 +37,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewPictureOrVideoLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/pictureOrVideo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
-
-        <ImageView
-            android:id="@+id/imageViewPicOrVid"
-            android:layout_width="199dp"
-            android:layout_height="169dp"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="22dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewPictureOrVideoLabel"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/textViewPeriod"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="43dp"
-            android:layout_marginTop="28dp"
-            android:text="Period"
-            app:layout_constraintStart_toEndOf="@+id/textViewPeriodLabel"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCategory" />
-
-        <TextView
-            android:id="@+id/textViewDescriptionLabel"
+            android:id="@+id/textViewNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
-            android:layout_marginTop="39dp"
-            android:text="@string/description"
+            android:layout_marginTop="19dp"
+            android:text="@string/name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewPeriodLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewLotLabel" />
 
         <TextView
             android:id="@+id/textViewName"
@@ -81,16 +67,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewNameLabel" />
 
         <TextView
-            android:id="@+id/textViewLotLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/lot"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/textViewCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,14 +87,24 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewCategoryLabel" />
 
         <TextView
-            android:id="@+id/textViewNameLabel"
+            android:id="@+id/textViewPeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="28dp"
+            android:text="Period"
+            app:layout_constraintStart_toEndOf="@+id/textViewPeriodLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCategory" />
+
+        <TextView
+            android:id="@+id/textViewDescriptionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
-            android:layout_marginTop="19dp"
-            android:text="@string/name"
+            android:layout_marginTop="39dp"
+            android:text="@string/description"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewLotLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewPeriodLabel" />
 
         <TextView
             android:id="@+id/textViewDescription"
@@ -131,5 +117,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewDescriptionLabel" />
+
+        <TextView
+            android:id="@+id/textViewPictureOrVideoLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/pictureOrVideo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
+
+        <ImageView
+            android:id="@+id/imageViewPicOrVid"
+            android:layout_width="199dp"
+            android:layout_height="169dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="22dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPictureOrVideoLabel"
+            tools:srcCompat="@tools:sample/avatars" />
+
     </LinearLayout>
 </ScrollView>

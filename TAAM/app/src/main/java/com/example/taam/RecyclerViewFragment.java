@@ -12,23 +12,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewFragment extends Fragment implements DataView{
+// Singleton design
+public final class RecyclerViewFragment extends Fragment implements DataView{
+
+    private static RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
+
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     List<Item> itemList;
     private DataModel dm;
 
-    public RecyclerViewFragment(){
+    private RecyclerViewFragment(){
         itemList = new ArrayList<>();
+    }
+
+    public static RecyclerViewFragment getInstance(){
+        return recyclerViewFragment;
     }
 
     @Nullable

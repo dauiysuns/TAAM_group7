@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ public class ViewFragment extends Fragment implements DataView{
     private String selectedLotNumber;
     private TextView textViewLot, textViewName, textViewCategory, textViewPeriod, textViewDescription;
     //private ImageView imageViewPicOrVid;
+    private ImageButton closeButton;
     private DataModel dm;
 
     public ViewFragment(String selectedLotNumber){
@@ -32,6 +34,9 @@ public class ViewFragment extends Fragment implements DataView{
         textViewPeriod = view.findViewById(R.id.textViewPeriod);
         textViewDescription = view.findViewById(R.id.textViewDescription);
         // imageViewPicOrVid = itemView.findViewById(R.id.imageViewPicOrVid);
+
+        closeButton = view.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
         dm = new DataModel(this);
         dm.displayItem(selectedLotNumber);

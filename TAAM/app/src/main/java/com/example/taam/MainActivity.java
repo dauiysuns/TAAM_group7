@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,15 +23,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            loadFragment(new MainScreenFragment());
+            FragmentLoader.loadFragment(getSupportFragmentManager(), new MainScreenFragment());
         }
-    }
-
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null); // allows users to undo fragment changes with back button
-        transaction.commit();
     }
 
     @Override
@@ -41,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack(); // reverses last fragment change
         } else {
-            super.onBackPressed(); // takes user back to home screen
+            super.onBackPressed();
         }
     }
 }
