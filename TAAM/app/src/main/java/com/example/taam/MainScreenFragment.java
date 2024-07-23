@@ -1,6 +1,7 @@
 package com.example.taam;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import java.util.List;
 
 public class MainScreenFragment extends Fragment {
     private RecyclerViewFragment recyclerView = new RecyclerViewFragment();
-    private List<Item> itemList = recyclerView.itemList;
 
     @Nullable
     @Override
@@ -68,9 +68,9 @@ public class MainScreenFragment extends Fragment {
     private void checkOneBoxSelected(){
         int count = 0;
         Item selected = null;
-        for(Item item : itemList){
+        for(Item item : recyclerView.itemList){
             if(item.isSelected()){
-                count++;
+                count += 1;
                 selected = item;
             }
             if(count > 1){
@@ -83,7 +83,6 @@ public class MainScreenFragment extends Fragment {
         }
         else{
             Toast.makeText(getContext(), "No check boxes are selected", Toast.LENGTH_SHORT).show();
-            return;
         }
     }
 }

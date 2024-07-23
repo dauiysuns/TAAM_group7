@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,8 +37,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         if (holder.isExpanded) {
             holder.groupExpand.setVisibility(View.VISIBLE);
+            holder.rollUp.setVisibility(View.VISIBLE);
+            holder.dropDown.setVisibility(View.GONE);
         } else {
             holder.groupExpand.setVisibility(View.GONE);
+            holder.rollUp.setVisibility(View.GONE);
+            holder.dropDown.setVisibility(View.VISIBLE);
         }
 
         holder.textViewName.setText(item.name);
@@ -55,7 +60,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         // getting image/video code missing here
 
-//        item.setSelected(holder.checkBox.isChecked());
         holder.checkBox.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -71,6 +75,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView textViewLot, textViewName, textViewCategory, textViewPeriod, textViewDescription;
+        ImageView dropDown, rollUp;
         //ImageView imageViewPicOrVid;
         CheckBox checkBox;
         boolean isExpanded = false;
@@ -86,6 +91,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
            // imageViewPicOrVid = itemView.findViewById(R.id.imageViewPicOrVid);
             checkBox = itemView.findViewById(R.id.checkBox);
+            dropDown = itemView.findViewById(R.id.dropDown);
+            rollUp = itemView.findViewById(R.id.rollUp);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -1,6 +1,7 @@
 package com.example.taam;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +24,13 @@ import java.util.List;
 public class RecyclerViewFragment extends Fragment implements DataView{
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
-     List<Item> itemList;
-    private FirebaseDatabase db;
+    List<Item> itemList;
     private DataModel dm;
-    private DatabaseReference itemsRef;
 
     public RecyclerViewFragment(){
         itemList = new ArrayList<>();
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,38 +38,13 @@ public class RecyclerViewFragment extends Fragment implements DataView{
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        itemList = new ArrayList<>();
         itemAdapter = new ItemAdapter(itemList);
         recyclerView.setAdapter(itemAdapter);
 
         dm = new DataModel(this);
         dm.displayAllItems();
-//        db = FirebaseDatabase
-//                .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/");
-//        fetchItemsFromDatabase();
 
         return view;
-    }
-
-    private void fetchItemsFromDatabase() {
-        itemsRef = db.getReference("items");
-        itemsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                itemList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Item item = snapshot.getValue(Item.class);
-                    itemList.add(item);
-                }
-                itemAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle possible errors
-            }
-        });
     }
 
     @Override
@@ -80,6 +55,6 @@ public class RecyclerViewFragment extends Fragment implements DataView{
 
     @Override
     public void showError(String errorMessage) {
-
+        Log.v("recyclerView", errorMessage);
     }
 }

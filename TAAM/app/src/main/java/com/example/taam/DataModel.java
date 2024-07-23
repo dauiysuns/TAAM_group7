@@ -22,9 +22,6 @@ public class DataModel {
     public DataModel(DataView view) {
         this.view = view;
     }
-    public DataModel(){
-
-    }
 
     public interface DataListener {
         void onDataChange(DataSnapshot snapshot);
@@ -53,7 +50,6 @@ public class DataModel {
         fetchData(ref.child("items/" + lotNumber).getRef(), new DataListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 Item item = new Item();
                 item.setLot(snapshot.getKey());
                 Field[] fields = item.getClass().getFields();
@@ -65,7 +61,6 @@ public class DataModel {
                     }
                 }
                 view.updateView(item);
-
             }
 
             @Override
@@ -92,9 +87,7 @@ public class DataModel {
                         }
                     }
                     view.updateView(item);
-                    //itemList.add(item);
                 }
-                //itemAdapter.notifyDataSetChanged();
             }
 
             @Override
