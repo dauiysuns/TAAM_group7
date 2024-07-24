@@ -22,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        loadFragment(new ReportFragment());
+
+        if (savedInstanceState == null) {
+            loadFragment(new ReportFragment());
+        }
     }
 
     private void loadFragment(Fragment fragment) {

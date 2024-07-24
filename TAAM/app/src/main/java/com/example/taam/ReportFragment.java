@@ -1,5 +1,6 @@
 package com.example.taam;
 
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ public class ReportFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_report, container, false);
+        Button generate = view.findViewById(R.id.buttonGenerate);
 
         //Spinner spinner = view.findViewById(R.id.spinner4);
 
@@ -36,7 +38,17 @@ public class ReportFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        generate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generatePdf();
+            }
+        });
         return view;
+    }
+
+    public void generatePdf(){
+        PdfDocument doc = new PdfDocument();
     }
 
 //    private void loadFragment(Fragment fragment) {
