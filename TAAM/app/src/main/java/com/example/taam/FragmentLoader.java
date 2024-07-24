@@ -15,11 +15,4 @@ public class FragmentLoader {
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
-    public static void loadRecyclerViewFragment(FragmentManager manager, Fragment fragment) {
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.recycler_view_container, fragment);
-        //transaction.addToBackStack(null);
-        transaction.commit();
-    }
 }
