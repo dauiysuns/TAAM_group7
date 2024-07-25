@@ -103,8 +103,6 @@ public class DataModel {
 
     public void removeItem(Item item) {
         ref.child("items/" + item.getLot()).removeValue();
-        //displayAllItems();
-        //ref.child("items/123/category").setValue("0");
     }
 
     public void addItem(Item item) {
@@ -112,6 +110,7 @@ public class DataModel {
         for (Field field: fields) {
             try {
                 ref.child("items/" + item.getLot() + "/" + field.getName()).setValue(field.get(item));
+                ref.child(field.getName()).child((String) Objects.requireNonNull(field.get(item))).child(item.getLot()).setValue("null");
             } catch (IllegalAccessException e) {
                 Log.v("error", e.getMessage());
             }
