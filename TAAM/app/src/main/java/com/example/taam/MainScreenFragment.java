@@ -32,6 +32,11 @@ public class MainScreenFragment extends Fragment implements DataView{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_main_screen_fragment, container, false);
 
+        // setting up recycler view
+        dm = new DataModel(this);
+        itemList = new ArrayList<>();
+        itemAdapter = new ItemAdapter(itemList);
+
         buttonAdmin = view.findViewById(R.id.buttonAdmin);
         buttonView1 = view.findViewById(R.id.buttonView1);
         buttonSearch1 = view.findViewById(R.id.buttonSearch1);
@@ -54,17 +59,26 @@ public class MainScreenFragment extends Fragment implements DataView{
         //buttonSearch2.setOnClickListener(v -> loadFragment(new SearchFragment());
         buttonBack.setOnClickListener(v -> viewBeforeLogIn());
         //buttonAdd.setOnClickListener(v -> loadFragment(new AddFragment());
-        buttonRemove.setOnClickListener(v -> removeItem());
+        //buttonRemove.setOnClickListener(v -> removeItem(itemList));
+//        buttonRemove.setOnClickListener(v -> FragmentLoader.loadFragment(
+//                getParentFragmentManager(), new RemoveFragment(itemList)));
+        buttonRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RemoveFragment fragment = new RemoveFragment(dm, getContext(), itemAdapter);
+                fragment.RemoveItem();
+            }
+        });
         //buttonReport.setOnClickListener(v -> loadFragment(new ReportFragment());
-
-        // setting up recycler view
-        itemList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        itemAdapter = new ItemAdapter(itemList);
         recyclerView.setAdapter(itemAdapter);
 
-        dm = new DataModel(this);
         dm.displayAllItems();
+
+        Item item = new Item("321", "name", "a", "b", "c");
+        dm.addItem(item);
+        Item item2 = new Item("123", "name", "a", "b", "c");
+        dm.addItem(item2);
 
         viewBeforeLogIn();
 
@@ -117,27 +131,6 @@ public class MainScreenFragment extends Fragment implements DataView{
         }
         else{
             Toast.makeText(getContext(), "Please first select an item to view.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void removeItem(){
-        int count = 0;
-        Item selected = null;
-        for(Item item : itemList){
-            if(item.isSelected()){
-                count += 1;
-                selected = item;
-            }
-            if(count > 1){
-                Toast.makeText(getContext(), "More than 1 item is selected.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-        if(count == 1){
-            FragmentLoader.loadFragment(getParentFragmentManager(), new RemoveFragment(selected.getLot()));
-        }
-        else{
-            Toast.makeText(getContext(), "Please first select an item to remove.", Toast.LENGTH_SHORT).show();
         }
     }
 }

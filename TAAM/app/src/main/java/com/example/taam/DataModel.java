@@ -16,11 +16,12 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 public class DataModel {
-    private final DatabaseReference ref = FirebaseDatabase
+    public DatabaseReference ref = FirebaseDatabase
             .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
             .getReference();
     DataView view;
 
+    public DataModel() {}
     public DataModel(DataView view) {
         this.view = view;
     }
@@ -31,6 +32,7 @@ public class DataModel {
     }
 
     public void fetchData(DatabaseReference reference, DataListener listener) {
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -99,30 +101,47 @@ public class DataModel {
         });
     }
 
-    public void removeItem(String lotNumber, Context context) {
-        fetchData(ref.child("items/" + lotNumber).getRef(), new DataListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Item item = snapshot.getValue(Item.class);
-                    if (item != null && item.getLot().equals(lotNumber)) {
-                        snapshot.getRef().removeValue().addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(context, "Item removed successfully.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(context, "Failed to remove item.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        break;
-                    }
-                }
-            }
+//    public void removeItem(String lotNumber, Context context) {
+//        fetchData(ref.child("items/" + lotNumber).getRef(), new DataListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    Item item = snapshot.getValue(Item.class);
+//                    if (item != null && item.getLot().equals(lotNumber)) {
+//                        snapshot.getRef().removeValue().addOnCompleteListener(task -> {
+//                            if (task.isSuccessful()) {
+//                                Toast.makeText(context, "Item removed successfully.", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                Toast.makeText(context, "Failed to remove item.", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onError(@NonNull DatabaseError error) {
+//                Log.v("removeItem", error.getMessage());
+//            }
+//        });
+//    }
 
-            @Override
-            public void onError(@NonNull DatabaseError error) {
-                Log.v("removeItem", error.getMessage());
+    public void removeItem(Item item) {
+        ref.child("items/" + item.getLot()).removeValue();
+        //displayAllItems();
+        //ref.child("items/123/category").setValue("0");
+    }
+
+    public void addItem(Item item) {
+        Field []fields = item.getClass().getFields();
+        for (Field field: fields) {
+            try {
+                ref.child("items/" + item.getLot() + "/" + field.getName()).setValue(field.get(item));
+            } catch (IllegalAccessException e) {
+                Log.v("error", e.getMessage());
             }
-        });
+        }
     }
 
 }

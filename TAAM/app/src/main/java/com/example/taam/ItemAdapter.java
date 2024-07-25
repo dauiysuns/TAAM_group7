@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
-    private List<Item> itemList;
+    public List<Item> itemList;
     private final int maxDescriptionLength = 350;
 
     public ItemAdapter(List<Item> itemList) {
