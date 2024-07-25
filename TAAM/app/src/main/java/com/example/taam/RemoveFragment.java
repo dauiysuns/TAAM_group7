@@ -57,9 +57,10 @@ public class RemoveFragment {
         builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                removeItem();
-                itemList.clear();
-                itemAdapter.notifyDataSetChanged();
+                if (removeItem()) {
+                    itemList.clear();
+                    itemAdapter.notifyDataSetChanged();
+                }
             }
         });
 
@@ -72,7 +73,7 @@ public class RemoveFragment {
         return builder;
     }
 
-    private void removeItem(){
+    private boolean removeItem(){
         int count = 0;
         ArrayList<Item> selected = new ArrayList<>();
         for(Item item : itemList){
@@ -83,12 +84,13 @@ public class RemoveFragment {
         }
         if (count == 0){
             Toast.makeText(context, "Please first select an item to remove.", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         } else {
             for (Item item: selected) {
                 dm.removeItem(item);
             }
         }
+        return true;
     }
 
 }
