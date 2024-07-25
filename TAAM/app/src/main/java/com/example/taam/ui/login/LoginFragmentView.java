@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.taam.R;
-import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginFragmentView extends Fragment {
     private LoginFragmentPresenter presenter;
