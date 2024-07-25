@@ -4,63 +4,82 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.taam.R;
+import com.google.android.material.textfield.TextInputEditText;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LoginFragmentView#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LoginFragmentView extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private LoginFragmentPresenter presenter;
 
     public LoginFragmentView() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginFragmentView.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LoginFragmentView newInstance(String param1, String param2) {
-        LoginFragmentView fragment = new LoginFragmentView();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        presenter = new LoginFragmentPresenter(this);
     }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(currentUser);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        Button login_button = view.findViewById(R.id.login);
+        EditText emailText = view.findViewById(R.id.emailText);
+        EditText passwordText = view.findViewById(R.id.passwordText);
+
+        login_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = emailText.getText().toString().trim();
+                String password = passwordText.getText().toString();
+                //ask presenter!
+                presenter.tryLogin(email, password);
+            }
+        });
+
+        //FOR SIGNUP BUTTON ?
+//        signup_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                NavHostFragment.findNavController(LoginFragmentView.this)
+//                        .navigate(R.id.action_navigation_login_to_navigation_signup);
+//            }
+//        });
+
+        return view;
+    }
+
+    // These methods are called by Presenter after model looks at the database
+    public void loginSuccessView() {
+        Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
+        // NEW ACTIVITY AFTER A SUCCESSFUL LOGIN!
+//        Intent intent = new Intent(getActivity(), UserLoggedInActivity.class);
+//        startActivity(intent);
+    }
+
+    public void loginFailureView() {
+        Toast.makeText(getActivity(), "Wrong email or password", Toast.LENGTH_SHORT).show();
+        Log.d("failure", "logged in not good");
+    }
+
+    public void invalidInputView() {
+        Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
     }
 }

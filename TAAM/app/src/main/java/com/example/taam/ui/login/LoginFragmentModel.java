@@ -1,49 +1,50 @@
 package com.example.taam.ui.login;
 
-import android.os.Bundle;
-
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
 
-import com.example.taam.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LoginFragmentModel#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class LoginFragmentModel {
+import java.util.Objects;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class LoginFragmentModel extends Fragment{
+    private final FirebaseAuth firebaseAuth;
 
     public LoginFragmentModel() {
-        // Required empty public constructor
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginFragmentModel.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LoginFragmentModel newInstance(String param1, String param2) {
-        LoginFragmentModel fragment = new LoginFragmentModel();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        return fragment;
+    public void modelLoginAttempt(String email, String password, LoginContract.Presenter listener){
+        if (email.isEmpty()) {
+            Log.d("uh oh", "email empty bro");
+        }
+        else if (password.isEmpty()) {
+            Log.d("uh oh", "password empty bro");
+        }
+        else {
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Test", "Success,  in database");
+                            //result to presenter
+                            listener.loginSuccessPresenter();
+                        } else {
+                            Log.d("Test", "Fail, not in database");
+                            //result to presenter
+                            listener.loginFailurePresenter(Objects.requireNonNull(task.getException()).getMessage());
+                        }
+                    }
+                });
+        }
+
     }
+
 }

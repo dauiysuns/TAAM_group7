@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">TAAM</string>
+    <!--Login Strings-->
     <string name="login">Log in</string>
+    <string name="password_text">Password:</string>
+    <string name="email_text">Email:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
