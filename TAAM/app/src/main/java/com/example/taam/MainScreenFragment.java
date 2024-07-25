@@ -65,8 +65,8 @@ public class MainScreenFragment extends Fragment implements DataView{
         buttonRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RemoveFragment fragment = new RemoveFragment(dm, getContext(), itemAdapter);
-                fragment.RemoveItem();
+                RemovePopUp popUp = new RemovePopUp(dm, getContext(), itemAdapter);
+                popUp.removeItem();
             }
         });
         //buttonReport.setOnClickListener(v -> loadFragment(new ReportFragment());
