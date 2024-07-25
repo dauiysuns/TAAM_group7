@@ -50,6 +50,13 @@ public class MainScreenFragment extends Fragment implements DataView{
         afterLogIn = view.findViewById(R.id.afterLogIn);
         recyclerView = view.findViewById(R.id.recyclerView);
 
+        buttonReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentLoader.loadFragment(getParentFragmentManager(), new ReportFragment());
+            }
+        });
+
         //buttonAdmin.setOnClickListener(v -> loadFragment(new AdminFragment());
         buttonAdmin.setOnClickListener(v -> logIn());
 
