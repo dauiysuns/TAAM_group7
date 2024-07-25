@@ -1,6 +1,8 @@
 package com.example.taam;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -14,11 +16,12 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 public class DataModel {
-    private final DatabaseReference ref = FirebaseDatabase
+    public DatabaseReference ref = FirebaseDatabase
             .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
             .getReference();
     DataView view;
 
+    public DataModel() {}
     public DataModel(DataView view) {
         this.view = view;
     }
@@ -28,8 +31,9 @@ public class DataModel {
         void onError(DatabaseError error);
     }
 
-    private void fetchData(DatabaseReference reference, DataListener listener) {
-        reference.addValueEventListener(new ValueEventListener() {
+    public void fetchData(DatabaseReference reference, DataListener listener) {
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (listener != null) {
@@ -50,7 +54,6 @@ public class DataModel {
         fetchData(ref.child("items/" + lotNumber).getRef(), new DataListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 Item item = new Item();
                 item.setLot(snapshot.getKey());
                 Field[] fields = item.getClass().getFields();
@@ -62,7 +65,6 @@ public class DataModel {
                     }
                 }
                 view.updateView(item);
-
             }
 
             @Override
@@ -76,6 +78,7 @@ public class DataModel {
         fetchData(ref.child("items").getRef(), new DataListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //itemList.clear();
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     Item item = new Item();
                     item.setLot(dataSnapshot.getKey());
@@ -98,14 +101,20 @@ public class DataModel {
         });
     }
 
-    public void addItemToDatabase(Item item) {
-        Field[] fields = item.getClass().getFields();
+    public void removeItem(Item item) {
+        ref.child("items/" + item.getLot()).removeValue();
+    }
+
+    public void addItem(Item item) {
+        Field []fields = item.getClass().getFields();
         for (Field field: fields) {
             try {
-                ref.child("items").child(item.getLot()).setValue(field.get(String.class));
+                ref.child("items/" + item.getLot() + "/" + field.getName()).setValue(field.get(item));
+                ref.child(field.getName()).child((String) Objects.requireNonNull(field.get(item))).child(item.getLot()).setValue("null");
             } catch (IllegalAccessException e) {
-                Log.v("error", "null value in item");
+                Log.v("error", e.getMessage());
             }
         }
     }
+
 }
