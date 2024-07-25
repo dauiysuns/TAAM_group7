@@ -34,6 +34,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         Item item = itemList.get(position);
         holder.textViewLot.setText(item.getLot());
 
+        holder.checkBox.setChecked(item.isSelected());
+
         if (holder.isExpanded) {
             holder.groupExpand.setVisibility(View.VISIBLE);
             holder.rollUp.setVisibility(View.VISIBLE);

@@ -87,9 +87,6 @@ public class RemoveFragment {
         } else {
             for (Item item: selected) {
                 dm.removeItem(item);
-                item.setSelected(false);
-//                itemList.remove(item);
-//                itemAdapter.notifyDataSetChanged();
             }
         }
     }
