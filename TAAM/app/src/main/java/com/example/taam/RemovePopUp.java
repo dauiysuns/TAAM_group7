@@ -39,6 +39,7 @@ public class RemovePopUp {
                 }
                 itemList.clear();
                 itemAdapter.notifyDataSetChanged();
+                dm.displayAllItems();
                 Toast.makeText(context, "Item(s) removed successfully.", Toast.LENGTH_SHORT).show();
             }
         });
