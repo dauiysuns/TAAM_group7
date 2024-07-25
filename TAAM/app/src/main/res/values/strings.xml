@@ -1,14 +1,19 @@
 <resources>
     <string name="app_name">TAAM</string>
-    <string name="detail">Detail</string>
-    <string name="for_item">For item:</string>
-    <string name="generate_report_by">Generate by:</string>
-    <string name="generate">Generate</string>
-    <string name="generate_report">Generate Report</string>
-
-    <string-array name="categories_array">
-        <item>Category</item>
-        <item>Period</item>
-    </string-array>
-
+    <string name="admin">Admin</string>
+    <string name="view">View</string>
+    <string name="search">Search</string>
+    <string name="remove">Remove</string>
+    <string name="back">Back</string>
+    <string name="collection_management">Collection Management</string>
+    <string name="report">Report</string>
+    <string name="add">Add</string>
+    <string name="lot">Lot#: </string>
+    <string name="name">Name: </string>
+    <string name="category">Category: </string>
+    <string name="period">Period: </string>
+    <string name="description">Description: </string>
+    <string name="pictureOrVideo">Picture/Video: </string>
+    <string name="yes">YES</string>
+    <string name="cancel">CANCEL</string>
 </resources>
