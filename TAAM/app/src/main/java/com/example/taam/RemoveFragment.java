@@ -60,6 +60,7 @@ public class RemoveFragment {
                 if (removeItem()) {
                     itemList.clear();
                     itemAdapter.notifyDataSetChanged();
+                    dm.displayAllItems();
                 }
             }
         });
