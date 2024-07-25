@@ -1,6 +1,7 @@
 package com.example.taam;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,12 +11,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity
+implements DataView
+{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -23,15 +26,20 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        if (savedInstanceState == null) {
-            loadFragment(new ReportFragment());
-        }
+        DataModel model = new DataModel(this);
+        model.displayItem("123");
+        Log.v("main activity", "all items");
+        model.displayAllItems();
+
     }
 
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null); // allows users to undo fragment changes with back button
-        transaction.commit();
+    @Override
+    public void updateView(Item item) {
+        Log.v("main activity", "name: " + item.name);
+        Log.v("main activity", "category: " + item.category);
+    }
+
+    public void showError(String error) {
+        Log.v("main activity", error);
     }
 }
