@@ -50,4 +50,10 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.itextpdf:itext7-core:7.1.16")
+    implementation("com.itextpdf:kernel:7.1.16")
+    implementation("com.itextpdf:layout:7.1.16")
+    implementation("com.itextpdf:io:7.1.16")
+    implementation("androidx.activity:activity-ktx:1.2.0") // Or later version
+    implementation("androidx.fragment:fragment-ktx:1.3.0") // Or later version
 }

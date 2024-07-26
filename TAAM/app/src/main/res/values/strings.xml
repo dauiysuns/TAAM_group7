@@ -23,4 +23,19 @@
     <string name="pictureOrVideo">Picture/Video: </string>
     <string name="yes">YES</string>
     <string name="cancel">CANCEL</string>
+    <string name="for_item">For item:</string>
+    <string name="detail">detail</string>
+    <string name="generate_report_by">Generate report by:</string>
+    <string name="generate">Generate</string>
+    <string name="generate_report">Generate Report</string>
+    <string name="cancel_not_bold">Cancel</string>
+
+    <string-array name="categories_array">
+        <item>Lot number</item>
+        <item>Name</item>
+        <item>Category</item>
+        <item>Category with Description and Picture only</item>
+        <item>Period</item>
+        <item>Period with Description and Picture only</item>
+    </string-array>
 </resources>
