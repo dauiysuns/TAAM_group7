@@ -1,4 +1,4 @@
-package com.example.taam;
+package com.example.taam.ui.report;
 
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -18,13 +19,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
+import com.example.taam.R;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -38,6 +37,8 @@ import java.util.Objects;
 
 public class ReportFragment extends Fragment {
     private static final int STORAGE_PERMISSION_CODE = 101; // Request code for permission
+    private ArrayAdapter<CharSequence> adapter;
+    private int position;
     private Spinner spinner;
     private String pdfPath;
 
@@ -50,7 +51,7 @@ public class ReportFragment extends Fragment {
         Button generate = view.findViewById(R.id.buttonGenerate);
 
         spinner = view.findViewById(R.id.spinner4);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
+        adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.categories_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -61,7 +62,7 @@ public class ReportFragment extends Fragment {
                 isGranted -> {
                     if (isGranted) {
                         // Permission granted
-                        generatePdf();
+                        generatePdf(new ReportCategory());
                         viewPdf();
                     } else {
                         // Permission denied
@@ -71,13 +72,25 @@ public class ReportFragment extends Fragment {
                 }
         );
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     if (Environment.isExternalStorageManager()) {
                         // Permission granted
-                        generatePdf();
+                        generatePdf(new ReportCategory());
                         viewPdf();
                     } else {
                         Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
@@ -89,7 +102,8 @@ public class ReportFragment extends Fragment {
                         requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                     } else {
                         // Permission already granted
-                        generatePdf();
+
+                        generatePdf(new ReportCategory());
                         viewPdf();
                     }
                 }
@@ -99,8 +113,8 @@ public class ReportFragment extends Fragment {
         return view;
     }
 
-    public void generatePdf() {
-        pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/example.pdf";
+    public void generatePdf(PDFGenerator generator) {
+        pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/TAAMReport.pdf";
         File file = new File(pdfPath);
 
         try {
@@ -108,7 +122,8 @@ public class ReportFragment extends Fragment {
             PdfDocument pdfDoc = new PdfDocument(writer);
             Document document = new Document(pdfDoc);
 
-            document.add(new Paragraph("Hello World!"));
+            generator.generate(document);
+//            document.add(new Paragraph("Hello World!"));
             document.close();
 
             Log.v("Generate Report", "Successful");

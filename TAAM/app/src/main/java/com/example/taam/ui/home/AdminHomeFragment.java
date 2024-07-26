@@ -7,7 +7,9 @@ import android.widget.Toast;
 
 import com.example.taam.database.Item;
 import com.example.taam.R;
+import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.remove.RemoveDialogFragment;
+import com.example.taam.ui.report.ReportFragment;
 
 import java.util.ArrayList;
 
@@ -35,6 +37,12 @@ public class AdminHomeFragment extends BaseHomeFragment {
         buttonBack.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new UserHomeFragment()));
         buttonRemove.setOnClickListener(v -> {
             removeItem();
+        });
+        buttonReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentLoader.loadFragment(getParentFragmentManager(), new ReportFragment());
+            }
         });
         // Add listeners for other buttons if needed
     }
