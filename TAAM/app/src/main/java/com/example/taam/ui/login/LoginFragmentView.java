@@ -1,5 +1,7 @@
 package com.example.taam.ui.login;
 
+import static com.example.taam.FragmentLoader.loadFragment;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +12,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.taam.R;
+import com.example.taam.home.AdminHomeFragment;
 import com.example.taam.ui.signup.SignupFragment;
 
 public class LoginFragmentView extends Fragment {
@@ -40,12 +42,12 @@ public class LoginFragmentView extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        Button login_button = view.findViewById(R.id.signup);
-        Button signup_button = view.findViewById(R.id.go_signup);
-        EditText emailText = view.findViewById(R.id.emailText);
-        EditText passwordText = view.findViewById(R.id.passwordText);
+        Button loginButton = view.findViewById(R.id.signup);
+        Button signupButton = view.findViewById(R.id.go_signup);
+        EditText emailText = view.findViewById(R.id.email_text);
+        EditText passwordText = view.findViewById(R.id.password_text);
 
-        login_button.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = emailText.getText().toString().trim();
@@ -55,15 +57,11 @@ public class LoginFragmentView extends Fragment {
             }
         });
 
-        signup_button.setOnClickListener(new View.OnClickListener() {
+        signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // THIS CAN USE THE FRAGMENT LOADER THING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                SignupFragment signupFragment = new SignupFragment();
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, signupFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                loadFragment(getParentFragmentManager(), new SignupFragment());
             }
         });
 
@@ -73,9 +71,7 @@ public class LoginFragmentView extends Fragment {
     // These methods are called by Presenter after model looks at the database
     public void loginSuccessView() {
         Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
-        // NEW ACTIVITY AFTER A SUCCESSFUL LOGIN!!
-//        Intent intent = new Intent(getActivity(), UserLoggedInActivity.class);
-//        startActivity(intent);
+        loadFragment(getParentFragmentManager(), new AdminHomeFragment());
     }
 
     public void loginFailureView() {

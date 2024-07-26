@@ -1,5 +1,7 @@
 package com.example.taam.ui.signup;
 
+import static com.example.taam.FragmentLoader.loadFragment;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.taam.R;
+import com.example.taam.ui.login.LoginFragmentView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -36,8 +39,8 @@ public class SignupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
 
         Button signup_button = view.findViewById(R.id.signup);
-        emailText = view.findViewById(R.id.emailText);
-        passwordText = view.findViewById(R.id.passwordText);
+        emailText = view.findViewById(R.id.email_text);
+        passwordText = view.findViewById(R.id.password_text);
 
         signup_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +75,7 @@ public class SignupFragment extends Fragment {
                         if (task.isSuccessful()) {
                             // Sign-up successful!
                             Toast.makeText(getActivity(), "Sign-up successful!", Toast.LENGTH_SHORT).show();
+                            loadFragment(getParentFragmentManager(), new LoginFragmentView());
                         } else {
                             // Sign-up failed
                             String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";

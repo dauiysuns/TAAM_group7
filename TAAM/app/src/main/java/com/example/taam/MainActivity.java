@@ -8,6 +8,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.taam.home.UserHomeFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            FragmentLoader.loadDefaultFragment(getSupportFragmentManager(), new MainScreenFragment());
+            FragmentLoader.loadDefaultFragment(getSupportFragmentManager(), new UserHomeFragment());
         }
     }
 
