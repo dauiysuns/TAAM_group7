@@ -118,7 +118,7 @@ public class ReportFragment extends Fragment {
     }
 
     private void viewPdf() {
-`        File file = new File(pdfPath);
+        File file = new File(pdfPath);
         Uri pdfUri = FileProvider.getUriForFile(requireContext(),
                 requireContext().getPackageName() + ".provider", file);
 
