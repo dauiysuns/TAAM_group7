@@ -15,4 +15,12 @@ public class FragmentLoader {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    public static void loadDefaultFragment(FragmentManager manager, Fragment fragment){
+        if (manager.findFragmentById(R.id.fragment_container) == null) {
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.add(R.id.fragment_container, fragment);
+            transaction.commit();
+        }
+    }
 }

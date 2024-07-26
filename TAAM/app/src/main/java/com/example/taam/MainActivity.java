@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            FragmentLoader.loadFragment(getSupportFragmentManager(), new MainScreenFragment());
+            FragmentLoader.loadDefaultFragment(getSupportFragmentManager(), new MainScreenFragment());
         }
     }
 
