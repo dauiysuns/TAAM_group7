@@ -3,9 +3,13 @@ package com.example.taam.home;
 import static com.example.taam.FragmentLoader.loadFragment;
 
 import android.view.View;
+import android.widget.Toast;
 
+import com.example.taam.Item;
 import com.example.taam.R;
 import com.example.taam.RemovePopUp;
+
+import java.util.ArrayList;
 
 public class AdminHomeFragment extends BaseHomeFragment {
 
@@ -30,9 +34,25 @@ public class AdminHomeFragment extends BaseHomeFragment {
         buttonView.setOnClickListener(v -> viewItem());
         buttonBack.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new UserHomeFragment()));
         buttonRemove.setOnClickListener(v -> {
-            RemovePopUp popUp = new RemovePopUp(dm, getContext(), itemAdapter);
-            popUp.removeItem();
+            removeItem();
         });
         // Add listeners for other buttons if needed
+    }
+
+    private void removeItem(){
+        int count = 0;
+        ArrayList<Item> selected = new ArrayList<>();
+        for(Item item : itemList){
+            if(item.isSelected()){
+                count += 1;
+                selected.add(item);
+            }
+        }
+        if (count == 0){
+            Toast.makeText(getContext(), "Please first select an item (or items) to remove.", Toast.LENGTH_SHORT).show();
+        } else {
+            RemovePopUp dialogFragment = new RemovePopUp(selected, this);
+            dialogFragment.show(getParentFragmentManager(), "remove dialog");
+        }
     }
 }

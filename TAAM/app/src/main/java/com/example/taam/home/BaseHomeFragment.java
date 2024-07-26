@@ -29,9 +29,9 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
 
     protected Button buttonView, buttonSearch, buttonBack, buttonAdd, buttonRemove, buttonReport;
     protected RecyclerView recyclerView;
-    protected ItemAdapter itemAdapter;
-    protected List<Item> itemList;
-    protected DataModel dm;
+    public ItemAdapter itemAdapter;
+    public List<Item> itemList;
+    public DataModel dm;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +81,12 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
     @Override
     public void showError(String errorMessage) {
         Log.v("Main Screen", errorMessage);
+    }
+
+    public void reset() {
+        itemList.clear();
+        itemAdapter.notifyDataSetChanged();
+        dm.displayAllItems();
     }
 
     protected void viewItem() {

@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 public class DataModel {
-    public DatabaseReference ref = FirebaseDatabase
+    public static DatabaseReference ref = FirebaseDatabase
             .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
             .getReference();
     DataView view;
@@ -101,11 +101,11 @@ public class DataModel {
         });
     }
 
-    public void removeItem(Item item) {
+    public static void removeItem(Item item) {
         ref.child("items/" + item.getLot()).removeValue();
     }
 
-    public void addItem(Item item) {
+    public static void addItem(Item item) {
         Field []fields = item.getClass().getFields();
         for (Field field: fields) {
             try {
