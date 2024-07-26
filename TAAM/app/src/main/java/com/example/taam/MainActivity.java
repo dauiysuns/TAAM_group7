@@ -1,20 +1,15 @@
 package com.example.taam;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.taam.ui.login.LoginFragmentView;
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity
-implements DataView
-{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,26 +22,17 @@ implements DataView
             return insets;
         });
 
-        DataModel model = new DataModel(this);
-        model.displayItem("123");
-        Log.v("main activity", "all items");
-        model.displayAllItems();
-
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
-            // Add default fragment
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.fragment_container, new LoginFragmentView()); // Default fragment
-            transaction.commit();
+        if (savedInstanceState == null) {
+            FragmentLoader.loadDefaultFragment(getSupportFragmentManager(), new MainScreenFragment());
         }
     }
 
     @Override
-    public void updateView(Item item) {
-        Log.v("main activity", "name: " + item.name);
-        Log.v("main activity", "category: " + item.category);
-    }
-
-    public void showError(String error) {
-        Log.v("main activity", error);
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            getSupportFragmentManager().popBackStack(); // reverses last fragment change
+        } else {
+            super.onBackPressed();
+        }
     }
 }

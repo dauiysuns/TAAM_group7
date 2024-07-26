@@ -9,28 +9,33 @@ public class Item {
     public String period;
     public String description;
     //missing field for file
-    private Boolean isSelected;
+    private boolean isSelected;
 
-    public Item(
-            String lotNumber,
-            String name,
-            String category,
-            String period,
-            String description) {
+    public Item(){
+
+    }
+    public Item(String lotNumber) {
+        this.lotNumber = lotNumber;
+    }
+
+    public Item(String lotNumber, String name, String category, String period, String description) {
         this.lotNumber = lotNumber;
         this.name = name;
         this.category = category;
         this.period = period;
         this.description = description;
+       // image
+        this.isSelected = false;
     }
 
-    public Item(String lotNumber) {
-        this.lotNumber = lotNumber;
+    public boolean isSelected() {
+        return isSelected;
     }
 
-    public Item() {
-
+    public void setSelected(boolean selected){
+        this.isSelected = selected;
     }
+
 
     public void setLot(String lotNumber) {
         if (this.lotNumber == null) {
