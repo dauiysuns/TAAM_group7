@@ -27,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             FragmentLoader.loadDefaultFragment(getSupportFragmentManager(), new UserHomeFragment());
         }
+        DataModel dm = new DataModel();
+
+        Item item = new Item("321", "name", "a", "b", "c");
+        dm.addItem(item);
+        Item item2 = new Item("123", "name", "a", "b", "c");
+        dm.addItem(item2);
     }
 
     @Override

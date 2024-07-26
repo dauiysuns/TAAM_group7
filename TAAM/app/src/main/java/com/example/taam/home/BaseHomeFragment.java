@@ -64,10 +64,6 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         dm.displayAllItems();
 
         // For demo purposes, adding items
-        Item item = new Item("321", "name", "a", "b", "c");
-        dm.addItem(item);
-        Item item2 = new Item("123", "name", "a", "b", "c");
-        dm.addItem(item2);
 
         return view;
     }
