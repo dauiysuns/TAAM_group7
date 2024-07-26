@@ -2,6 +2,7 @@
     <string name="app_name">TAAM</string>
     <!--Login Strings-->
     <string name="login">Login</string>
+    <string name="signup">Sign up</string>
     <string name="password_text">Password</string>
     <string name="email_text">Email</string>
     <!-- TODO: Remove or change this placeholder text -->

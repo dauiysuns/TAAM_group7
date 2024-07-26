@@ -3,6 +3,7 @@ package com.example.taam.ui.login;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.taam.R;
+import com.example.taam.ui.signup.SignupFragment;
 
 public class LoginFragmentView extends Fragment {
     private LoginFragmentPresenter presenter;
@@ -39,7 +41,8 @@ public class LoginFragmentView extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        Button login_button = view.findViewById(R.id.login);
+        Button login_button = view.findViewById(R.id.signup);
+        Button signup_button = view.findViewById(R.id.go_signup);
         EditText emailText = view.findViewById(R.id.emailText);
         EditText passwordText = view.findViewById(R.id.passwordText);
 
@@ -53,14 +56,17 @@ public class LoginFragmentView extends Fragment {
             }
         });
 
-        //FOR SIGNUP BUTTON ?
-//        signup_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavHostFragment.findNavController(LoginFragmentView.this)
-//                        .navigate(R.id.action_navigation_login_to_navigation_signup);
-//            }
-//        });
+        signup_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // THIS CAN USE THE FRAGMENT LOADER THING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                SignupFragment signupFragment = new SignupFragment();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, signupFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
         return view;
     }

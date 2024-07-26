@@ -22,9 +22,11 @@ public class LoginFragmentModel extends Fragment{
 
     public void modelLoginAttempt(String email, String password, LoginContract.Presenter listener){
         if (email.isEmpty()) {
+            listener.emptyEmailPresenter();
             Log.d("uh oh", "email empty bro");
         }
         else if (password.isEmpty()) {
+            listener.emptyPasswordPresenter();
             Log.d("uh oh", "password empty bro");
         }
         else {

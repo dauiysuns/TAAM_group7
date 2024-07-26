@@ -9,7 +9,7 @@
         android:id="@+id/signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login"
+        android:text="@string/signup"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,26 +74,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
-        android:text="@string/login"
+        android:text="@string/signup"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
-
-    <Button
-        android:id="@+id/go_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#5E5A6A"
-        android:text="@string/signup"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup"
-        app:layout_constraintVertical_bias="0.05" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
