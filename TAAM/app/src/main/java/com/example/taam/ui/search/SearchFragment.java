@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.taam.R;
+import com.example.taam.ui.FragmentLoader;
 
 public class SearchFragment extends Fragment {
 
@@ -48,7 +49,8 @@ public class SearchFragment extends Fragment {
                 String name = nameText.getText().toString();
                 String category = categoryText.getText().toString();
                 String period = periodText.getText().toString();
-                loadFragment(new ResultFragment(lotNumber, name, category, period));
+                FragmentLoader.loadFragment(getParentFragmentManager(), new ResultFragment(lotNumber, name, category, period));
+                //loadFragment(new ResultFragment(lotNumber, name, category, period));
             }
         });
 
