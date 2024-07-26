@@ -1,4 +1,4 @@
-package com.example.taam;
+package com.example.taam.ui.view;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class ViewFragment extends Fragment implements DataView{
+import com.example.taam.database.Item;
+import com.example.taam.R;
+import com.example.taam.database.DataModel;
+import com.example.taam.database.DataView;
+
+public class ViewFragment extends Fragment implements DataView {
     private String selectedLotNumber;
     private TextView textViewLot, textViewName, textViewCategory, textViewPeriod, textViewDescription;
     //private ImageView imageViewPicOrVid;

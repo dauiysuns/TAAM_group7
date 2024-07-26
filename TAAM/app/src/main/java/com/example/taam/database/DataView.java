@@ -1,4 +1,4 @@
-package com.example.taam;
+package com.example.taam.database;
 
 /**
  * Implement when you need to access the database to do some processing

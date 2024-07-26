@@ -1,4 +1,4 @@
-package com.example.taam;
+package com.example.taam.database;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.taam.R;
 
 import java.util.List;
 

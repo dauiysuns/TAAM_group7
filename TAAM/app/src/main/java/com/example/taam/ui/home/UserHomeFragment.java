@@ -1,6 +1,6 @@
-package com.example.taam.home;
+package com.example.taam.ui.home;
 
-import static com.example.taam.FragmentLoader.loadFragment;
+import static com.example.taam.ui.FragmentLoader.loadFragment;
 
 import android.view.View;
 import android.widget.Button;

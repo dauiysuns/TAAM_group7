@@ -1,6 +1,6 @@
-package com.example.taam.home;
+package com.example.taam.ui.home;
 
-import static com.example.taam.FragmentLoader.loadFragment;
+import static com.example.taam.ui.FragmentLoader.loadFragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -16,11 +16,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.taam.DataModel;
-import com.example.taam.DataView;
-import com.example.taam.Item;
-import com.example.taam.ItemAdapter;
-import com.example.taam.ViewFragment;
+import com.example.taam.database.DataModel;
+import com.example.taam.database.DataView;
+import com.example.taam.database.Item;
+import com.example.taam.database.ItemAdapter;
+import com.example.taam.ui.view.ViewFragment;
 
 import java.util.ArrayList;
 import java.util.List;

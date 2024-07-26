@@ -1,6 +1,6 @@
 package com.example.taam.ui.signup;
 
-import static com.example.taam.FragmentLoader.loadFragment;
+import static com.example.taam.ui.FragmentLoader.loadFragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;

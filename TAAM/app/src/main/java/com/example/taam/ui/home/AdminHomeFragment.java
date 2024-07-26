@@ -1,13 +1,13 @@
-package com.example.taam.home;
+package com.example.taam.ui.home;
 
-import static com.example.taam.FragmentLoader.loadFragment;
+import static com.example.taam.ui.FragmentLoader.loadFragment;
 
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.taam.Item;
+import com.example.taam.database.Item;
 import com.example.taam.R;
-import com.example.taam.RemovePopUp;
+import com.example.taam.ui.remove.RemoveDialogFragment;
 
 import java.util.ArrayList;
 
@@ -51,7 +51,7 @@ public class AdminHomeFragment extends BaseHomeFragment {
         if (count == 0){
             Toast.makeText(getContext(), "Please first select an item (or items) to remove.", Toast.LENGTH_SHORT).show();
         } else {
-            RemovePopUp dialogFragment = new RemovePopUp(selected, this);
+            RemoveDialogFragment dialogFragment = new RemoveDialogFragment(selected, this);
             dialogFragment.show(getParentFragmentManager(), "remove dialog");
         }
     }

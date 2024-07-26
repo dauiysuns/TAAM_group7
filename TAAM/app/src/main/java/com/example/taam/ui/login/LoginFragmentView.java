@@ -1,6 +1,6 @@
 package com.example.taam.ui.login;
 
-import static com.example.taam.FragmentLoader.loadFragment;
+import static com.example.taam.ui.FragmentLoader.loadFragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.taam.R;
-import com.example.taam.home.AdminHomeFragment;
+import com.example.taam.ui.home.AdminHomeFragment;
 import com.example.taam.ui.signup.SignupFragment;
 
 public class LoginFragmentView extends Fragment {

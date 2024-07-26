@@ -1,8 +1,10 @@
-package com.example.taam;
+package com.example.taam.ui;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.example.taam.R;
 
 public class FragmentLoader {
 

@@ -1,8 +1,7 @@
-package com.example.taam;
+package com.example.taam.ui.remove;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -10,19 +9,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
-import com.example.taam.home.BaseHomeFragment;
+import com.example.taam.database.Item;
+import com.example.taam.database.DataModel;
+import com.example.taam.ui.home.BaseHomeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RemovePopUp extends DialogFragment{
+public class RemoveDialogFragment extends DialogFragment{
     private List<Item> selected;
     private BaseHomeFragment homeFragment;
 
 
-    public RemovePopUp(ArrayList<Item> selected, BaseHomeFragment homeFragment){
+    public RemoveDialogFragment(ArrayList<Item> selected, BaseHomeFragment homeFragment){
         this.selected = selected;
         this.homeFragment = homeFragment;
     }
