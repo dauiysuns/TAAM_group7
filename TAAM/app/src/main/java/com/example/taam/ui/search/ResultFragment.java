@@ -9,13 +9,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.taam.R;
+import com.example.taam.database.DataModel;
+import com.example.taam.database.DataView;
 import com.example.taam.database.Item;
+import com.example.taam.ui.FragmentLoader;
+import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,19 +32,18 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ResultFragment extends Fragment implements ValueEventListener {
+public class ResultFragment extends Fragment implements DataView {
 
     //added by me
     String lotNumber;
     String name;
     String category;
     String period;
-    FirebaseDatabase db;
-    DatabaseReference ref;
-
-    public ResultFragment() {
-        // Required empty public constructor
-    }
+    DataModel dm;
+    ArrayList<Item> lotMatches = new ArrayList<>();
+    ArrayList<Item> nameMatches = new ArrayList<>();
+    ArrayList<Item> categoryMatches = new ArrayList<>();
+    ArrayList<Item> periodMatches = new ArrayList<>();
 
     //added by me
     public ResultFragment(String lotNumber, String name, String category, String period) {
@@ -52,31 +56,63 @@ public class ResultFragment extends Fragment implements ValueEventListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dm = new DataModel(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_result, container, false);
+        Button backButton = view.findViewById(R.id.button3);
 
-        db = FirebaseDatabase.getInstance();
         ArrayList<Item> lotMatches = new ArrayList<>();
         ArrayList<Item> nameMatches = new ArrayList<>();
         ArrayList<Item> categoryMatches = new ArrayList<>();
         ArrayList<Item> periodMatches = new ArrayList<>();
 
-        searchByLot(lotMatches);
-        searchByName(nameMatches);
-        searchByCategory(categoryMatches);
-        searchByPeriod(periodMatches);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentLoader.loadFragment(getParentFragmentManager(), new AdminHomeFragment());
+            }
+        });
+        dm.displayAllItems();
 
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    @Override
+    public void updateView(Item item) {
+        if (item != null && item.period != null && item.period.equalsIgnoreCase(period)) {
+            periodMatches.add(item);
+        }
+        if (item != null && item.category != null && item.category.equalsIgnoreCase(category)) {
+            categoryMatches.add(item);
+        }
+        if (item != null && item.getLot() != null &&  item.getLot().equalsIgnoreCase(lotNumber)) {
+            lotMatches.add(item);
+        }
+        if (item != null && item.name != null && item.name.equalsIgnoreCase(name)) {
+            nameMatches.add(item);
+        }
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+
+    }
+
+    @Override
+    public void onComplete() {
+        //maybe check if item already in array before adding?
         lotMatches.addAll(nameMatches);
         lotMatches.addAll(nameMatches);
         lotMatches.addAll(categoryMatches);
         lotMatches.addAll(periodMatches);
 
         //display results
-        TableLayout table = view.findViewById(R.id.table);
+        TableLayout table = getView().findViewById(R.id.table);
         for (int i = 0; i < lotMatches.size(); i++) {
             TableRow row = new TableRow(getContext());
             row.setLayoutParams(new TableRow.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT));
@@ -98,118 +134,5 @@ public class ResultFragment extends Fragment implements ValueEventListener {
 
             table.addView(row);
         }
-
-        // Inflate the layout for this fragment
-        return view;
-    }
-
-    private void searchByLot(ArrayList<Item> lotMatches) {
-        ref = db.getReference("items/");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boolean found = false;
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Item item = snapshot.getValue(Item.class);
-                    if (item != null && item.getLot() != null &&  item.getLot().equalsIgnoreCase(lotNumber)) {
-                        lotMatches.add(item);
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    Toast.makeText(getContext(), "Lot number not found", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Database error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void searchByName(ArrayList<Item> nameMatches) {
-        ref = db.getReference("name/");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boolean found = false;
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Item item = snapshot.getValue(Item.class);
-                    if (item != null && item.name != null && item.name.equalsIgnoreCase(name)) {
-                        nameMatches.add(item);
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    Toast.makeText(getContext(), "Name not found", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Database error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void searchByCategory(ArrayList<Item> categoryMatches) {
-        ref = db.getReference("category/");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boolean found = false;
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Item item = snapshot.getValue(Item.class);
-                    if (item != null && item.category != null && item.category.equalsIgnoreCase(category)) {
-                        categoryMatches.add(item);
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    Toast.makeText(getContext(), "Category not found", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Database error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void searchByPeriod(ArrayList<Item> periodMatches) {
-        ref = db.getReference("period/");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boolean found = false;
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Item item = snapshot.getValue(Item.class);
-                    if (item != null && item.period != null && item.period.equalsIgnoreCase(period)) {
-                        periodMatches.add(item);
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    Toast.makeText(getContext(), "Period not found", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Database error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    @Override
-    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-    }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError error) {
-
     }
 }
