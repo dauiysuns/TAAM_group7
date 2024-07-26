@@ -1,10 +1,6 @@
 package com.example.taam.ui.login;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.taam.R;
 import com.example.taam.ui.signup.SignupFragment;
@@ -74,7 +73,7 @@ public class LoginFragmentView extends Fragment {
     // These methods are called by Presenter after model looks at the database
     public void loginSuccessView() {
         Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
-        // NEW ACTIVITY AFTER A SUCCESSFUL LOGIN!
+        // NEW ACTIVITY AFTER A SUCCESSFUL LOGIN!!
 //        Intent intent = new Intent(getActivity(), UserLoggedInActivity.class);
 //        startActivity(intent);
     }
