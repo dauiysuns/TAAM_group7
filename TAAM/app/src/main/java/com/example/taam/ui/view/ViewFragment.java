@@ -44,7 +44,7 @@ public class ViewFragment extends Fragment implements DataView {
         closeButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
         dm = new DataModel(this);
-        dm.displayItem(selectedLotNumber);
+        dm.getItemByLot(selectedLotNumber);
 
         return view;
     }

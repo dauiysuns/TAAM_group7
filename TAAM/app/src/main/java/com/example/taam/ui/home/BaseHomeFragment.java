@@ -61,7 +61,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(itemAdapter);
 
-        dm.displayAllItems();
+        dm.getAllItems();
 
         // For demo purposes, adding items
 
@@ -86,7 +86,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
     public void reset() {
         itemList.clear();
         itemAdapter.notifyDataSetChanged();
-        dm.displayAllItems();
+        dm.getAllItems();
     }
 
     protected void viewItem() {
