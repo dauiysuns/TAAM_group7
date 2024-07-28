@@ -1,5 +1,7 @@
 package com.example.taam.ui.report;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -24,15 +26,23 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.example.taam.R;
+import com.example.taam.ui.report.generator.CategoryDescPicReport;
+import com.example.taam.ui.report.generator.CategoryReport;
+import com.example.taam.ui.report.generator.LotNumberReport;
+import com.example.taam.ui.report.generator.NameReport;
+import com.example.taam.ui.report.generator.PDFGenerator;
+import com.example.taam.ui.report.generator.PeriodDescPicReport;
+import com.example.taam.ui.report.generator.PeriodReport;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
+
 import android.Manifest;
 import android.content.Intent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class ReportFragment extends Fragment {
@@ -41,6 +51,14 @@ public class ReportFragment extends Fragment {
     private int position;
     private Spinner spinner;
     private String pdfPath;
+    private HashMap<String, PDFGenerator> generatorHashMap = new HashMap<String, PDFGenerator>() {{
+        put("Category", new CategoryReport());
+        put("Period", new PeriodReport());
+        put("Lot number", new LotNumberReport());
+        put("Name", new NameReport());
+        put("Category with Description and Picture only", new CategoryDescPicReport());
+        put("Period with Description and Picture only", new PeriodDescPicReport());
+    }};
 
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
@@ -62,7 +80,7 @@ public class ReportFragment extends Fragment {
                 isGranted -> {
                     if (isGranted) {
                         // Permission granted
-                        generatePdf(new ReportCategory());
+                        generatePdf();
                         viewPdf();
                     } else {
                         // Permission denied
@@ -76,6 +94,8 @@ public class ReportFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                SharedPreferences sharedPreference = getContext().getSharedPreferences("spinner", Context.MODE_PRIVATE);
+                sharedPreference.edit().putString("selected", parent.getItemAtPosition(position).toString()).apply();
             }
 
             @Override
@@ -90,7 +110,7 @@ public class ReportFragment extends Fragment {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     if (Environment.isExternalStorageManager()) {
                         // Permission granted
-                        generatePdf(new ReportCategory());
+                        generatePdf();
                         viewPdf();
                     } else {
                         Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
@@ -103,7 +123,7 @@ public class ReportFragment extends Fragment {
                     } else {
                         // Permission already granted
 
-                        generatePdf(new ReportCategory());
+                        generatePdf();
                         viewPdf();
                     }
                 }
@@ -113,7 +133,13 @@ public class ReportFragment extends Fragment {
         return view;
     }
 
-    public void generatePdf(PDFGenerator generator) {
+    public void generatePdf() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("spinner", Context.MODE_PRIVATE);
+        String category = sharedPreferences.getString("selected", "error");
+        PDFGenerator generator;
+
+        generator = generatorHashMap.get(category);
+
         pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/TAAMReport.pdf";
         File file = new File(pdfPath);
 
