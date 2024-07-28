@@ -108,4 +108,9 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
             Toast.makeText(getContext(), "Please first select an item to view.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onComplete() {
+
+    }
 }

@@ -14,4 +14,5 @@ package com.example.taam.database;
 public interface DataView {
     void updateView(Item item);
     void showError(String errorMessage);
+    void onComplete();
 }

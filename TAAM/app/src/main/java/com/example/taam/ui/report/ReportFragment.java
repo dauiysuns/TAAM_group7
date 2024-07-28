@@ -26,6 +26,9 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.example.taam.R;
+import com.example.taam.database.DataModel;
+import com.example.taam.database.DataView;
+import com.example.taam.database.Item;
 import com.example.taam.ui.report.generator.CategoryDescPicReport;
 import com.example.taam.ui.report.generator.CategoryReport;
 import com.example.taam.ui.report.generator.LotNumberReport;
@@ -44,8 +47,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
-public class ReportFragment extends Fragment {
+public class ReportFragment extends Fragment implements DataView {
     private static final int STORAGE_PERMISSION_CODE = 101; // Request code for permission
     private ArrayAdapter<CharSequence> adapter;
     private int position;
@@ -59,6 +63,7 @@ public class ReportFragment extends Fragment {
         put("Category with Description and Picture only", new CategoryDescPicReport());
         put("Period with Description and Picture only", new PeriodDescPicReport());
     }};
+    Document document;
 
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
@@ -81,7 +86,7 @@ public class ReportFragment extends Fragment {
                     if (isGranted) {
                         // Permission granted
                         generatePdf();
-                        viewPdf();
+                        //viewPdf();
                     } else {
                         // Permission denied
                         Log.v("Permission", "Storage permission denied");
@@ -111,7 +116,7 @@ public class ReportFragment extends Fragment {
                     if (Environment.isExternalStorageManager()) {
                         // Permission granted
                         generatePdf();
-                        viewPdf();
+                        //viewPdf();
                     } else {
                         Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
                         startActivity(intent);
@@ -124,7 +129,7 @@ public class ReportFragment extends Fragment {
                         // Permission already granted
 
                         generatePdf();
-                        viewPdf();
+                        //viewPdf();
                     }
                 }
             }
@@ -134,11 +139,11 @@ public class ReportFragment extends Fragment {
     }
 
     public void generatePdf() {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("spinner", Context.MODE_PRIVATE);
-        String category = sharedPreferences.getString("selected", "error");
-        PDFGenerator generator;
-
-        generator = generatorHashMap.get(category);
+//        SharedPreferences sharedPreferences = getContext().getSharedPreferences("spinner", Context.MODE_PRIVATE);
+//        String category = sharedPreferences.getString("selected", "error");
+//        PDFGenerator generator;
+//
+//        generator = generatorHashMap.get(category);
 
         pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/TAAMReport.pdf";
         File file = new File(pdfPath);
@@ -147,10 +152,13 @@ public class ReportFragment extends Fragment {
             PdfWriter writer = new PdfWriter(file);
             PdfDocument pdfDoc = new PdfDocument(writer);
             Document document = new Document(pdfDoc);
-
-            generator.generate(document);
+            this.document = document;
+//            generator.generate(document);
 //            document.add(new Paragraph("Hello World!"));
-            document.close();
+            DataModel dm = new DataModel(this);
+            dm.displayAllItems();
+
+//            document.close();
 
             Log.v("Generate Report", "Successful");
         } catch (FileNotFoundException e) {
@@ -170,5 +178,25 @@ public class ReportFragment extends Fragment {
 
         Intent chooser = Intent.createChooser(intent, "Open PDF");
         startActivity(chooser);
+    }
+
+    @Override
+    public void updateView(Item item) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("spinner", Context.MODE_PRIVATE);
+        String category = sharedPreferences.getString("selected", "error");
+        PDFGenerator generator = generatorHashMap.get(category);
+        ((LotNumberReport)generator).generate(document);
+        ((LotNumberReport)generator).populate(item);
+    }
+
+    @Override
+    public void onComplete() {
+        document.close();
+        viewPdf();
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+
     }
 }

@@ -63,4 +63,9 @@ public class ViewFragment extends Fragment implements DataView {
         Log.v("View", errorMessage);
     }
 
+    @Override
+    public void onComplete() {
+
+    }
+
 }
