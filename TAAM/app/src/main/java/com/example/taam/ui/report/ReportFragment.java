@@ -49,7 +49,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class ReportFragment extends Fragment implements DataView {
+public class ReportFragment extends Fragment implements DataView{
     private static final int STORAGE_PERMISSION_CODE = 101; // Request code for permission
     private ArrayAdapter<CharSequence> adapter;
     private int position;
