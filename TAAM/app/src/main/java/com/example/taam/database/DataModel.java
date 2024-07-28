@@ -90,6 +90,7 @@ public class DataModel {
                     }
                     view.updateView(item);
                 }
+                view.onComplete();
             }
 
             @Override
