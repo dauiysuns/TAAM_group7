@@ -30,11 +30,6 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             FragmentLoader.loadDefaultFragment(getSupportFragmentManager(), new UserHomeFragment());
         }
-
-        Item item = new Item("321", "name", "a", "b", "c");
-        DataModel.addItem(item);
-        Item item2 = new Item("123", "name", "a", "b", "c");
-        DataModel.addItem(item2);
     }
 
     @Override

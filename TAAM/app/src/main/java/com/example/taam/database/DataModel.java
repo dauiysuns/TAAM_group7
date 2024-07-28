@@ -1,6 +1,7 @@
 package com.example.taam.database;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -103,16 +104,41 @@ public class DataModel {
         ref.child("items/" + item.getLot()).removeValue();
     }
 
-    public static void addItem(Item item) {
-        Field []fields = item.getClass().getFields();
-        for (Field field: fields) {
-            try {
-                ref.child("items/" + item.getLot() + "/" + field.getName()).setValue(field.get(item));
-                ref.child(field.getName()).child((String) Objects.requireNonNull(field.get(item))).child(item.getLot()).setValue("null");
-            } catch (IllegalAccessException e) {
-                Log.v("error", e.getMessage());
-            }
-        }
+    // used for checking whether item added successfully or not
+    public interface AddItemCallback {
+        void onComplete(boolean success);
     }
 
+    public static void addItem(Item item, android.content.Context context, AddItemCallback callback) {
+
+        final DatabaseReference itemRef = ref.child("items/" + item.getLot());
+
+        itemRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // check for duplicate item
+                if (dataSnapshot.exists()) {
+                    Toast.makeText(context, "This Lot Number has been used", Toast.LENGTH_SHORT).show();
+                    callback.onComplete(false);
+                } else {
+                    // No duplicate, add item
+                    Field[] fields = item.getClass().getFields();
+                    for (Field field : fields) {
+                        try {
+                            itemRef.child(field.getName()).setValue(field.get(item));
+                            ref.child(field.getName()).child((String) Objects.requireNonNull(field.get(item))).child(item.getLot()).setValue("null");
+                        } catch (IllegalAccessException e) {
+                            Log.v("error", e.getMessage());
+                        }
+                    }
+                    callback.onComplete(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v("error", databaseError.getMessage());
+            }
+        });
+    }
 }

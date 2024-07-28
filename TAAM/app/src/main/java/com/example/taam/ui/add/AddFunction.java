@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import com.example.taam.database.Item;
 import com.example.taam.database.DataModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -246,18 +247,31 @@ public class AddFunction extends Fragment {
         Item newEntry = new Item(lot, name, category, period, description, picUrls, vidUrls);
 
         //using DataModel functions, add item to database
-        DataModel.addItem(newEntry);
+        DataModel.addItem(newEntry, getContext(), new DataModel.AddItemCallback() {
+            @Override
+            public void onComplete(boolean success) {
+                if(success){
+                    Toast.makeText(getContext(), "Entry " + newEntry.getLot() + " added successfully!", Toast.LENGTH_SHORT).show();
+                    clearFields();
+                }
+            }
+        });
+    }
 
-        Toast.makeText(getContext(), "Entry " + lot + " added successfully!", Toast.LENGTH_SHORT).show();
-
+    private void clearFields(){
         //clear all fields
         editTextName.setText("");
         editTextLotNumber.setText("");
         editTextDescription.setText("");
         spinnerCategory.setSelection(0);
         spinnerPeriod.setSelection(0);
-        picUrls.clear();
-        vidUrls.clear();
+        //only clear arrayLists if they contain info
+        if(picUrls != null){
+            picUrls.clear();
+        }
+        if(vidUrls != null){
+            vidUrls.clear();
+        }
         progressBar.setVisibility(View.INVISIBLE);
     }
 }
