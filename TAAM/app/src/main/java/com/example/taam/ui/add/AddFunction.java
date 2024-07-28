@@ -2,6 +2,7 @@ package com.example.taam.ui.add;
 
 import static android.app.Activity.RESULT_OK;
 
+import com.example.taam.database.DataView;
 import com.example.taam.database.Item;
 import com.example.taam.database.DataModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -247,7 +248,7 @@ public class AddFunction extends Fragment {
         Item newEntry = new Item(lot, name, category, period, description, picUrls, vidUrls);
 
         //using DataModel functions, add item to database
-        DataModel.addItem(newEntry, getContext(), new DataModel.AddItemCallback() {
+        DataModel.addItem(newEntry, getContext(), new DataView.AddItemCallback() {
             @Override
             public void onComplete(boolean success) {
                 if(success){

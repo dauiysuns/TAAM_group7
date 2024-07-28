@@ -104,12 +104,7 @@ public class DataModel {
         ref.child("items/" + item.getLot()).removeValue();
     }
 
-    // used for checking whether item added successfully or not
-    public interface AddItemCallback {
-        void onComplete(boolean success);
-    }
-
-    public static void addItem(Item item, android.content.Context context, AddItemCallback callback) {
+    public static void addItem(Item item, android.content.Context context, DataView.AddItemCallback callback) {
 
         final DatabaseReference itemRef = ref.child("items/" + item.getLot());
 
