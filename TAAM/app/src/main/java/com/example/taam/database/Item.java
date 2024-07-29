@@ -10,7 +10,7 @@ public class Item {
     public String category;
     public String period;
     public String description;
-    private ArrayList<Media> mediaUrls;
+    public ArrayList<Media> mediaUrls;
     private boolean isSelected;
 
     public Item(){

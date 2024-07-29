@@ -51,10 +51,11 @@ public class ViewFragment extends Fragment implements DataView {
         closeButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
         dm = new DataModel(this);
+        dm.getItemByLot(selectedLotNumber);
 
         // set up Media recyclerView
         mediaUrls = new ArrayList<>();
-        dm.displayItem(selectedLotNumber);
+        dm.getItemByLot(selectedLotNumber);
         mediaAdapter = new MediaAdapter(mediaUrls, getContext());
         mediaRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mediaRecyclerView.setAdapter(mediaAdapter);
@@ -78,5 +79,7 @@ public class ViewFragment extends Fragment implements DataView {
     }
 
     @Override
-    public void onComplete(){}
+    public void onComplete(){
+
+    }
 }
