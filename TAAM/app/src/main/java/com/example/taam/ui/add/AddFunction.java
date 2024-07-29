@@ -5,6 +5,8 @@ import static android.app.Activity.RESULT_OK;
 import com.example.taam.database.DataView;
 import com.example.taam.database.Item;
 import com.example.taam.database.DataModel;
+import com.example.taam.ui.FragmentLoader;
+import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -62,8 +64,7 @@ import com.google.firebase.storage.UploadTask;
 public class AddFunction extends Fragment {
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
-    private ArrayList<String> picUrls;
-    private ArrayList<String> vidUrls;
+    private ArrayList<String> mediaUrls;
 
     private Uri uri;
     ProgressBar progressBar;
@@ -188,11 +189,11 @@ public class AddFunction extends Fragment {
                     public void onSuccess(Uri uri) {
                         String downloadUrl = uri.toString();
                         if (mediaType.equals("image")) {
-                            picUrls.add(downloadUrl);
+                            mediaUrls.add(downloadUrl);
                             Toast.makeText(getContext(), "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
                         }
                         else if (mediaType.equals("video")) {
-                            vidUrls.add(downloadUrl);
+                            mediaUrls.add(downloadUrl);
                             Toast.makeText(getContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -254,6 +255,7 @@ public class AddFunction extends Fragment {
                 if(success){
                     Toast.makeText(getContext(), "Entry " + newEntry.getLot() + " added successfully!", Toast.LENGTH_SHORT).show();
                     clearFields();
+                    FragmentLoader.loadFragment(getParentFragmentManager(), new AdminHomeFragment());
                 }
             }
         });

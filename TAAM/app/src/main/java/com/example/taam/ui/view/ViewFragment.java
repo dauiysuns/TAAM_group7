@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taam.database.Item;
 import com.example.taam.R;
@@ -20,7 +21,7 @@ import com.example.taam.database.DataView;
 public class ViewFragment extends Fragment implements DataView {
     private String selectedLotNumber;
     private TextView textViewLot, textViewName, textViewCategory, textViewPeriod, textViewDescription;
-    //private ImageView imageViewPicOrVid;
+    private RecyclerView mediaRecyclerView;
     private ImageButton closeButton;
     private DataModel dm;
 
@@ -38,7 +39,7 @@ public class ViewFragment extends Fragment implements DataView {
         textViewCategory = view.findViewById(R.id.textViewCategory);
         textViewPeriod = view.findViewById(R.id.textViewPeriod);
         textViewDescription = view.findViewById(R.id.textViewDescription);
-        // imageViewPicOrVid = itemView.findViewById(R.id.imageViewPicOrVid);
+        mediaRecyclerView = view.findViewById(R.id.mediaRecyclerView);
 
         closeButton = view.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());

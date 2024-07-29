@@ -17,7 +17,7 @@ import com.example.taam.R;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
-    public List<Item> itemList;
+    private List<Item> itemList;
     private final int maxDescriptionLength = 350;
 
     public ItemAdapter(List<Item> itemList) {
