@@ -11,7 +11,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class DataModel {
@@ -126,6 +129,14 @@ public class DataModel {
                             Log.v("error", e.getMessage());
                         }
                     }
+                    ArrayList<Media> media = item.getMediaUrls();
+                    itemRef.child("PictureVideo").setValue(media.get(0)).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("Firebase", "ArrayList added successfully");
+                        } else {
+                            Log.d("Firebase", "Failed to add ArrayList");
+                        }
+                    });
                     callback.onComplete(true);
                 }
             }

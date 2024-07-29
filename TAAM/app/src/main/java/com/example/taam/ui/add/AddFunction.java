@@ -112,6 +112,8 @@ public class AddFunction extends Fragment {
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPeriod.setAdapter(adapter2);
 
+        mediaUrls = new ArrayList<>();
+
         //setting up media upload launcher
         uploadMediaLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -175,6 +177,7 @@ public class AddFunction extends Fragment {
         Intent intent = new Intent();
         intent.setType(type);
         intent.setAction(Intent.ACTION_GET_CONTENT);
+        this.mediaType = mediaType;
         uploadMediaLauncher.launch(intent);
     }
 

@@ -19,6 +19,7 @@ public class Item {
 
     public Item(String lotNumber) {
         this.lotNumber = lotNumber;
+        this.mediaUrls = new ArrayList<>();
     }
 
     public Item(String lotNumber, String name, String category, String period, String description, ArrayList<Media> mediaUrls) {
@@ -27,6 +28,7 @@ public class Item {
         this.category = category;
         this.period = period;
         this.description = description;
+        //this.mediaUrls = new ArrayList<>();
         this.mediaUrls = mediaUrls;
         this.isSelected = false;
     }
