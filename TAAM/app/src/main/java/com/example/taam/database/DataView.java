@@ -14,14 +14,5 @@ package com.example.taam.database;
 public interface DataView {
     void updateView(Item item);
     void showError(String errorMessage);
-    //void onComplete();
-
-    public interface checkComplete{
-        void onComplete();
-    }
-
-    // used for checking whether item added successfully or not
-    public interface AddItemCallback {
-        void onComplete(boolean success);
-    }
+    void onComplete();
 }
