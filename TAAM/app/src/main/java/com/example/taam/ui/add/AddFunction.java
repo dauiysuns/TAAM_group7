@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import com.example.taam.database.DataView;
 import com.example.taam.database.Item;
 import com.example.taam.database.DataModel;
+import com.example.taam.database.Media;
 import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -64,7 +65,7 @@ import com.google.firebase.storage.UploadTask;
 public class AddFunction extends Fragment {
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
-    private ArrayList<String> mediaUrls;
+    private ArrayList<Media> mediaUrls;
 
     private Uri uri;
     ProgressBar progressBar;
@@ -187,13 +188,12 @@ public class AddFunction extends Fragment {
                 mediaReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        String downloadUrl = uri.toString();
                         if (mediaType.equals("image")) {
-                            mediaUrls.add(downloadUrl);
+                            mediaUrls.add(new Media("image", uri));
                             Toast.makeText(getContext(), "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
                         }
                         else if (mediaType.equals("video")) {
-                            mediaUrls.add(downloadUrl);
+                            mediaUrls.add(new Media("video", uri));
                             Toast.makeText(getContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -246,7 +246,7 @@ public class AddFunction extends Fragment {
         }
 
         //create the Item using current fields to add to db (+ add any uploaded media)
-        Item newEntry = new Item(lot, name, category, period, description, picUrls, vidUrls);
+        Item newEntry = new Item(lot, name, category, period, description, mediaUrls);
 
         //using DataModel functions, add item to database
         DataModel.addItem(newEntry, getContext(), new DataView.AddItemCallback() {
@@ -268,12 +268,9 @@ public class AddFunction extends Fragment {
         editTextDescription.setText("");
         spinnerCategory.setSelection(0);
         spinnerPeriod.setSelection(0);
-        //only clear arrayLists if they contain info
-        if(picUrls != null){
-            picUrls.clear();
-        }
-        if(vidUrls != null){
-            vidUrls.clear();
+        //only clear arrayList if it contain info
+        if(mediaUrls != null){
+            mediaUrls.clear();
         }
         progressBar.setVisibility(View.INVISIBLE);
     }

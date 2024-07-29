@@ -3,6 +3,8 @@ package com.example.taam.database;
 import android.net.Uri;
 
 public class Media {
+    public static final int TYPE_IMAGE = 0;
+    public static final int TYPE_VIDEO = 1;
     private String type;
     private Uri uri;
 

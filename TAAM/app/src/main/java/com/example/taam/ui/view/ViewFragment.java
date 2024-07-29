@@ -11,19 +11,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taam.database.Item;
 import com.example.taam.R;
 import com.example.taam.database.DataModel;
 import com.example.taam.database.DataView;
+import com.example.taam.database.Media;
+
+import java.util.ArrayList;
 
 public class ViewFragment extends Fragment implements DataView {
     private String selectedLotNumber;
     private TextView textViewLot, textViewName, textViewCategory, textViewPeriod, textViewDescription;
+    private MediaAdapter mediaAdapter;
     private RecyclerView mediaRecyclerView;
     private ImageButton closeButton;
     private DataModel dm;
+    private ArrayList<Media> mediaItems;
 
     public ViewFragment(String selectedLotNumber){
         this.selectedLotNumber = selectedLotNumber;
@@ -47,6 +53,12 @@ public class ViewFragment extends Fragment implements DataView {
         dm = new DataModel(this);
         dm.displayItem(selectedLotNumber);
 
+        // set up Media recyclerView
+        mediaItems = new ArrayList<>();
+        mediaAdapter = new MediaAdapter(mediaItems, getContext());
+        mediaRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mediaRecyclerView.setAdapter(mediaAdapter);
+
         return view;
     }
 
@@ -57,6 +69,7 @@ public class ViewFragment extends Fragment implements DataView {
         textViewCategory.setText(item.category);
         textViewPeriod.setText(item.period);
         textViewDescription.setText(item.description);
+        mediaItems = item.getMediaUrls();
     }
 
     @Override

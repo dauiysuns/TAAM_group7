@@ -10,7 +10,7 @@ public class Item {
     public String category;
     public String period;
     public String description;
-    private ArrayList<String> mediaUrls;
+    private ArrayList<Media> mediaUrls;
     private boolean isSelected;
 
     public Item(){
@@ -21,7 +21,7 @@ public class Item {
         this.lotNumber = lotNumber;
     }
 
-    public Item(String lotNumber, String name, String category, String period, String description, ArrayList<String> mediaUrls) {
+    public Item(String lotNumber, String name, String category, String period, String description, ArrayList<Media> mediaUrls) {
         this.lotNumber = lotNumber;
         this.name = name;
         this.category = category;
@@ -52,11 +52,11 @@ public class Item {
         return this.lotNumber;
     }
 
-    public void addMediaUrl(String url) {
-        this.mediaUrls.add(url);
+    public void addMediaUrl(Media mediaItem) {
+        this.mediaUrls.add(mediaItem);
     }
 
-    public List<String> getMediaUrls() {
+    public ArrayList<Media> getMediaUrls() {
         return this.mediaUrls;
     }
 
