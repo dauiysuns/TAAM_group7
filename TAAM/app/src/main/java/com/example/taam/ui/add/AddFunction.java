@@ -189,14 +189,15 @@ public class AddFunction extends Fragment {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 mediaReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    String uriString = uri.toString();
                     @Override
                     public void onSuccess(Uri uri) {
                         if (mediaType.equals("image")) {
-                            mediaUrls.add(new Media("image", uri));
+                            mediaUrls.add(new Media("image", uriString));
                             Toast.makeText(getContext(), "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
                         }
                         else if (mediaType.equals("video")) {
-                            mediaUrls.add(new Media("video", uri));
+                            mediaUrls.add(new Media("video", uriString));
                             Toast.makeText(getContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -271,7 +272,7 @@ public class AddFunction extends Fragment {
         editTextDescription.setText("");
         spinnerCategory.setSelection(0);
         spinnerPeriod.setSelection(0);
-        //only clear arrayList if it contain info
+        //only clear arrayList if it contains info
         if(mediaUrls != null){
             mediaUrls.clear();
         }

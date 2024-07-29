@@ -51,7 +51,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         // setting up recycler view
         dm = new DataModel(this);
         itemList = new ArrayList<>();
-        itemAdapter = new ItemAdapter(itemList);
+        itemAdapter = new ItemAdapter(itemList, getContext());
 
         // initialize buttons and RecyclerView
         initializeViews(view);
@@ -63,8 +63,6 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         recyclerView.setAdapter(itemAdapter);
 
         dm.displayAllItems();
-
-        // For demo purposes, adding items
 
         return view;
     }

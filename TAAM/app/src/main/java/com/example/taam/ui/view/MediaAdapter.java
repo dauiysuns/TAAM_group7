@@ -1,6 +1,7 @@
 package com.example.taam.ui.view;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,14 +41,22 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if(mediaItems.get(position).getType().equals("image")){
+            return 0;
+        }
+        return 1;
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Media mediaItem = mediaItems.get(position);
         if (holder.getItemViewType() == Media.TYPE_IMAGE) {
             ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
-            Glide.with(context).load(mediaItem.getUri()).into(imageViewHolder.imageView);
+            Glide.with(context).load(Uri.parse(mediaItem.getUri())).into(imageViewHolder.imageView);
         } else {
             VideoViewHolder videoViewHolder = (VideoViewHolder) holder;
-            videoViewHolder.videoView.setVideoURI(mediaItem.getUri());
+            videoViewHolder.videoView.setVideoURI(Uri.parse(mediaItem.getUri()));
 
             MediaController mediaController = new MediaController(context);
             mediaController.setAnchorView(videoViewHolder.videoView);
@@ -62,7 +71,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         return mediaItems.size();
     }
 
-    public static class ImageViewHolder extends RecyclerView.ViewHolder {
+    public class ImageViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
 
         public ImageViewHolder(@NonNull View itemView) {
@@ -71,7 +80,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
     }
 
-    public static class VideoViewHolder extends RecyclerView.ViewHolder {
+    public class VideoViewHolder extends RecyclerView.ViewHolder {
         VideoView videoView;
 
         public VideoViewHolder(@NonNull View itemView) {

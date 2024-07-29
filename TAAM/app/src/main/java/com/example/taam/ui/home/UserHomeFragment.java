@@ -21,7 +21,7 @@ public class UserHomeFragment extends BaseHomeFragment {
         buttonView = view.findViewById(R.id.view_button);
         buttonSearch = view.findViewById(R.id.search_button);
         buttonAdmin = view.findViewById(R.id.admin_button);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.mediaRecyclerView);
     }
 
     @Override

@@ -28,7 +28,6 @@ public class Item {
         this.category = category;
         this.period = period;
         this.description = description;
-        //this.mediaUrls = new ArrayList<>();
         this.mediaUrls = mediaUrls;
         this.isSelected = false;
     }

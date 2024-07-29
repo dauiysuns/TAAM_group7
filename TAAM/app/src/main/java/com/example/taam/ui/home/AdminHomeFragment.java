@@ -27,7 +27,7 @@ public class AdminHomeFragment extends BaseHomeFragment {
         buttonAdd = view.findViewById(R.id.add_button);
         buttonRemove = view.findViewById(R.id.remove_button);
         buttonReport = view.findViewById(R.id.report_button);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.mediaRecyclerView);
     }
 
     @Override

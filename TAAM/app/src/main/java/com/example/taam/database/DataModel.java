@@ -66,6 +66,8 @@ public class DataModel {
                         Log.v("error", Objects.requireNonNull(e.getMessage()));
                     }
                 }
+                // need to get the arrayLIst
+
                 view.updateView(item);
             }
 
@@ -129,14 +131,8 @@ public class DataModel {
                             Log.v("error", e.getMessage());
                         }
                     }
-                    ArrayList<Media> media = item.getMediaUrls();
-                    itemRef.child("PictureVideo").setValue(media.get(0)).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d("Firebase", "ArrayList added successfully");
-                        } else {
-                            Log.d("Firebase", "Failed to add ArrayList");
-                        }
-                    });
+                    ArrayList<Media> mediaItems = item.getMediaUrls();
+                    itemRef.child("mediaUrls").setValue(mediaItems);
                     callback.onComplete(true);
                 }
             }

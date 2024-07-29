@@ -6,9 +6,9 @@ public class Media {
     public static final int TYPE_IMAGE = 0;
     public static final int TYPE_VIDEO = 1;
     private String type;
-    private Uri uri;
+    private String uri;
 
-    public Media(String type, Uri uri){
+    public Media(String type, String uri){
         this.type = type;
         this.uri = uri;
     }
@@ -17,7 +17,7 @@ public class Media {
         return type;
     }
 
-    public Uri getUri() {
+    public String getUri() {
         return uri;
     }
 }
