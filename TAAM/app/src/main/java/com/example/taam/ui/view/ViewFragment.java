@@ -18,9 +18,9 @@ import com.example.taam.database.Item;
 import com.example.taam.R;
 import com.example.taam.database.DataModel;
 import com.example.taam.database.DataView;
-import com.example.taam.database.Media;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ViewFragment extends Fragment implements DataView {
     private String selectedLotNumber;
@@ -29,7 +29,7 @@ public class ViewFragment extends Fragment implements DataView {
     private RecyclerView mediaRecyclerView;
     private ImageButton closeButton;
     private DataModel dm;
-    private ArrayList<Media> mediaUrls;
+    private ArrayList<HashMap<String, String>> mediaUrls;
 
     public ViewFragment(String selectedLotNumber){
         this.selectedLotNumber = selectedLotNumber;
@@ -51,7 +51,6 @@ public class ViewFragment extends Fragment implements DataView {
         closeButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
         dm = new DataModel(this);
-        dm.getItemByLot(selectedLotNumber);
 
         // set up Media recyclerView
         mediaUrls = new ArrayList<>();
@@ -70,7 +69,7 @@ public class ViewFragment extends Fragment implements DataView {
         textViewCategory.setText(item.category);
         textViewPeriod.setText(item.period);
         textViewDescription.setText(item.description);
-        mediaUrls = item.getMediaUrls();
+        mediaUrls = item.mediaUrls;
     }
 
     @Override

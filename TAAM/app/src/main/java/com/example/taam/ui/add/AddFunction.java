@@ -5,15 +5,14 @@ import static android.app.Activity.RESULT_OK;
 import com.example.taam.database.DataView;
 import com.example.taam.database.Item;
 import com.example.taam.database.DataModel;
-import com.example.taam.database.Media;
 import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -65,7 +64,7 @@ import com.google.firebase.storage.UploadTask;
 public class AddFunction extends Fragment {
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
-    private ArrayList<Media> mediaUrls;
+    private ArrayList<HashMap<String, String>> mediaUrls;
 
     private Uri uri;
     ProgressBar progressBar;
@@ -192,14 +191,16 @@ public class AddFunction extends Fragment {
                     String uriString = uri.toString();
                     @Override
                     public void onSuccess(Uri uri) {
+                        HashMap<String, String> map = new HashMap<>();
                         if (mediaType.equals("image")) {
-                            mediaUrls.add(new Media("image", uriString));
+                            map.put("image", uriString);
                             Toast.makeText(getContext(), "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
                         }
                         else if (mediaType.equals("video")) {
-                            mediaUrls.add(new Media("video", uriString));
+                            map.put("video", uriString);
                             Toast.makeText(getContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
                         }
+                        mediaUrls.add(map);
                     }
                 });
             }

@@ -2,6 +2,7 @@ package com.example.taam.database;
 
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Item {
@@ -10,7 +11,7 @@ public class Item {
     public String category;
     public String period;
     public String description;
-    public ArrayList<Media> mediaUrls;
+    public ArrayList<HashMap<String, String>> mediaUrls;
     private boolean isSelected;
 
     public Item(){
@@ -22,7 +23,7 @@ public class Item {
         this.mediaUrls = new ArrayList<>();
     }
 
-    public Item(String lotNumber, String name, String category, String period, String description, ArrayList<Media> mediaUrls) {
+    public Item(String lotNumber, String name, String category, String period, String description, ArrayList<HashMap<String, String>> mediaUrls) {
         this.lotNumber = lotNumber;
         this.name = name;
         this.category = category;
@@ -51,14 +52,6 @@ public class Item {
 
     public String getLot() {
         return this.lotNumber;
-    }
-
-    public void addMediaUrl(Media mediaItem) {
-        this.mediaUrls.add(mediaItem);
-    }
-
-    public ArrayList<Media> getMediaUrls() {
-        return this.mediaUrls;
     }
 
 }

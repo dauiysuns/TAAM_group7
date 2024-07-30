@@ -13,6 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class DataModel {
@@ -146,7 +147,7 @@ public class DataModel {
                             Log.v("error", e.getMessage());
                         }
                     }
-                    ArrayList<Media> mediaItems = item.getMediaUrls();
+                    ArrayList<HashMap<String, String>> mediaItems = item.mediaUrls;
                     itemRef.child("mediaUrls").setValue(mediaItems);
                     callback.onComplete(true);
                 }

@@ -14,23 +14,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.taam.R;
-import com.example.taam.database.Media;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    private ArrayList<Media> mediaItems;
+    private ArrayList<HashMap<String, String>> mediaUrls;
     Context context;
+    private final int TYPE_IMAGE = 0;
+    private final int TYPE_VIDEO = 1;
 
-    public MediaAdapter(ArrayList<Media> mediaItems, Context context){
-        this.mediaItems = mediaItems;
+    public MediaAdapter(ArrayList<HashMap<String, String>> mediaUrls, Context context){
+        this.mediaUrls = mediaUrls;
         this.context = context;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == Media.TYPE_IMAGE){
+        if(viewType == 0){
             View view = LayoutInflater.from(context).inflate(R.layout.image_holder, parent, false);
             return new ImageViewHolder(view);
         }
@@ -42,21 +44,21 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public int getItemViewType(int position) {
-        if(mediaItems.get(position).getType().equals("image")){
-            return 0;
+        if(mediaUrls.get(position).containsKey("image")){
+            return TYPE_IMAGE;
         }
-        return 1;
+        return TYPE_VIDEO;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Media mediaItem = mediaItems.get(position);
-        if (holder.getItemViewType() == Media.TYPE_IMAGE) {
+        HashMap<String, String> mediaItem = mediaUrls.get(position);
+        if (holder.getItemViewType() == TYPE_IMAGE) {
             ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
-            Glide.with(context).load(Uri.parse(mediaItem.getUri())).into(imageViewHolder.imageView);
+            Glide.with(context).load(mediaItem.get("image")).into(imageViewHolder.imageView);
         } else {
             VideoViewHolder videoViewHolder = (VideoViewHolder) holder;
-            videoViewHolder.videoView.setVideoURI(Uri.parse(mediaItem.getUri()));
+            videoViewHolder.videoView.setVideoURI(Uri.parse(mediaItem.get("video")));
 
             MediaController mediaController = new MediaController(context);
             mediaController.setAnchorView(videoViewHolder.videoView);
@@ -68,7 +70,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return mediaItems.size();
+        return mediaUrls.size();
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {

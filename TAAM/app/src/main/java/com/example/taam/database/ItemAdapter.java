@@ -18,6 +18,7 @@ import com.example.taam.R;
 import com.example.taam.ui.view.MediaAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
@@ -68,7 +69,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         }
 
         // set up Media recyclerView
-        ArrayList<Media> mediaItems = new ArrayList<>();
+        ArrayList<HashMap<String, String>> mediaItems = new ArrayList<>();
         MediaAdapter mediaAdapter = new MediaAdapter(mediaItems, context);
         holder.mediaRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.mediaRecyclerView.setAdapter(mediaAdapter);
