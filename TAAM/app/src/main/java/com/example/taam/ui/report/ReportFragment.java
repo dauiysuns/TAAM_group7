@@ -1,5 +1,6 @@
 package com.example.taam.ui.report;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -30,6 +32,8 @@ import com.example.taam.R;
 import com.example.taam.database.DataModel;
 import com.example.taam.database.DataView;
 import com.example.taam.database.Item;
+import com.example.taam.ui.FragmentLoader;
+import com.example.taam.ui.home.AdminHomeFragment;
 import com.example.taam.ui.report.generator.Reports;
 import com.example.taam.ui.report.generator.PDFGenerator;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -46,15 +50,15 @@ import java.util.Objects;
 
 public class ReportFragment extends Fragment implements DataView{
     private String pdfPath;
-    private final HashMap<String, PDFGenerator> generatorHashMap = new HashMap<String, PDFGenerator>() {{
-        put("Category", new Reports.CategoryReport());
-        put("Period", new Reports.PeriodReport());
-        put("Lot number", new Reports.LotNumberReport());
-        put("Name", new Reports.NameReport());
-        put("Category with Description and Picture only", new Reports.CategoryDescPicReport());
-        put("Period with Description and Picture only", new Reports.PeriodDescPicReport());
-        put("All reports", new Reports.AllReport());
-    }};
+    private HashMap<String, PDFGenerator> generatorHashMap = new HashMap<String, PDFGenerator>() {{
+        put("Category", new Reports());
+        put("Period", new Reports());
+        put("Lot number", new Reports());
+        put("Name", new Reports());
+        put("Category with Description and Picture only", new Reports());
+        put("Period with Description and Picture only", new Reports());
+        put("All reports", new Reports());
+    }};;
     private Document document;
     PDFGenerator generator;
     private ActivityResultLauncher<String> requestPermissionLauncher;
@@ -67,7 +71,7 @@ public class ReportFragment extends Fragment implements DataView{
 
         Spinner spinner = view.findViewById(R.id.spinner4);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
-                R.array.categories_array, android.R.layout.simple_spinner_item);
+                R.array.report_options_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -99,6 +103,17 @@ public class ReportFragment extends Fragment implements DataView{
         });
 
         generate.setOnClickListener(v -> {
+            generatorHashMap.clear();
+            generatorHashMap = new HashMap<String, PDFGenerator>() {{
+                put("Category", new Reports());
+                put("Period", new Reports());
+                put("Lot number", new Reports());
+                put("Name", new Reports());
+                put("Category with Description and Picture only", new Reports());
+                put("Period with Description and Picture only", new Reports());
+                put("All reports", new Reports());
+                }};
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 if (Environment.isExternalStorageManager()) {
                     // Permission granted
@@ -109,9 +124,13 @@ public class ReportFragment extends Fragment implements DataView{
                 }
             } else {
                 if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
+                        != PackageManager.PERMISSION_GRANTED ||
+                        ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED) {
                     requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                } else {
+                    requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+                }
+                else {
                     // Permission already granted
                     generatePdf();
                 }
@@ -138,7 +157,12 @@ public class ReportFragment extends Fragment implements DataView{
             DataModel dm = new DataModel(this);
 
             generator.generate(document);
-            dm.getItemsByCategory((category.toLowerCase()), byItemText.getText().toString());
+            if (category.equals("Category with Description and Picture only"))
+                dm.getItemsByCategory("category", byItemText.getText().toString());
+            if (category.equals("Period with Description and Picture only"))
+                dm.getItemsByCategory("period", byItemText.getText().toString());
+            else
+                dm.getItemsByCategory((category.toLowerCase()), byItemText.getText().toString());
 
             Log.v("Generate Report", "Successful");
         } catch (FileNotFoundException e) {
@@ -162,12 +186,12 @@ public class ReportFragment extends Fragment implements DataView{
 
     @Override
     public void updateView(Item item) {
-        ((Reports.LotNumberReport)generator).populate(item);
+        generator.populate(item);
     }
 
     @Override
     public void onComplete() {
-        ((Reports.LotNumberReport)generator).applyChanges();
+        generator.applyChanges();
         document.close();
         viewPdf();
     }

@@ -2,6 +2,7 @@ package com.example.taam.ui.home;
 
 import static com.example.taam.ui.FragmentLoader.loadFragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,9 +30,9 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
 
     protected Button buttonView, buttonSearch, buttonBack, buttonAdd, buttonRemove, buttonReport;
     protected RecyclerView recyclerView;
-    public ItemAdapter itemAdapter;
-    public List<Item> itemList;
-    public DataModel dm;
+    private ItemAdapter itemAdapter;
+    protected List<Item> itemList;
+    private DataModel dm;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         // setting up recycler view
         dm = new DataModel(this);
         itemList = new ArrayList<>();
-        itemAdapter = new ItemAdapter(itemList);
+        itemAdapter = new ItemAdapter(itemList, getContext());
 
         // initialize buttons and RecyclerView
         initializeViews(view);
@@ -62,8 +63,6 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         recyclerView.setAdapter(itemAdapter);
 
         dm.getAllItems();
-
-        // For demo purposes, adding items
 
         return view;
     }
@@ -108,9 +107,9 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
             Toast.makeText(getContext(), "Please first select an item to view.", Toast.LENGTH_SHORT).show();
         }
     }
-
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onComplete() {
-
+        itemAdapter.notifyDataSetChanged();
     }
 }

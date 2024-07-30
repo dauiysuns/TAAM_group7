@@ -1,6 +1,9 @@
 package com.example.taam.database;
 
 import android.util.Log;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Item {
     private String lotNumber;
@@ -8,23 +11,25 @@ public class Item {
     public String category;
     public String period;
     public String description;
-    //missing field for file
+    public ArrayList<HashMap<String, String>> mediaUrls;
     private boolean isSelected;
 
     public Item(){
-
+        this.mediaUrls = new ArrayList<>();
     }
+
     public Item(String lotNumber) {
         this.lotNumber = lotNumber;
+        this.mediaUrls = new ArrayList<>();
     }
 
-    public Item(String lotNumber, String name, String category, String period, String description) {
+    public Item(String lotNumber, String name, String category, String period, String description, ArrayList<HashMap<String, String>> mediaUrls) {
         this.lotNumber = lotNumber;
         this.name = name;
         this.category = category;
         this.period = period;
         this.description = description;
-       // image
+        this.mediaUrls = mediaUrls;
         this.isSelected = false;
     }
 
@@ -48,4 +53,5 @@ public class Item {
     public String getLot() {
         return this.lotNumber;
     }
+
 }
