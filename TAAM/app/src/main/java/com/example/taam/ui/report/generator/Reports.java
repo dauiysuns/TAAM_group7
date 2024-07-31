@@ -3,7 +3,13 @@ package com.example.taam.ui.report.generator;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.taam.database.Item;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -17,6 +23,7 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.UnitValue;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.pdfa.PdfADocument;
+import com.google.firebase.storage.FileDownloadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,20 +35,45 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class Reports implements PDFGenerator{
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+    StorageReference fileRef;
     Document document;
     Table table;
 
-    // Title
+    public void downloadFile(String urlPath) {
+        fileRef = storage.getReferenceFromUrl(urlPath);
+        try {
+            File localFile = File.createTempFile("image", "jpg");
+            fileRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // File downloaded successfully
+                    String absolutePath = localFile.getAbsolutePath();
+                    Log.d("Firebase", "File downloaded to: " + absolutePath);
 
+                    // Now you can use this path with iText
 
+                    try {
+                        Image img = new Image(ImageDataFactory.create(absolutePath));
+                        table.addCell(new Cell().add(img));
+                    } catch (MalformedURLException e) {
+                        Log.e("Firebase", "Error creating URL", e);
+                    }
+                    // Add image to PDF document as needed
 
-    // Table Column Widths
-
-    // Header style
-
-
-    // Cell style
-
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    Log.e("Firebase", "Error downloading file", exception);
+                }
+            });
+        } catch (IOException e) {
+            Log.e("Firebase", "Error creating local file", e);
+        }
+    }
 
     public void generate(Document document) {
         PdfFont bold;
@@ -102,9 +134,11 @@ public class Reports implements PDFGenerator{
         for (Field field: fields) {
             try {
                 if (field.getName().equals("mediaUrls")) {
-                    Cell cell = new Cell();
-                    //cell.add(new Image(ImageDataFactory.create(item.getMediaUrls().get(0).getUri())));
-                    table.addCell(cell).addStyle(cellStyle);
+                    ArrayList<HashMap<String, String>> mediaUrls = (ArrayList<HashMap<String, String>>) field.get(item);
+                    for (HashMap<String, String> media: mediaUrls) {
+                        table.addCell(new Cell().addStyle(cellStyle));
+                        downloadFile(media.get("image"));
+                    }
                 } else
                     table.addCell(new Cell()
                             .add(new Paragraph(Objects

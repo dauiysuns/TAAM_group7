@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class DataModel {
+    public static HashMap<String, String> lotToImage = new HashMap<>();
     public static DatabaseReference ref = FirebaseDatabase
             .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
             .getReference();
