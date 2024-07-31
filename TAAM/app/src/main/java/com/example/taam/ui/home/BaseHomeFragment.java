@@ -30,9 +30,9 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
 
     protected Button buttonView, buttonSearch, buttonBack, buttonAdd, buttonRemove, buttonReport;
     protected RecyclerView recyclerView;
-    public ItemAdapter itemAdapter;
-    public List<Item> itemList;
-    public DataModel dm;
+    private ItemAdapter itemAdapter;
+    protected List<Item> itemList;
+    private DataModel dm;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         // setting up recycler view
         dm = new DataModel(this);
         itemList = new ArrayList<>();
-        itemAdapter = new ItemAdapter(itemList);
+        itemAdapter = new ItemAdapter(itemList, getContext());
 
         // initialize buttons and RecyclerView
         initializeViews(view);
@@ -62,7 +62,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(itemAdapter);
 
-        dm.displayAllItems();
+        dm.getAllItems();
 
         return view;
     }
@@ -74,6 +74,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
     @Override
     public void updateView(Item item) {
         itemList.add(item);
+        itemAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -81,11 +82,10 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         Log.v("Main Screen", errorMessage);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     public void reset() {
         itemList.clear();
         itemAdapter.notifyDataSetChanged();
-        dm.displayAllItems();
+        dm.getAllItems();
     }
 
     protected void viewItem() {
@@ -107,7 +107,6 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
             Toast.makeText(getContext(), "Please first select an item to view.", Toast.LENGTH_SHORT).show();
         }
     }
-
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onComplete() {

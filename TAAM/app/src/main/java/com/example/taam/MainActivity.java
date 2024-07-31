@@ -8,8 +8,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.taam.database.DataModel;
-import com.example.taam.database.Item;
+import com.example.taam.ui.home.AdminHomeFragment;
 import com.example.taam.ui.home.UserHomeFragment;
 import com.example.taam.ui.FragmentLoader;
 
@@ -28,13 +27,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            FragmentLoader.loadDefaultFragment(getSupportFragmentManager(), new UserHomeFragment());
+            FragmentLoader.loadDefaultFragment(getSupportFragmentManager(), new AdminHomeFragment());
         }
-
-        Item item = new Item("321", "name", "a", "b", "c");
-        DataModel.addItem(item);
-        Item item2 = new Item("123", "name", "a", "b", "c");
-        DataModel.addItem(item2);
     }
 
     @Override

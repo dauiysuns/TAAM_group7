@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.taam.database.Item;
 import com.example.taam.R;
+import com.example.taam.ui.add.AddFunction;
 import com.example.taam.ui.remove.RemoveDialogFragment;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class AdminHomeFragment extends BaseHomeFragment {
         buttonAdd = view.findViewById(R.id.add_button);
         buttonRemove = view.findViewById(R.id.remove_button);
         buttonReport = view.findViewById(R.id.report_button);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.mediaRecyclerView);
     }
 
     @Override
@@ -36,6 +37,7 @@ public class AdminHomeFragment extends BaseHomeFragment {
         buttonRemove.setOnClickListener(v -> {
             removeItem();
         });
+        buttonAdd.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new AddFunction()));
         // Add listeners for other buttons if needed
     }
 
