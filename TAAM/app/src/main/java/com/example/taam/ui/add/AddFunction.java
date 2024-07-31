@@ -187,22 +187,16 @@ public class AddFunction extends Fragment {
         mediaReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                mediaReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    String uriString = uri.toString();
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        HashMap<String, String> map = new HashMap<>();
-                        if (mediaType.equals("image")) {
-                            map.put("image", uriString);
-                            Toast.makeText(getContext(), "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
-                        }
-                        else if (mediaType.equals("video")) {
-                            map.put("video", uriString);
-                            Toast.makeText(getContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
-                        }
-                        mediaUrls.add(map);
-                    }
-                });
+                HashMap<String, String> map = new HashMap<>();
+                if (mediaType.equals("image")) {
+                    map.put("image", mediaReference.toString());
+                    Toast.makeText(getContext(), "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
+                }
+                else if (mediaType.equals("video")) {
+                    map.put("video", mediaReference.toString());
+                    Toast.makeText(getContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
+                }
+                mediaUrls.add(map);
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -273,10 +267,7 @@ public class AddFunction extends Fragment {
         editTextDescription.setText("");
         spinnerCategory.setSelection(0);
         spinnerPeriod.setSelection(0);
-        //only clear arrayList if it contains info
-        if(mediaUrls != null){
-            mediaUrls.clear();
-        }
+        mediaUrls.clear();
         progressBar.setVisibility(View.INVISIBLE);
     }
 }

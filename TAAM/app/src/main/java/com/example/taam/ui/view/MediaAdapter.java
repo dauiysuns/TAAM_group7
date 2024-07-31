@@ -1,7 +1,7 @@
 package com.example.taam.ui.view;
 
 import android.content.Context;
-import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.example.taam.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private ArrayList<HashMap<String, String>> mediaUrls;
-    Context context;
+    private Context context;
     private final int TYPE_IMAGE = 0;
     private final int TYPE_VIDEO = 1;
 
@@ -32,12 +35,12 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == 0){
-            View view = LayoutInflater.from(context).inflate(R.layout.image_holder, parent, false);
+        if(viewType == TYPE_IMAGE){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_holder, parent, false);
             return new ImageViewHolder(view);
         }
         else{
-            View view = LayoutInflater.from(context).inflate(R.layout.video_holder, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_holder, parent, false);
             return new VideoViewHolder(view);
         }
     }
@@ -55,16 +58,35 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         HashMap<String, String> mediaItem = mediaUrls.get(position);
         if (holder.getItemViewType() == TYPE_IMAGE) {
             ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
-            Glide.with(context).load(mediaItem.get("image")).into(imageViewHolder.imageView);
+            String imageUrl = mediaItem.get("image");
+
+            // the URL needs to be a Firebase Storage URL (need to start with gs://)
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReferenceFromUrl(imageUrl);
+            storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                Glide.with(context)
+                        .load(uri)
+                        .override(Target.SIZE_ORIGINAL) // or set fixed dimensions like .override(600, 600)
+                        .into(imageViewHolder.imageView);
+            }).addOnFailureListener(exception -> {
+                Log.v("Load Image", "Error while loading image");
+            });
+
         } else {
             VideoViewHolder videoViewHolder = (VideoViewHolder) holder;
-            videoViewHolder.videoView.setVideoURI(Uri.parse(mediaItem.get("video")));
+            String videoUrl = mediaItem.get("video");
 
-            MediaController mediaController = new MediaController(context);
-            mediaController.setAnchorView(videoViewHolder.videoView);
-            videoViewHolder.videoView.setMediaController(mediaController);
-
-            videoViewHolder.videoView.setOnPreparedListener(mp -> videoViewHolder.videoView.start());
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReferenceFromUrl(videoUrl);
+            storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                videoViewHolder.videoView.setVideoURI(uri);
+                MediaController mediaController = new MediaController(context);
+                mediaController.setAnchorView(videoViewHolder.videoView);
+                videoViewHolder.videoView.setMediaController(mediaController);
+                videoViewHolder.videoView.setOnPreparedListener(mp -> videoViewHolder.videoView.start());
+            }).addOnFailureListener(exception -> {
+                Log.e("Video", "Failed to get video URL.", exception);
+            });
         }
     }
 

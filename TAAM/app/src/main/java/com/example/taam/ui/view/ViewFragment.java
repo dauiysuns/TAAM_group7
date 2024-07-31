@@ -51,13 +51,8 @@ public class ViewFragment extends Fragment implements DataView {
         closeButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
         dm = new DataModel(this);
-
-        // set up Media recyclerView
         mediaUrls = new ArrayList<>();
         dm.getItemByLot(selectedLotNumber);
-        mediaAdapter = new MediaAdapter(mediaUrls, getContext());
-        mediaRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mediaRecyclerView.setAdapter(mediaAdapter);
 
         return view;
     }
@@ -69,7 +64,14 @@ public class ViewFragment extends Fragment implements DataView {
         textViewCategory.setText(item.category);
         textViewPeriod.setText(item.period);
         textViewDescription.setText(item.description);
-        mediaUrls = item.mediaUrls;
+
+        // if an item has no picture/video then mediaUrls is null
+        if(item.mediaUrls != null){
+            mediaUrls = item.mediaUrls;
+        }
+        mediaAdapter = new MediaAdapter(mediaUrls, getContext());
+        mediaRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mediaRecyclerView.setAdapter(mediaAdapter);
     }
 
     @Override
@@ -79,6 +81,5 @@ public class ViewFragment extends Fragment implements DataView {
 
     @Override
     public void onComplete(){
-
     }
 }
