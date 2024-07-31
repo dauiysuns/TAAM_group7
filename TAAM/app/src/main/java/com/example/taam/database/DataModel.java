@@ -92,8 +92,7 @@ public class DataModel {
                 }
                 DataSnapshot querySnapshot = snapshot.child(category).child(query);
                 for (DataSnapshot lot: querySnapshot.getChildren()) {
-                    DataSnapshot snapshot1 = snapshot.child("items").child(lot.getKey().toString());
-                        view.updateView(setFields(snapshot.child("items").child(lot.getKey().toString())));
+                        view.updateView(setFields(snapshot.child("items").child(lot.getKey())));
                 }
                 view.onComplete();
             }
@@ -124,6 +123,16 @@ public class DataModel {
 
     public static void removeItem(Item item) {
         ref.child("items/" + item.getLot()).removeValue();
+        Field [] fields = item.getClass().getFields();
+        for (Field field: fields) {
+            try {
+                if (!field.getName().equals("mediaUrls"))
+                    ref.child(field.getName()).child((String) Objects.requireNonNull(field.get(item))).child(item.getLot()).removeValue();
+            } catch (IllegalAccessException e) {
+                Log.v("error", Objects.requireNonNull(e.getMessage()));
+            }
+
+        }
     }
 
     public static void addItem(Item item, android.content.Context context, DataView.AddItemCallback callback) {

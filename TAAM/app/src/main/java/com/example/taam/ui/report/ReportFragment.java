@@ -42,52 +42,60 @@ import com.itextpdf.layout.Document;
 
 import android.Manifest;
 import android.content.Intent;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class ReportFragment extends Fragment implements DataView{
+public class ReportFragment extends Fragment implements DataView {
     private String pdfPath;
-    private HashMap<String, PDFGenerator> generatorHashMap = new HashMap<String, PDFGenerator>() {{
-        put("Category", new Reports());
-        put("Period", new Reports());
-        put("Lot number", new Reports());
-        put("Name", new Reports());
-        put("Category with Description and Picture only", new Reports());
-        put("Period with Description and Picture only", new Reports());
-        put("All reports", new Reports());
-    }};;
-    private Document document;
-    PDFGenerator generator;
+    private HashMap<String, PDFGenerator> generatorHashMap;
+    private PDFGenerator generator;
+    private PdfWriter writer;
+    private PdfDocument pdfDoc;
+    File file;
+    Document document;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+    private EditText byItemText;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_report, container, false);
-        Button generate = view.findViewById(R.id.buttonGenerate);
+        setupUI(view);
+        setupPermissionLauncher();
+        return view;
+    }
 
+    private void setupUI(View view) {
+        Button generate = view.findViewById(R.id.buttonGenerate);
+        Button cancel = view.findViewById(R.id.buttonCancel);
         Spinner spinner = view.findViewById(R.id.spinner4);
+        byItemText = view.findViewById(R.id.editTextNumberLot);
+
+        setupSpinner(spinner);
+
+        generate.setOnClickListener(v -> {
+            if (byItemText.getText() == null) {
+                Toast.makeText(getContext(), "Please specify category", Toast.LENGTH_SHORT).show();
+            } else {
+                handlePermissionsAndGeneratePdf();
+            }
+        });
+
+        cancel.setOnClickListener(v -> {
+            FragmentLoader.loadFragment(getParentFragmentManager(), new AdminHomeFragment());
+        });
+    }
+
+    private void setupSpinner(Spinner spinner) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.report_options_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
-        // Initialize the permission launcher
-        requestPermissionLauncher = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                isGranted -> {
-                    if (isGranted) {
-                        // Permission granted
-                        generatePdf();
-                    } else {
-                        // Permission denied
-                        Log.v("Permission", "Storage permission denied");
-                    }
-                }
-        );
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -98,80 +106,91 @@ public class ReportFragment extends Fragment implements DataView{
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // No action needed
             }
         });
+    }
 
-        generate.setOnClickListener(v -> {
-            generatorHashMap.clear();
+    private void setupPermissionLauncher() {
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                generatePdf();
+            } else {
+                Log.v("Permission", "Storage permission denied");
+            }
+        });
+    }
+
+    private void handlePermissionsAndGeneratePdf() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()) {
+                generatePdf();
+            } else {
+                startActivity(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+            } else {
+                generatePdf();
+            }
+        }
+    }
+
+    private void generatePdf() {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("spinner", Context.MODE_PRIVATE);
+        String category = sharedPreferences.getString("selected", "error");
+        generator = getGeneratorForCategory(category);
+
+        pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/TAAMReport" + category + byItemText.getText().toString() + ".pdf";
+        file = new File(pdfPath);
+
+        try {
+            writer = new PdfWriter(file);
+            pdfDoc = new PdfDocument(writer);
+            document = new Document(pdfDoc);
+
+            DataModel dm = new DataModel(this);
+            generator.generate(document);
+
+            loadDataIntoGenerator(dm, category);
+            Log.v("Generate Report", "Successful");
+        } catch (FileNotFoundException e) {
+            Log.v("error", e.getMessage());
+        }
+    }
+
+    private PDFGenerator getGeneratorForCategory(String category) {
+        if (generatorHashMap == null) {
             generatorHashMap = new HashMap<String, PDFGenerator>() {{
                 put("Category", new Reports());
                 put("Period", new Reports());
                 put("Lot number", new Reports());
                 put("Name", new Reports());
-                put("Category with Description and Picture only", new Reports());
-                put("Period with Description and Picture only", new Reports());
-                put("All reports", new Reports());
-                }};
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                if (Environment.isExternalStorageManager()) {
-                    // Permission granted
-                    generatePdf();
-                } else {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                    startActivity(intent);
-                }
-            } else {
-                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED ||
-                        ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                                != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                    requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-                }
-                else {
-                    // Permission already granted
-                    generatePdf();
-                }
-            }
-        });
-
-        return view;
+                put("Category with Description and Picture only", new Reports()); //TODO: implement
+                put("Period with Description and Picture only", new Reports()); //TODO: implement
+                put("All reports", new Reports()); //TODO: implement
+            }};
+        }
+        return generatorHashMap.get(category);
     }
 
-    public void generatePdf() {
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("spinner", Context.MODE_PRIVATE);
-        String category = sharedPreferences.getString("selected", "error");
-        generator = generatorHashMap.get(category);
-
-        EditText byItemText = requireView().findViewById(R.id.editTextNumberLot);
-
-        pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/TAAMReport.pdf";
-        File file = new File(pdfPath);
-
-        try {
-            PdfWriter writer = new PdfWriter(file);
-            PdfDocument pdfDoc = new PdfDocument(writer);
-            this.document = new Document(pdfDoc);
-            DataModel dm = new DataModel(this);
-
-            generator.generate(document);
-            if (category.equals("Category with Description and Picture only"))
-                dm.getItemsByCategory("category", byItemText.getText().toString());
-            if (category.equals("Period with Description and Picture only"))
-                dm.getItemsByCategory("period", byItemText.getText().toString());
-            else
-                dm.getItemsByCategory((category.toLowerCase()), byItemText.getText().toString());
-
-            Log.v("Generate Report", "Successful");
-        } catch (FileNotFoundException e) {
-            Log.v("error", Objects.requireNonNull(e.getMessage()));
+    private void loadDataIntoGenerator(DataModel dm, String category) {
+        if (category.equals("Category with Description and Picture only")) {
+            dm.getItemsByCategory("category", byItemText.getText().toString());
+        } else if (category.equals("Period with Description and Picture only")) {
+            dm.getItemsByCategory("period", byItemText.getText().toString());
+        } else {
+            dm.getItemsByCategory(category.toLowerCase(), byItemText.getText().toString());
         }
     }
 
     private void viewPdf() {
-        File file = new File(pdfPath);
+        //File file = new File(pdfPath);
         Uri pdfUri = FileProvider.getUriForFile(requireContext(),
                 requireContext().getPackageName() + ".provider", file);
 
@@ -192,12 +211,25 @@ public class ReportFragment extends Fragment implements DataView{
     @Override
     public void onComplete() {
         generator.applyChanges();
-        document.close();
+        try {
+            document.close();
+        } catch (Exception e) {
+            Log.v("error", e.getMessage());
+        } try {
+            pdfDoc.close();
+        }catch (Exception e) {
+            Log.v("error", e.getMessage());
+        }try {
+            writer.close();
+        } catch (Exception e) {
+            Log.v("error", e.getMessage());
+        }
         viewPdf();
     }
 
     @Override
     public void showError(String errorMessage) {
-
+        // Handle error
     }
 }
+

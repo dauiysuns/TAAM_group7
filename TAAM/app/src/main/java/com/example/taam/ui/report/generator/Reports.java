@@ -7,6 +7,7 @@ import com.example.taam.database.Item;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
 import com.itextpdf.layout.element.Cell;
@@ -15,7 +16,9 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.UnitValue;
 import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.pdfa.PdfADocument;
 
+import java.io.File;
 import java.io.IOException;
 
 import java.lang.reflect.Field;
@@ -25,49 +28,52 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class Reports implements PDFGenerator{
-    static PdfFont bold;
-    static PdfFont normal;
     Document document;
     Table table;
 
-    static {
+    // Title
+
+
+
+    // Table Column Widths
+
+    // Header style
+
+
+    // Cell style
+
+
+    public void generate(Document document) {
+        PdfFont bold;
+        PdfFont normal;
         try {
             bold = PdfFontFactory.createFont("Helvetica-Bold");
             normal = PdfFontFactory.createFont("Helvetica");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
 
-    // Title
-    Paragraph title = new Paragraph("Toronto Asian Art Museum Collection Management")
-            .setFont(bold)
-            .setFontSize(20)
-            .setBold()
-            .setMarginBottom(20);
+        Paragraph title = new Paragraph("Toronto Asian Art Museum Collection Management")
+                .setFont(bold)
+                .setFontSize(20)
+                .setBold()
+                .setMarginBottom(20);
 
+        float[] columnWidths = {1, 3, 3, 2, 4, 4};
 
-    // Table Column Widths
-    float[] columnWidths = {1, 3, 3, 2, 4, 4};
+        Style headerStyle = new Style()
+                .setFont(bold)
+                .setFontSize(12)
+                .setBackgroundColor(new DeviceRgb(200, 200, 200))
+                .setPadding(5);
 
-    // Header style
-    static Style headerStyle = new Style()
-            .setFont(bold)
-            .setFontSize(12)
-            .setBackgroundColor(new DeviceRgb(200, 200, 200))
-            .setPadding(5);
+        this.document = null;
+        this.table = null;
 
-    // Cell style
-    static Style cellStyle = new Style()
-            .setFont(normal)
-            .setFontSize(10)
-            .setPadding(5);
-
-    public void generate(Document document) {
         this.document = document;
         document.add(title);
 
-        table = new Table(UnitValue.createPercentArray(columnWidths));
+        this.table = new Table(UnitValue.createPercentArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
 
         table.addHeaderCell(new Cell().add(new Paragraph("Lot#")).addStyle(headerStyle));
@@ -79,6 +85,18 @@ public class Reports implements PDFGenerator{
     }
     @Override
     public void populate(Item item){
+        PdfFont normal;
+        try {
+            normal = PdfFontFactory.createFont("Helvetica");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Style cellStyle = new Style()
+                .setFont(normal)
+                .setFontSize(10)
+                .setPadding(5);
+
+
         Field [] fields = item.getClass().getFields();
         table.addCell(new Cell().add(new Paragraph(item.getLot())));
         for (Field field: fields) {
@@ -101,6 +119,6 @@ public class Reports implements PDFGenerator{
 
     @Override
     public void applyChanges() {
-        document.add(table);
+        this.document.add(this.table);
     }
 }
