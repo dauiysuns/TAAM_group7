@@ -8,8 +8,6 @@ import com.example.taam.database.DataModel;
 import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,11 +54,6 @@ import com.google.firebase.storage.UploadTask;
 
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddFunction#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddFunction extends Fragment {
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
@@ -72,8 +65,6 @@ public class AddFunction extends Fragment {
     private String mediaType;
 
     //ngl i don't know really know what these are... i just be using them ?? maybe
-    private final DatabaseReference itemsRef = DataModel.ref; //the static field
-    private final FirebaseDatabase db = FirebaseDatabase.getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/");
     StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
     @Nullable
