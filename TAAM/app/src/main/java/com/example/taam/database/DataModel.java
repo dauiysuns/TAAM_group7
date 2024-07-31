@@ -82,16 +82,27 @@ public class DataModel {
         });
     }
 
-    public void getItemsByCategory(String category, String query) {
+    public void getItemsByCategory(String category, String query, android.content.Context context) {
+
         fetchData(ref, new DataListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (category.equals("lot number")) {
-                    view.updateView(setFields(snapshot.child("items").child(query)));
-                    view.onComplete();
+                    DataSnapshot querySnapshot = snapshot.child("items").child(query);
+                    if(!querySnapshot.exists()){
+                        Toast.makeText(context, "This lot number does not exist.", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        view.updateView(setFields(querySnapshot));
+                        view.onComplete();
+                    }
                     return;
                 }
                 DataSnapshot querySnapshot = snapshot.child(category).child(query);
+                if(!querySnapshot.exists()){
+                    Toast.makeText(context, "This " + category + " does not exist.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 for (DataSnapshot lot: querySnapshot.getChildren()) {
                         view.updateView(setFields(snapshot.child("items").child(lot.getKey())));
                 }

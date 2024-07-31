@@ -79,8 +79,8 @@ public class ReportFragment extends Fragment implements DataView {
         setupSpinner(spinner);
 
         generate.setOnClickListener(v -> {
-            if (byItemText.getText() == null) {
-                Toast.makeText(getContext(), "Please specify category", Toast.LENGTH_SHORT).show();
+            if (byItemText.getText().toString().equals("")) {
+                Toast.makeText(getContext(), "Please enter an input", Toast.LENGTH_SHORT).show();
             } else {
                 handlePermissionsAndGeneratePdf();
             }
@@ -181,11 +181,11 @@ public class ReportFragment extends Fragment implements DataView {
 
     private void loadDataIntoGenerator(DataModel dm, String category) {
         if (category.equals("Category with Description and Picture only")) {
-            dm.getItemsByCategory("category", byItemText.getText().toString());
+            dm.getItemsByCategory("category", byItemText.getText().toString(), getContext());
         } else if (category.equals("Period with Description and Picture only")) {
-            dm.getItemsByCategory("period", byItemText.getText().toString());
+            dm.getItemsByCategory("period", byItemText.getText().toString(), getContext());
         } else {
-            dm.getItemsByCategory(category.toLowerCase(), byItemText.getText().toString());
+            dm.getItemsByCategory(category.toLowerCase(), byItemText.getText().toString(), getContext());
         }
     }
 
