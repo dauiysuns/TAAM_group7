@@ -66,7 +66,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                 Glide.with(context)
                         .load(uri)
-                        .override(Target.SIZE_ORIGINAL) // or set fixed dimensions like .override(600, 600)
+                        .override(700,700) // or set fixed dimensions like .override(600, 600)
                         .into(imageViewHolder.imageView);
             }).addOnFailureListener(exception -> {
                 Log.v("Load Image", "Error while loading image");

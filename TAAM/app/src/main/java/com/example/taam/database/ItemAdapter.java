@@ -69,7 +69,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         }
 
         // set up Media recyclerView
-        ArrayList<HashMap<String, String>> mediaItems = new ArrayList<>();
+        ArrayList<HashMap<String, String>> mediaItems = item.mediaUrls;
         MediaAdapter mediaAdapter = new MediaAdapter(mediaItems, context);
         holder.mediaRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.mediaRecyclerView.setAdapter(mediaAdapter);
