@@ -49,15 +49,17 @@ import java.io.FileNotFoundException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Objects;
+import com.example.taam.ui.report.generator.DownloadCompleteListener;
 
-public class ReportFragment extends Fragment implements DataView {
+
+public class ReportFragment extends Fragment implements DataView, DownloadCompleteListener {
     private String pdfPath;
     private HashMap<String, PDFGenerator> generatorHashMap;
     private PDFGenerator generator;
     private PdfWriter writer;
     private PdfDocument pdfDoc;
-    File file;
-    Document document;
+    private File file;
+    private Document document;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private EditText byItemText;
 
@@ -146,6 +148,10 @@ public class ReportFragment extends Fragment implements DataView {
         String category = sharedPreferences.getString("selected", "error");
         generator = getGeneratorForCategory(category);
 
+        if (generator instanceof Reports) {
+            ((Reports) generator).setDownloadCompleteListener(this);
+        }
+
         pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/TAAMReport" + category + byItemText.getText().toString() + ".pdf";
         file = new File(pdfPath);
 
@@ -190,7 +196,6 @@ public class ReportFragment extends Fragment implements DataView {
     }
 
     private void viewPdf() {
-        //File file = new File(pdfPath);
         Uri pdfUri = FileProvider.getUriForFile(requireContext(),
                 requireContext().getPackageName() + ".provider", file);
 
@@ -208,18 +213,18 @@ public class ReportFragment extends Fragment implements DataView {
         generator.populate(item);
     }
 
-    @Override
-    public void onComplete() {
-        generator.applyChanges();
+    public void onCompleted() {
         try {
             document.close();
         } catch (Exception e) {
             Log.v("error", e.getMessage());
-        } try {
+        }
+        try {
             pdfDoc.close();
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.v("error", e.getMessage());
-        }try {
+        }
+        try {
             writer.close();
         } catch (Exception e) {
             Log.v("error", e.getMessage());
@@ -228,8 +233,19 @@ public class ReportFragment extends Fragment implements DataView {
     }
 
     @Override
+    public void onComplete() {
+
+    }
+
+    @Override
     public void showError(String errorMessage) {
         // Handle error
     }
+
+    @Override
+    public void onDownloadComplete() {
+        onCompleted();
+    }
 }
+
 

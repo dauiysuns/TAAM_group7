@@ -34,53 +34,62 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class Reports implements PDFGenerator{
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference();
-    StorageReference fileRef;
-    Document document;
-    Table table;
+public class Reports implements PDFGenerator {
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReference();
+    private Document document;
+    private Table table;
+    private Cell cell;
+    private DownloadCompleteListener downloadCompleteListener;
+    private int pendingDownloads = 0;
+
+    public void setDownloadCompleteListener(DownloadCompleteListener downloadCompleteListener) {
+        this.downloadCompleteListener = downloadCompleteListener;
+    }
 
     public void downloadFile(String urlPath) {
-        fileRef = storage.getReferenceFromUrl(urlPath);
+        pendingDownloads++;
+        StorageReference fileRef = storage.getReferenceFromUrl(urlPath);
         try {
             File localFile = File.createTempFile("image", "jpg");
-            fileRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    // File downloaded successfully
-                    String absolutePath = localFile.getAbsolutePath();
-                    Log.d("Firebase", "File downloaded to: " + absolutePath);
+            fileRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                String absolutePath = localFile.getAbsolutePath();
+                Log.d("Firebase", "File downloaded to: " + absolutePath);
 
-                    // Now you can use this path with iText
-
-                    try {
-                        Image img = new Image(ImageDataFactory.create(absolutePath));
-                        table.addCell(new Cell().add(img));
-                    } catch (MalformedURLException e) {
-                        Log.e("Firebase", "Error creating URL", e);
-                    }
-                    // Add image to PDF document as needed
-
+                try {
+                    Image img = new Image(ImageDataFactory.create(absolutePath));
+                    cell.add(img.scaleAbsolute(100f, 100f));
+                    checkPendingDownloads();
+                } catch (MalformedURLException e) {
+                    Log.e("Firebase", "Error creating URL", e);
+                    checkPendingDownloads();
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle any errors
-                    Log.e("Firebase", "Error downloading file", exception);
-                }
+            }).addOnFailureListener(exception -> {
+                Log.e("Firebase", "Error downloading file", exception);
+                checkPendingDownloads();
             });
         } catch (IOException e) {
             Log.e("Firebase", "Error creating local file", e);
+            checkPendingDownloads();
+        }
+    }
+
+    private void checkPendingDownloads() {
+        pendingDownloads--;
+        if (pendingDownloads == 0) {
+            table.addCell(cell);
+            applyChanges();
+            if (downloadCompleteListener != null) {
+                downloadCompleteListener.onDownloadComplete();
+            }
         }
     }
 
     public void generate(Document document) {
         PdfFont bold;
-        PdfFont normal;
+        cell = new Cell();
         try {
             bold = PdfFontFactory.createFont("Helvetica-Bold");
-            normal = PdfFontFactory.createFont("Helvetica");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -99,13 +108,10 @@ public class Reports implements PDFGenerator{
                 .setBackgroundColor(new DeviceRgb(200, 200, 200))
                 .setPadding(5);
 
-        this.document = null;
-        this.table = null;
-
         this.document = document;
         document.add(title);
 
-        this.table = new Table(UnitValue.createPercentArray(columnWidths));
+        table = new Table(UnitValue.createPercentArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
 
         table.addHeaderCell(new Cell().add(new Paragraph("Lot#")).addStyle(headerStyle));
@@ -115,8 +121,9 @@ public class Reports implements PDFGenerator{
         table.addHeaderCell(new Cell().add(new Paragraph("Description")).addStyle(headerStyle));
         table.addHeaderCell(new Cell().add(new Paragraph("Picture/Video")).addStyle(headerStyle));
     }
+
     @Override
-    public void populate(Item item){
+    public void populate(Item item) {
         PdfFont normal;
         try {
             normal = PdfFontFactory.createFont("Helvetica");
@@ -128,23 +135,23 @@ public class Reports implements PDFGenerator{
                 .setFontSize(10)
                 .setPadding(5);
 
-
-        Field [] fields = item.getClass().getFields();
+        Field[] fields = item.getClass().getFields();
         table.addCell(new Cell().add(new Paragraph(item.getLot())));
-        for (Field field: fields) {
+        for (Field field : fields) {
             try {
                 if (field.getName().equals("mediaUrls")) {
                     ArrayList<HashMap<String, String>> mediaUrls = (ArrayList<HashMap<String, String>>) field.get(item);
-                    for (HashMap<String, String> media: mediaUrls) {
-                        table.addCell(new Cell().addStyle(cellStyle));
+                    for (HashMap<String, String> media : mediaUrls) {
+                        //table.addCell(new Cell().addStyle(cellStyle));
                         downloadFile(media.get("image"));
                     }
-                } else
+                } else {
                     table.addCell(new Cell()
-                            .add(new Paragraph(Objects
-                                    .requireNonNull(field.get(item))
-                                    .toString())))
+                                    .add(new Paragraph(Objects
+                                            .requireNonNull(field.get(item))
+                                            .toString())))
                             .addStyle(cellStyle);
+                }
             } catch (IllegalAccessException e) {
                 Log.v("error", Objects.requireNonNull(e.getMessage()));
             }
@@ -153,6 +160,7 @@ public class Reports implements PDFGenerator{
 
     @Override
     public void applyChanges() {
-        this.document.add(this.table);
+        document.add(table);
     }
 }
+
