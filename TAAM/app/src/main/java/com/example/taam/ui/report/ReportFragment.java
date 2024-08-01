@@ -23,7 +23,9 @@ import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.home.AdminHomeFragment;
 import com.example.taam.ui.report.Handler.PDFHandler;
 import com.example.taam.ui.report.Handler.PermissionHandler;
+import com.example.taam.ui.report.Handler.generator.PDFGenerator;
 import com.example.taam.ui.report.Handler.generator.ReportForAllFields;
+import com.example.taam.ui.report.Handler.generator.ReportForDescriptionImage;
 
 public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, PermissionHandler.PermissionCallback, SpinnerFragment.SpinnerCallback {
     private EditText byItemText;
@@ -76,8 +78,15 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("spinner", Context.MODE_PRIVATE);
         String category = sharedPreferences.getString("selected", "error");
 
-        ReportForAllFields generator = new ReportForAllFields();
-        generator.setDownloadCompleteListener(pdfHandler);
+        PDFGenerator generator;
+        if(category.equals("Category with Description and Picture only") || category.equals("Period with Description and Picture only")){
+            generator = new ReportForDescriptionImage();
+            ((ReportForDescriptionImage) generator).setDownloadCompleteListener(pdfHandler);
+        }
+        else{
+            generator = new ReportForAllFields();
+            ((ReportForAllFields) generator).setDownloadCompleteListener(pdfHandler);
+        }
 
         pdfHandler.generatePdf(category, byItemText.getText().toString(), generator);
     }
