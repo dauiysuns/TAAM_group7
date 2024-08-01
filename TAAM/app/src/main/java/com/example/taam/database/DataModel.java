@@ -11,10 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class DataModel {
     public static HashMap<String, String> lotToImage = new HashMap<>();
@@ -23,111 +20,85 @@ public class DataModel {
             .getReference();
     DataView view;
 
-    public DataModel() {}
     public DataModel(DataView view) {
         this.view = view;
     }
 
-    public interface DataListener {
-        void onDataChange(DataSnapshot snapshot);
-        void onError(DatabaseError error);
-    }
-
-    public void fetchData(DatabaseReference reference, DataListener listener) {
-
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getItemByLot(String lotNumber) {
+        ref.child("items/" + lotNumber).orderByPriority().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (listener != null) {
-                    listener.onDataChange(snapshot);
+                Item item = snapshot.getValue(Item.class);
+                if (item != null) {
+                    view.updateView(item);
+                } else {
+                    view.showError("Item not found");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                if (listener != null) {
-                    listener.onError(error);
-                }
-            }
-        });
-    }
-
-    private Item setFields(DataSnapshot snapshot) {
-        Item item = new Item();
-        item.setLot(snapshot.getKey());
-        Field[] fields = item.getClass().getFields();
-        for (Field field : fields) {
-            try {
-                if (field.getName().equals("mediaUrls"))
-                    field.set(item, snapshot.child(field.getName()).getValue());
-                field.set(item, snapshot.child(field.getName()).getValue());
-            } catch (IllegalAccessException e) {
-                Log.v("error", Objects.requireNonNull(e.getMessage()));
-            }
-        }
-        return item;
-    }
-
-    public void getItemByLot(String lotNumber){
-        fetchData(ref.child("items/" + lotNumber).orderByPriority().getRef(), new DataListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                view.updateView(setFields(snapshot));
-            }
-
-            @Override
-            public void onError(@NonNull DatabaseError error) {
                 view.showError(error.getMessage());
             }
         });
     }
 
     public void getItemsByCategory(String category, String query, android.content.Context context) {
-
-        fetchData(ref, new DataListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (category.equals("lot number")) {
                     DataSnapshot querySnapshot = snapshot.child("items").child(query);
-                    if(!querySnapshot.exists()){
+                    if (!querySnapshot.exists()) {
                         Toast.makeText(context, "This lot number does not exist.", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        view.updateView(setFields(querySnapshot));
-                        view.onComplete();
+                    } else {
+                        Item item = querySnapshot.getValue(Item.class);
+                        if (item != null) {
+                            view.updateView(item);
+                            view.onComplete();
+                        } else {
+                            view.showError("Item not found");
+                        }
                     }
                     return;
                 }
                 DataSnapshot querySnapshot = snapshot.child(category).child(query);
-                if(!querySnapshot.exists()){
+                if (!querySnapshot.exists()) {
                     Toast.makeText(context, "This " + category + " does not exist.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                for (DataSnapshot lot: querySnapshot.getChildren()) {
-                        view.updateView(setFields(snapshot.child("items").child(lot.getKey())));
+                for (DataSnapshot lot : querySnapshot.getChildren()) {
+                    DataSnapshot itemSnapshot = snapshot.child("items").child(lot.getKey());
+                    Item item = itemSnapshot.getValue(Item.class);
+                    if (item != null) {
+                        view.updateView(item);
+                    }
                 }
                 view.onComplete();
             }
 
             @Override
-            public void onError(@NonNull DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 view.showError(error.getMessage());
             }
         });
     }
 
-    public void getAllItems(){
-        fetchData(ref.child("items").getRef(), new DataListener() {
+    public void getAllItems() {
+        ref.child("items").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                    view.updateView(setFields(dataSnapshot));
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Item item = dataSnapshot.getValue(Item.class);
+                    if (item != null) {
+                        view.updateView(item);
+                    }
                 }
                 view.onComplete();
             }
 
             @Override
-            public void onError(@NonNull DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 view.showError(error.getMessage());
             }
         });
@@ -135,20 +106,12 @@ public class DataModel {
 
     public static void removeItem(Item item) {
         ref.child("items/" + item.getLot()).removeValue();
-        Field [] fields = item.getClass().getFields();
-        for (Field field: fields) {
-            try {
-                if (!field.getName().equals("mediaUrls"))
-                    ref.child(field.getName()).child((String) Objects.requireNonNull(field.get(item))).child(item.getLot()).removeValue();
-            } catch (IllegalAccessException e) {
-                Log.v("error", Objects.requireNonNull(e.getMessage()));
-            }
-
-        }
+        ref.child("name").child(item.name).child(item.getLot()).removeValue();
+        ref.child("category").child(item.category).child(item.getLot()).removeValue();
+        ref.child("period").child(item.period).child(item.getLot()).removeValue();
     }
 
     public static void addItem(Item item, android.content.Context context, DataView.AddItemCallback callback) {
-
         final DatabaseReference itemRef = ref.child("items/" + item.getLot());
 
         itemRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -160,18 +123,10 @@ public class DataModel {
                     callback.onComplete(false);
                 } else {
                     // No duplicate, add item
-                    Field[] fields = item.getClass().getFields();
-                    for (Field field : fields) {
-                        try {
-                            itemRef.child(field.getName()).setValue(field.get(item));
-                            if (!field.getName().equals("mediaUrls"))
-                                ref.child(field.getName()).child((String) Objects.requireNonNull(field.get(item))).child(item.getLot()).setValue("null");
-                        } catch (IllegalAccessException e) {
-                            Log.v("error", e.getMessage());
-                        }
-                    }
-                    ArrayList<HashMap<String, String>> mediaItems = item.mediaUrls;
-                    itemRef.child("mediaUrls").setValue(mediaItems);
+                    itemRef.setValue(item);
+                    ref.child("name").child(item.name).child(item.getLot()).setValue("null");
+                    ref.child("category").child(item.category).child(item.getLot()).setValue("null");
+                    ref.child("period").child(item.period).child(item.getLot()).setValue("null");
                     callback.onComplete(true);
                 }
             }
