@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            FragmentLoader.loadDefaultFragment(getSupportFragmentManager(), new AdminHomeFragment());
+            FragmentLoader.loadDefaultFragment(getSupportFragmentManager(), new UserHomeFragment());
         }
     }
 

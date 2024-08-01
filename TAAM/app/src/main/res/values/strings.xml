@@ -73,4 +73,19 @@
     <string name="yes">YES</string>
     <string name="cancel">CANCEL</string>
     <string name="new_entry">New entry</string>
+    <string name="detail">detail</string>
+    <string name="for_item">Fore item</string>
+    <string name="generate_report_by">Generate report by:</string>
+    <string name="cancel_not_bold">Cancel</string>
+    <string name="generate">Generate</string>
+    <string name="generate_report">Generate report</string>
+
+    <string-array name="report_options_array">
+        <item>Lot number</item>
+        <item>Name</item>
+        <item>Category</item>
+        <item>Category with Description and Picture only</item>
+        <item>Period</item>
+        <item>Period with Description and Picture only</item>
+    </string-array>
 </resources>

@@ -9,6 +9,7 @@ import com.example.taam.database.Item;
 import com.example.taam.R;
 import com.example.taam.ui.add.AddFunction;
 import com.example.taam.ui.remove.RemoveDialogFragment;
+import com.example.taam.ui.report.ReportFragment;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,7 @@ public class AdminHomeFragment extends BaseHomeFragment {
             removeItem();
         });
         buttonAdd.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new AddFunction()));
+        buttonReport.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new ReportFragment()));
         // Add listeners for other buttons if needed
     }
 
