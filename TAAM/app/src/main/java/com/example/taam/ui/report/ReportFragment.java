@@ -1,67 +1,37 @@
 package com.example.taam.ui.report;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.example.taam.R;
-import com.example.taam.database.DataModel;
-import com.example.taam.database.DataView;
-import com.example.taam.database.Item;
 import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.home.AdminHomeFragment;
-import com.example.taam.ui.report.generator.Reports;
+import com.example.taam.ui.report.Handler.PDFHandler;
+import com.example.taam.ui.report.Handler.PermissionHandler;
+import com.example.taam.ui.report.generator.ReportForAllFields;
 import com.example.taam.ui.report.generator.PDFGenerator;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
 
-import android.Manifest;
-import android.content.Intent;
-import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.Writer;
 import java.util.HashMap;
-import java.util.Objects;
-import com.example.taam.ui.report.generator.DownloadCompleteListener;
 
-
-public class ReportFragment extends Fragment implements DataView, DownloadCompleteListener {
-    private String pdfPath;
-    private HashMap<String, PDFGenerator> generatorHashMap;
-    private PDFGenerator generator;
-    private PdfWriter writer;
-    private PdfDocument pdfDoc;
-    private File file;
-    private Document document;
-    private ActivityResultLauncher<String> requestPermissionLauncher;
+public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, PermissionHandler.PermissionCallback, SpinnerFragment.SpinnerCallback {
     private EditText byItemText;
+    private PDFHandler pdfHandler;
+    private PermissionHandler permissionHandler;
 
     @Nullable
     @Override
@@ -78,174 +48,58 @@ public class ReportFragment extends Fragment implements DataView, DownloadComple
         Spinner spinner = view.findViewById(R.id.spinner4);
         byItemText = view.findViewById(R.id.editTextNumberLot);
 
-        setupSpinner(spinner);
+        new SpinnerFragment(requireContext(), spinner, this).setupSpinner();
 
         generate.setOnClickListener(v -> {
             if (byItemText.getText().toString().equals("")) {
                 Toast.makeText(getContext(), "Please enter an input", Toast.LENGTH_SHORT).show();
             } else {
-                handlePermissionsAndGeneratePdf();
+                permissionHandler.handlePermissions();
             }
         });
 
-        cancel.setOnClickListener(v -> {
-            FragmentLoader.loadFragment(getParentFragmentManager(), new AdminHomeFragment());
-        });
-    }
-
-    private void setupSpinner(Spinner spinner) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
-                R.array.report_options_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SharedPreferences sharedPreference = requireContext().getSharedPreferences("spinner", Context.MODE_PRIVATE);
-                sharedPreference.edit().putString("selected", parent.getItemAtPosition(position).toString()).apply();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // No action needed
-            }
-        });
+        cancel.setOnClickListener(v -> FragmentLoader.loadFragment(getParentFragmentManager(), new AdminHomeFragment()));
     }
 
     private void setupPermissionLauncher() {
-        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+        ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
             if (isGranted) {
                 generatePdf();
             } else {
                 Log.v("Permission", "Storage permission denied");
             }
         });
-    }
 
-    private void handlePermissionsAndGeneratePdf() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
-                generatePdf();
-            } else {
-                startActivity(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-            } else {
-                generatePdf();
-            }
-        }
+        permissionHandler = new PermissionHandler(requireActivity(), requireContext(), requestPermissionLauncher, this);
     }
 
     private void generatePdf() {
+        pdfHandler = new PDFHandler(requireContext(), this);
+
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("spinner", Context.MODE_PRIVATE);
         String category = sharedPreferences.getString("selected", "error");
-        generator = getGeneratorForCategory(category);
 
-        if (generator instanceof Reports) {
-            ((Reports) generator).setDownloadCompleteListener(this);
-        }
+        ReportForAllFields generator = new ReportForAllFields();
+        generator.setDownloadCompleteListener(pdfHandler);
 
-        pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/TAAMReport" + category + byItemText.getText().toString() + ".pdf";
-        file = new File(pdfPath);
-
-        try {
-            writer = new PdfWriter(file);
-            pdfDoc = new PdfDocument(writer);
-            document = new Document(pdfDoc);
-
-            DataModel dm = new DataModel(this);
-            generator.generate(document);
-
-            loadDataIntoGenerator(dm, category);
-            Log.v("Generate Report", "Successful");
-        } catch (FileNotFoundException e) {
-            Log.v("error", e.getMessage());
-        }
-    }
-
-    private PDFGenerator getGeneratorForCategory(String category) {
-        if (generatorHashMap == null) {
-            generatorHashMap = new HashMap<String, PDFGenerator>() {{
-                put("Category", new Reports());
-                put("Period", new Reports());
-                put("Lot number", new Reports());
-                put("Name", new Reports());
-                put("Category with Description and Picture only", new Reports()); //TODO: implement
-                put("Period with Description and Picture only", new Reports()); //TODO: implement
-                put("All reports", new Reports()); //TODO: implement
-            }};
-        }
-        return generatorHashMap.get(category);
-    }
-
-    private void loadDataIntoGenerator(DataModel dm, String category) {
-        if (category.equals("Category with Description and Picture only")) {
-            dm.getItemsByCategory("category", byItemText.getText().toString(), getContext());
-        } else if (category.equals("Period with Description and Picture only")) {
-            dm.getItemsByCategory("period", byItemText.getText().toString(), getContext());
-        } else {
-            dm.getItemsByCategory(category.toLowerCase(), byItemText.getText().toString(), getContext());
-        }
-    }
-
-    private void viewPdf() {
-        Uri pdfUri = FileProvider.getUriForFile(requireContext(),
-                requireContext().getPackageName() + ".provider", file);
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(pdfUri, "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        Intent chooser = Intent.createChooser(intent, "Open PDF");
-        startActivity(chooser);
+        pdfHandler.generatePdf(category, byItemText.getText().toString(), generator);
     }
 
     @Override
-    public void updateView(Item item) {
-        generator.populate(item);
-    }
-
-    public void onCompleted() {
-        try {
-            document.close();
-        } catch (Exception e) {
-            Log.v("error", e.getMessage());
-        }
-        try {
-            pdfDoc.close();
-        } catch (Exception e) {
-            Log.v("error", e.getMessage());
-        }
-        try {
-            writer.close();
-        } catch (Exception e) {
-            Log.v("error", e.getMessage());
-        }
-        viewPdf();
+    public void onPDFGenerated() {
+        pdfHandler.viewPdf();
     }
 
     @Override
-    public void onComplete() {
-
+    public void onPermissionGranted() {
+        generatePdf();
     }
 
     @Override
-    public void showError(String errorMessage) {
-        // Handle error
-    }
-
-    @Override
-    public void onDownloadComplete() {
-        onCompleted();
+    public void onItemSelected(String selected) {
+        //TODO: Handle item selection
     }
 }
+
 
 
