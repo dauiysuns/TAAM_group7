@@ -1,10 +1,16 @@
 package com.example.taam.ui.report.Handler.generator;
 
+import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.taam.database.Item;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -64,6 +70,26 @@ public class ReportForAllFields implements PDFGenerator {
             Log.e("Firebase", "Error creating local file", e);
             checkPendingDownloads();
         }
+    }
+
+    public void downloadVideo(String urlPath, Cell cell) {
+        //pendingDownloads++;
+        StorageReference fileRef = storage.getReferenceFromUrl(urlPath);
+        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Got the download URL
+                String videoUrl = uri.toString();
+                cell.add(new Paragraph(videoUrl).setWidth(100f));
+                checkPendingDownloads();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                checkPendingDownloads();
+            }
+        });
     }
 
     private void checkPendingDownloads() {
@@ -153,8 +179,9 @@ public class ReportForAllFields implements PDFGenerator {
                 }
 
                 if (video != null) {
-                    cell.add(new Paragraph(video));
-                    checkPendingDownloads();
+                    downloadVideo(media.get("video"), cell);
+//                    cell.add(new Paragraph(video));
+//                    checkPendingDownloads();
                 }
             }
             if (mediaUrls.isEmpty()) {
