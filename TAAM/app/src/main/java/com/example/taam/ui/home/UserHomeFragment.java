@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.taam.R;
+import com.example.taam.ui.add.AddFunction;
 import com.example.taam.ui.login.LoginFragmentView;
 
 public class UserHomeFragment extends BaseHomeFragment {
@@ -32,6 +33,6 @@ public class UserHomeFragment extends BaseHomeFragment {
             // Implement search functionality
         });
 
-        buttonAdmin.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new LoginFragmentView()));
+        buttonAdmin.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new AdminHomeFragment()));
     }
 }

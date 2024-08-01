@@ -64,8 +64,14 @@ public class DataModel {
                 }
                 DataSnapshot querySnapshot = snapshot.child(category).child(query);
                 if (!querySnapshot.exists()) {
-                    Toast.makeText(context, "This " + category + " does not exist.",
-                            Toast.LENGTH_SHORT).show();
+                    if(category.equals("name")){
+                        Toast.makeText(context, "This name does not exist.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(context, "This " + category + " does not contain an item.",
+                                Toast.LENGTH_SHORT).show();
+                    }
                     return;
                 }
                 for (DataSnapshot lot : querySnapshot.getChildren()) {

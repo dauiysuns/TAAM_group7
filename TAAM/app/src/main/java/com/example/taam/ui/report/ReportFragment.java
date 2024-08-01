@@ -7,9 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -31,6 +34,9 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
     private EditText byItemText;
     private PDFHandler pdfHandler;
     private PermissionHandler permissionHandler;
+    private Spinner categorySpinner, periodSpinner;
+    private TextView textViewForItem;
+    private String userInput;
 
     @Nullable
     @Override
@@ -46,18 +52,58 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
         Button cancel = view.findViewById(R.id.buttonCancel);
         Spinner spinner = view.findViewById(R.id.spinner4);
         byItemText = view.findViewById(R.id.editTextNumberLot);
+        categorySpinner = view.findViewById(R.id.categorySpinner);
+        periodSpinner = view.findViewById(R.id.periodSpinner);
+        textViewForItem = view.findViewById(R.id.textViewForItem);
 
         new SpinnerFragment(requireContext(), spinner, this).setupSpinner();
 
+        //category spinner
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(requireContext(),
+                R.array.categories_array, android.R.layout.simple_spinner_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter1);
+
+        //period spinner
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(requireContext(),
+                R.array.periods_array, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        periodSpinner.setAdapter(adapter2);
+
+        setUpSpinnerListener(categorySpinner);
+        setUpSpinnerListener(periodSpinner);
+
         generate.setOnClickListener(v -> {
-            if (byItemText.getText().toString().equals("")) {
+            if(byItemText.getVisibility() == View.VISIBLE){
+                userInput = byItemText.getText().toString();
+            }
+            if (userInput.equals("")) {
                 Toast.makeText(getContext(), "Please enter an input", Toast.LENGTH_SHORT).show();
-            } else {
+            }else{
                 permissionHandler.handlePermissions();
             }
+
         });
 
         cancel.setOnClickListener(v -> FragmentLoader.loadFragment(getParentFragmentManager(), new AdminHomeFragment()));
+
+        // hide the category and period spinners for now
+        categorySpinner.setVisibility(View.GONE);
+        periodSpinner.setVisibility(View.GONE);
+    }
+
+    private void setUpSpinnerListener(Spinner spinner){
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                userInput = spinner.getItemAtPosition(position).toString().toLowerCase();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // No action needed
+            }
+        });
     }
 
     private void setupPermissionLauncher() {
@@ -79,16 +125,15 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
         String category = sharedPreferences.getString("selected", "error");
 
         PDFGenerator generator;
+
         if(category.equals("Category with Description and Picture only") || category.equals("Period with Description and Picture only")){
             generator = new ReportForDescriptionImage();
             ((ReportForDescriptionImage) generator).setDownloadCompleteListener(pdfHandler);
-        }
-        else{
+        } else{
             generator = new ReportForAllFields();
             ((ReportForAllFields) generator).setDownloadCompleteListener(pdfHandler);
         }
-
-        pdfHandler.generatePdf(category, byItemText.getText().toString(), generator);
+        pdfHandler.generatePdf(category, userInput, generator);
     }
 
     @Override
@@ -103,7 +148,28 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
 
     @Override
     public void onItemSelected(String selected) {
-        //TODO: Handle item selection
+        if (selected.equals("Category") || selected.equals("Category with Description and Picture only") ){
+            categorySpinner.setVisibility(View.VISIBLE);
+            textViewForItem.setVisibility(View.VISIBLE);
+            byItemText.setVisibility(View.GONE);
+            periodSpinner.setVisibility(View.GONE);
+        } else if (selected.equals("Period") || selected.equals("Period with Description and Picture only")) {
+            periodSpinner.setVisibility(View.VISIBLE);
+            textViewForItem.setVisibility(View.VISIBLE);
+            byItemText.setVisibility(View.GONE);
+            categorySpinner.setVisibility(View.GONE);
+        } else if (selected.equals("All Items")) {
+            byItemText.setVisibility(View.GONE);
+            textViewForItem.setVisibility(View.GONE);
+            categorySpinner.setVisibility(View.GONE);
+            periodSpinner.setVisibility(View.GONE);
+        } else{
+            byItemText.setText("");
+            byItemText.setVisibility(View.VISIBLE);
+            textViewForItem.setVisibility(View.VISIBLE);
+            categorySpinner.setVisibility(View.GONE);
+            periodSpinner.setVisibility(View.GONE);
+        }
     }
 }
 
