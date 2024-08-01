@@ -128,30 +128,28 @@ public class ReportForAllFields implements PDFGenerator {
                 .setPadding(5);
 
         // set up desired order for fields other than lot
-        String [] fieldOrder = {"name", "category", "period", "description", "mediaUrls"};
+        String [] fieldOrder = {"name", "category", "period", "description"};
 
         table.addCell(new Cell().add(new Paragraph(item.getLot())));
-        for (String fieldName : fieldOrder) {
-            try {
+        try{
+            for (String fieldName : fieldOrder) {
                 Field field = item.getClass().getDeclaredField(fieldName);
-                if (field.getName().equals("mediaUrls")) {
-                    ArrayList<HashMap<String, String>> mediaUrls = (ArrayList<HashMap<String, String>>) field.get(item);
-                    for (HashMap<String, String> media : mediaUrls) {
-                        //table.addCell(new Cell().addStyle(cellStyle));
-                        downloadFile(media.get("image"));
-                    }
-                } else {
-                    table.addCell(new Cell()
-                                    .add(new Paragraph(Objects
-                                            .requireNonNull(field.get(item))
-                                            .toString())))
-                            .addStyle(cellStyle);
-                }
-            } catch (IllegalAccessException e) {
-                Log.v("error", Objects.requireNonNull(e.getMessage()));
-            } catch(NoSuchFieldException e){
-                Log.v("error", "Cannot access field " + fieldName);
+                table.addCell(new Cell()
+                                .add(new Paragraph(Objects
+                                        .requireNonNull(field.get(item))
+                                        .toString())))
+                        .addStyle(cellStyle);
             }
+            Field field = item.getClass().getDeclaredField("mediaUrls");
+            ArrayList<HashMap<String, String>> mediaUrls = (ArrayList<HashMap<String, String>>) field.get(item);
+            for (HashMap<String, String> media : mediaUrls) {
+                //table.addCell(new Cell().addStyle(cellStyle));
+                downloadFile(media.get("image"));
+            }
+        } catch (IllegalAccessException e) {
+            Log.v("error", Objects.requireNonNull(e.getMessage()));
+        } catch(NoSuchFieldException e){
+            Log.v("error", "Cannot access field");
         }
     }
 
