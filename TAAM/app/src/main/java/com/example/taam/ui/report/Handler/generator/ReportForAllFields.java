@@ -40,7 +40,7 @@ public class ReportForAllFields implements PDFGenerator {
     }
 
     public void downloadFile(String urlPath, Cell cell) {
-        pendingDownloads++;
+        //pendingDownloads++;
         StorageReference fileRef = storage.getReferenceFromUrl(urlPath);
         try {
             File localFile = File.createTempFile("image", "jpg");
@@ -144,11 +144,22 @@ public class ReportForAllFields implements PDFGenerator {
             Cell cell = new Cell().addStyle(cellStyle);
             table.addCell(cell);
             for (HashMap<String, String> media : mediaUrls) {
+                pendingDownloads++;
+                String image = media.get("image");
+                String video = media.get("video");
                 //table.addCell(new Cell().addStyle(cellStyle));
-                downloadFile(media.get("image"), cell);
-                if (media.get("video") != null) {
-
+                if (image != null) {
+                    downloadFile(media.get("image"), cell);
                 }
+
+                if (video != null) {
+                    cell.add(new Paragraph(video));
+                    checkPendingDownloads();
+                }
+            }
+            if (mediaUrls.isEmpty()) {
+                pendingDownloads++;
+                checkPendingDownloads();
             }
         } catch (IllegalAccessException e) {
             Log.v("error", Objects.requireNonNull(e.getMessage()));
