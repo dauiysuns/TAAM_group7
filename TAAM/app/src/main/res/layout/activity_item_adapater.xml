@@ -77,8 +77,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mediaRecyclerView"
-        android:layout_width="253dp"
-        android:layout_height="184dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginTop="26dp"
         app:layout_constraintStart_toStartOf="parent"

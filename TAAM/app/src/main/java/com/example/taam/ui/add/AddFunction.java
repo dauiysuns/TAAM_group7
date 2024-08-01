@@ -8,8 +8,6 @@ import com.example.taam.database.DataModel;
 import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,11 +54,6 @@ import com.google.firebase.storage.UploadTask;
 
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddFunction#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddFunction extends Fragment {
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
@@ -72,8 +65,6 @@ public class AddFunction extends Fragment {
     private String mediaType;
 
     //ngl i don't know really know what these are... i just be using them ?? maybe
-    private final DatabaseReference itemsRef = DataModel.ref; //the static field
-    private final FirebaseDatabase db = FirebaseDatabase.getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/");
     StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
     @Nullable
@@ -197,22 +188,6 @@ public class AddFunction extends Fragment {
                     Toast.makeText(getContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
                 }
                 mediaUrls.add(map);
-//                mediaReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    String uriString = uri.toString();
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        HashMap<String, String> map = new HashMap<>();
-//                        if (mediaType.equals("image")) {
-//                            map.put("image", uriString);
-//                            Toast.makeText(getContext(), "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
-//                        }
-//                        else if (mediaType.equals("video")) {
-//                            map.put("video", uriString);
-//                            Toast.makeText(getContext(), "Video uploaded successfully", Toast.LENGTH_SHORT).show();
-//                        }
-//                        mediaUrls.add(map);
-//                    }
-//                });
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -283,10 +258,7 @@ public class AddFunction extends Fragment {
         editTextDescription.setText("");
         spinnerCategory.setSelection(0);
         spinnerPeriod.setSelection(0);
-        //only clear arrayList if it contains info
-        if(mediaUrls != null){
-            mediaUrls.clear();
-        }
+        mediaUrls.clear();
         progressBar.setVisibility(View.INVISIBLE);
     }
 }

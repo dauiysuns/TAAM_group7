@@ -12,9 +12,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class DataModel {
-    public static HashMap<String, String> lotToImage = new HashMap<>();
     public static DatabaseReference ref = FirebaseDatabase
             .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
             .getReference();
@@ -64,11 +64,13 @@ public class DataModel {
                 }
                 DataSnapshot querySnapshot = snapshot.child(category).child(query);
                 if (!querySnapshot.exists()) {
-                    Toast.makeText(context, "This " + category + " does not exist.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "This " + category + " does not exist.",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
                 for (DataSnapshot lot : querySnapshot.getChildren()) {
-                    DataSnapshot itemSnapshot = snapshot.child("items").child(lot.getKey());
+                    DataSnapshot itemSnapshot = snapshot.child("items")
+                            .child(Objects.requireNonNull(lot.getKey()));
                     Item item = itemSnapshot.getValue(Item.class);
                     if (item != null) {
                         view.updateView(item);
@@ -116,7 +118,7 @@ public class DataModel {
 
         itemRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // check for duplicate item
                 if (dataSnapshot.exists()) {
                     Toast.makeText(context, "This Lot Number has been used", Toast.LENGTH_SHORT).show();
@@ -132,7 +134,7 @@ public class DataModel {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.v("error", databaseError.getMessage());
             }
         });
