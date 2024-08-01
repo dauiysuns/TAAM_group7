@@ -27,13 +27,13 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class ReportForAllFields implements PDFGenerator {
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference storageRef = storage.getReference();
-    private Document document;
-    private Table table;
+    protected FirebaseStorage storage = FirebaseStorage.getInstance();
+    protected StorageReference storageRef = storage.getReference();
+    protected Document document;
+    protected Table table;
     //private Cell cell;
-    private DownloadCompleteListener downloadCompleteListener;
-    private int pendingDownloads = 0;
+    protected DownloadCompleteListener downloadCompleteListener;
+    protected int pendingDownloads = 0;
 
     public void setDownloadCompleteListener(DownloadCompleteListener downloadCompleteListener) {
         this.downloadCompleteListener = downloadCompleteListener;
@@ -66,7 +66,7 @@ public class ReportForAllFields implements PDFGenerator {
         }
     }
 
-    private void checkPendingDownloads() {
+    protected void checkPendingDownloads() {
         pendingDownloads--;
         if (pendingDownloads == 0) {
             //table.addCell(cell);
@@ -91,8 +91,6 @@ public class ReportForAllFields implements PDFGenerator {
                 .setBold()
                 .setMarginBottom(20);
 
-        float[] columnWidths = {1, 3, 3, 2, 4, 4};
-
         Style headerStyle = new Style()
                 .setFont(bold)
                 .setFontSize(12)
@@ -101,6 +99,12 @@ public class ReportForAllFields implements PDFGenerator {
 
         this.document = document;
         document.add(title);
+
+        generateTable(headerStyle);
+    }
+
+    public void generateTable(Style headerStyle){
+        float[] columnWidths = {1, 3, 3, 2, 4, 4};
 
         table = new Table(UnitValue.createPercentArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
@@ -118,27 +122,18 @@ public class ReportForAllFields implements PDFGenerator {
         PdfFont normal;
         try {
             normal = PdfFontFactory.createFont("Helvetica");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        Style cellStyle = new Style()
-                .setFont(normal)
-                .setFontSize(10)
-                .setPadding(5);
 
-        // set up desired order for fields other than lot
-        String [] fieldOrder = {"name", "category", "period", "description"};
+            Style cellStyle = new Style()
+                    .setFont(normal)
+                    .setFontSize(10)
+                    .setPadding(5);
 
-        table.addCell(new Cell().add(new Paragraph(item.getLot())));
-        try{
-            for (String fieldName : fieldOrder) {
-                Field field = item.getClass().getDeclaredField(fieldName);
-                table.addCell(new Cell()
-                                .add(new Paragraph(Objects
-                                        .requireNonNull(field.get(item))
-                                        .toString())))
-                        .addStyle(cellStyle);
-            }
+            table.addCell(new Cell().add(new Paragraph(item.getLot())));
+
+            // add required field(s)
+            addField(item, cellStyle);
+
+            // add the mediaUrls
             Field field = item.getClass().getDeclaredField("mediaUrls");
             ArrayList<HashMap<String, String>> mediaUrls = (ArrayList<HashMap<String, String>>) field.get(item);
             Cell cell = new Cell().addStyle(cellStyle);
@@ -151,19 +146,21 @@ public class ReportForAllFields implements PDFGenerator {
                 if (image != null) {
                     downloadFile(media.get("image"), cell);
                 }
-
                 if (video != null) {
                     cell.add(new Paragraph(video));
                     checkPendingDownloads();
                 }
             }
             if (mediaUrls.isEmpty()) {
+                cell.add(new Paragraph("None"));
                 pendingDownloads++;
                 checkPendingDownloads();
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
             Log.v("error", Objects.requireNonNull(e.getMessage()));
-        } catch(NoSuchFieldException e){
+        } catch (NoSuchFieldException e) {
             Log.v("error", "Cannot access field");
         }
     }
@@ -171,6 +168,20 @@ public class ReportForAllFields implements PDFGenerator {
     @Override
     public void applyChanges() {
         document.add(table);
+    }
+
+    public void addField(Item item, Style cellStyle) throws NoSuchFieldException, IllegalAccessException {
+        // set up desired order for fields other than lot
+        String[] fieldOrder = {"name", "category", "period", "description"};
+
+        for (String fieldName : fieldOrder) {
+            Field field = item.getClass().getDeclaredField(fieldName);
+            table.addCell(new Cell()
+                            .add(new Paragraph(Objects
+                                    .requireNonNull(field.get(item))
+                                    .toString())))
+                    .addStyle(cellStyle);
+        }
     }
 }
 

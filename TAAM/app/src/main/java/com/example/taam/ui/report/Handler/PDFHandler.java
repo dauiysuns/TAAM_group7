@@ -66,6 +66,8 @@ public class PDFHandler implements DataView, DownloadCompleteListener {
             dm.getItemsByCategory("category", input, context);
         } else if (category.equals("Period with Description and Picture only")) {
             dm.getItemsByCategory("period", input, context);
+        } else if (category.equals("All Items")){
+            dm.getAllItems();
         } else {
             dm.getItemsByCategory(category.toLowerCase(), input, context);
         }

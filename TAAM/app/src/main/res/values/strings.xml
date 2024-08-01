@@ -87,5 +87,6 @@
         <item>Category with Description and Picture only</item>
         <item>Period</item>
         <item>Period with Description and Picture only</item>
+        <item>All Items</item>
     </string-array>
 </resources>
