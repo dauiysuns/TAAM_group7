@@ -23,10 +23,7 @@ import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.home.AdminHomeFragment;
 import com.example.taam.ui.report.Handler.PDFHandler;
 import com.example.taam.ui.report.Handler.PermissionHandler;
-import com.example.taam.ui.report.generator.ReportForAllFields;
-import com.example.taam.ui.report.generator.PDFGenerator;
-
-import java.util.HashMap;
+import com.example.taam.ui.report.Handler.generator.ReportForAllFields;
 
 public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, PermissionHandler.PermissionCallback, SpinnerFragment.SpinnerCallback {
     private EditText byItemText;

@@ -1,4 +1,4 @@
-package com.example.taam.ui.report.generator;
+package com.example.taam.ui.report.Handler.generator;
 
 import android.util.Log;
 
@@ -31,7 +31,7 @@ public class ReportForAllFields implements PDFGenerator {
     private StorageReference storageRef = storage.getReference();
     private Document document;
     private Table table;
-    private Cell cell;
+    //private Cell cell;
     private DownloadCompleteListener downloadCompleteListener;
     private int pendingDownloads = 0;
 
@@ -39,7 +39,7 @@ public class ReportForAllFields implements PDFGenerator {
         this.downloadCompleteListener = downloadCompleteListener;
     }
 
-    public void downloadFile(String urlPath) {
+    public void downloadFile(String urlPath, Cell cell) {
         pendingDownloads++;
         StorageReference fileRef = storage.getReferenceFromUrl(urlPath);
         try {
@@ -69,7 +69,7 @@ public class ReportForAllFields implements PDFGenerator {
     private void checkPendingDownloads() {
         pendingDownloads--;
         if (pendingDownloads == 0) {
-            table.addCell(cell);
+            //table.addCell(cell);
             applyChanges();
             if (downloadCompleteListener != null) {
                 downloadCompleteListener.onDownloadComplete();
@@ -79,7 +79,6 @@ public class ReportForAllFields implements PDFGenerator {
 
     public void generate(Document document) {
         PdfFont bold;
-        cell = new Cell();
         try {
             bold = PdfFontFactory.createFont("Helvetica-Bold");
         } catch (IOException e) {
@@ -142,9 +141,14 @@ public class ReportForAllFields implements PDFGenerator {
             }
             Field field = item.getClass().getDeclaredField("mediaUrls");
             ArrayList<HashMap<String, String>> mediaUrls = (ArrayList<HashMap<String, String>>) field.get(item);
+            Cell cell = new Cell().addStyle(cellStyle);
+            table.addCell(cell);
             for (HashMap<String, String> media : mediaUrls) {
                 //table.addCell(new Cell().addStyle(cellStyle));
-                downloadFile(media.get("image"));
+                downloadFile(media.get("image"), cell);
+                if (media.get("video") != null) {
+
+                }
             }
         } catch (IllegalAccessException e) {
             Log.v("error", Objects.requireNonNull(e.getMessage()));
