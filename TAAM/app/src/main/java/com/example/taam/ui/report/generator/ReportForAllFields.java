@@ -127,10 +127,13 @@ public class ReportForAllFields implements PDFGenerator {
                 .setFontSize(10)
                 .setPadding(5);
 
-        Field[] fields = item.getClass().getFields();
+        // set up desired order for fields other than lot
+        String [] fieldOrder = {"name", "category", "period", "description", "mediaUrls"};
+
         table.addCell(new Cell().add(new Paragraph(item.getLot())));
-        for (Field field : fields) {
+        for (String fieldName : fieldOrder) {
             try {
+                Field field = item.getClass().getDeclaredField(fieldName);
                 if (field.getName().equals("mediaUrls")) {
                     ArrayList<HashMap<String, String>> mediaUrls = (ArrayList<HashMap<String, String>>) field.get(item);
                     for (HashMap<String, String> media : mediaUrls) {
@@ -146,6 +149,8 @@ public class ReportForAllFields implements PDFGenerator {
                 }
             } catch (IllegalAccessException e) {
                 Log.v("error", Objects.requireNonNull(e.getMessage()));
+            } catch(NoSuchFieldException e){
+                Log.v("error", "Cannot access field " + fieldName);
             }
         }
     }
