@@ -1,6 +1,5 @@
 package com.example.taam.ui.search;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.taam.R;
@@ -115,43 +112,36 @@ public class ResultFragment extends Fragment implements DataView {
 
     @Override
     public void onComplete() {
-        //maybe check if item already in array before adding?
         lotMatches.addAll(nameMatches);
         lotMatches.addAll(nameMatches);
         lotMatches.addAll(categoryMatches);
         lotMatches.addAll(periodMatches);
+        ArrayList<Item> itemList = new ArrayList<>();
+        for (int i = 0; i < lotMatches.size(); i++) {
+            Item item = lotMatches.get(i);
+            if (itemList.isEmpty()) {
+                itemList.add(item);
+            } else {
+                boolean duplicate = false;
+                for (int j = 0; j < itemList.size(); j++) {
+                    if (itemList.get(j).getLot().equals(item.getLot())) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if (!duplicate) {
+                    itemList.add(item);
+                }
+            }
+        }
 
         //display results
-        ItemAdapter itemAdapter = new ItemAdapter(lotMatches);
+        ItemAdapter itemAdapter = new ItemAdapter(itemList);
         RecyclerView recyclerView = getView().findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(itemAdapter);
 
         DataModel dataModel = new DataModel(this);
-        //dataModel.displayItem(itemList.get(0).getLot());
         dataModel.displayAllItems();
-
-        /*TableLayout table = getView().findViewById(R.id.table);
-        TableLayout.LayoutParams layout = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
-        for (int i = 0; i < lotMatches.size(); i++) {
-            TableRow row = new TableRow(getContext());
-            row.setLayoutParams(new TableRow.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT));
-            TextView l = new TextView(getContext());
-            l.setText(lotMatches.get(i).getLot());
-            row.addView(l);
-            TextView n = new TextView(getContext());
-            n.setText(lotMatches.get(i).name);
-            row.addView(n);
-            TextView c = new TextView(getContext());
-            c.setText(lotMatches.get(i).category);
-            row.addView(c);
-            TextView p = new TextView(getContext());
-            p.setText(lotMatches.get(i).period);
-            row.addView(p);
-            TextView d = new TextView(getContext());
-            d.setText(lotMatches.get(i).description);
-            row.addView(d);
-            table.addView(row, layout);
-        }*/
     }
 }
