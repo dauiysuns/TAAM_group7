@@ -1,0 +1,321 @@
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#FFFFFF"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="573dp"
+		android:layout_weight="1"
+		android:clipToPadding="false"
+		android:paddingBottom="58dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="26dp"
+				android:background="@drawable/cr1b4f378b"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingVertical="18dp"
+				android:paddingLeft="150dp"
+				android:paddingRight="11dp">
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="4dp"
+					android:layout_weight="1"
+					android:text="TAAM"
+					android:textColor="#FEF7FF"
+					android:textSize="22sp" />
+
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="75dp"
+					android:layout_height="wrap_content"
+					android:background="@drawable/s2c2c2csw1cr8b2c2c2c"
+					android:gravity="center_horizontal"
+					android:orientation="vertical"
+					android:paddingVertical="14dp">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Admin"
+						android:textColor="#F5F5F5"
+						android:textSize="16sp" />
+				</LinearLayout>
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="32dp"
+				android:layout_marginBottom="26dp"
+				android:gravity="center_vertical"
+				android:orientation="horizontal">
+
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="18dp"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="33dp"
+					android:background="@drawable/cr2b65558f"
+					android:orientation="vertical"
+					android:paddingHorizontal="3dp">
+
+					<ImageView
+						android:layout_width="match_parent"
+						android:layout_height="9dp"
+						android:layout_marginTop="4dp"
+						android:scaleType="fitXY"
+						android:src="@mipmap/ic_launcher" />
+				</LinearLayout>
+
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="4dp"
+					android:layout_weight="1"
+					android:orientation="vertical">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginBottom="9dp"
+						android:text="Lot #:  lot_number"
+						android:textColor="#1D1B20"
+						android:textSize="16sp" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Name:  name"
+						android:textColor="#1D1B20"
+						android:textSize="16sp" />
+				</LinearLayout>
+
+				<ImageView
+					android:layout_width="10dp"
+					android:layout_height="5dp"
+					android:scaleType="fitXY"
+					android:src="@mipmap/ic_launcher" />
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="9dp"
+				android:layout_marginBottom="12dp"
+				android:background="@drawable/cr28bece6f0"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingHorizontal="27dp"
+				android:paddingVertical="16dp">
+
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="4dp"
+					android:layout_weight="1"
+					android:orientation="vertical">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginBottom="9dp"
+						android:text="Lot #:  lot_number"
+						android:textColor="#1D1B20"
+						android:textSize="16sp" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Name:  name"
+						android:textColor="#1D1B20"
+						android:textSize="16sp" />
+				</LinearLayout>
+
+				<ImageView
+					android:layout_width="4dp"
+					android:layout_height="3dp"
+					android:scaleType="fitXY"
+					android:src="@mipmap/ic_launcher" />
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="9dp"
+				android:layout_marginBottom="12dp"
+				android:background="@drawable/cr28bece6f0"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingHorizontal="27dp"
+				android:paddingVertical="16dp">
+
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="4dp"
+					android:layout_weight="1"
+					android:orientation="vertical">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginBottom="9dp"
+						android:text="Lot #:  lot_number"
+						android:textColor="#1D1B20"
+						android:textSize="16sp" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Name:  name"
+						android:textColor="#1D1B20"
+						android:textSize="16sp" />
+				</LinearLayout>
+
+				<ImageView
+					android:layout_width="10dp"
+					android:layout_height="5dp"
+					android:scaleType="fitXY"
+					android:src="@mipmap/ic_launcher" />
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="9dp"
+				android:layout_marginBottom="12dp"
+				android:background="@drawable/cr28bece6f0"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingHorizontal="27dp"
+				android:paddingVertical="16dp">
+
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="4dp"
+					android:layout_weight="1"
+					android:orientation="vertical">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginBottom="9dp"
+						android:text="Lot #:  lot_number"
+						android:textColor="#1D1B20"
+						android:textSize="16sp" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Name:  name"
+						android:textColor="#1D1B20"
+						android:textSize="16sp" />
+				</LinearLayout>
+
+				<ImageView
+					android:layout_width="10dp"
+					android:layout_height="5dp"
+					android:scaleType="fitXY"
+					android:src="@mipmap/ic_launcher" />
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="9dp"
+				android:layout_marginBottom="53dp"
+				android:background="@drawable/cr28bece6f0"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingHorizontal="27dp"
+				android:paddingVertical="16dp">
+
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="4dp"
+					android:layout_weight="1"
+					android:orientation="vertical">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginBottom="9dp"
+						android:text="Lot #:  lot_number"
+						android:textColor="#1D1B20"
+						android:textSize="16sp" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Name:  name"
+						android:textColor="#1D1B20"
+						android:textSize="16sp" />
+				</LinearLayout>
+
+				<ImageView
+					android:layout_width="10dp"
+					android:layout_height="5dp"
+					android:scaleType="fitXY"
+					android:src="@mipmap/ic_launcher" />
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="85dp"
+				android:gravity="center_vertical"
+				android:orientation="horizontal">
+
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="83dp"
+					android:layout_height="wrap_content"
+					android:background="@drawable/cr100b65558f"
+					android:gravity="center_horizontal"
+					android:orientation="vertical"
+					android:paddingVertical="14dp">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Label"
+						android:textColor="#FFFFFF"
+						android:textSize="14sp" />
+				</LinearLayout>
+
+				<View
+					android:layout_width="0dp"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="83dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cr100b65558f"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingVertical="14dp">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Label"
+						android:textColor="#FFFFFF"
+						android:textSize="14sp" />
+				</LinearLayout>
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

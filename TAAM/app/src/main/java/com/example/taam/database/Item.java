@@ -1,9 +1,9 @@
 package com.example.taam.database;
 
 import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Item {
     private String lotNumber;
@@ -13,6 +13,7 @@ public class Item {
     public String description;
     public ArrayList<HashMap<String, String>> mediaUrls;
     private boolean isSelected;
+    private boolean isExpanded;
 
     public Item(){
         this.mediaUrls = new ArrayList<>();
@@ -41,6 +42,13 @@ public class Item {
         this.isSelected = selected;
     }
 
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.isExpanded = expanded;
+    }
 
     public void setLot(String lotNumber) {
         if (this.lotNumber == null) {

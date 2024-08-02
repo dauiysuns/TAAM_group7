@@ -18,6 +18,21 @@
     <!--        app:layout_constraintTop_toBottomOf="@+id/textView"-->
     <!--        app:layout_constraintVertical_bias="0.73" />-->
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:contentInsetStart="0dp"
+        android:padding="16dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_collapseMode="pin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="TAAM" />
+
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="400dp"

@@ -1,7 +1,6 @@
 package com.example.taam.database;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +44,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         holder.checkBox.setChecked(item.isSelected());
 
-        if (holder.isExpanded) {
+        if (item.isExpanded()) {
             holder.groupExpand.setVisibility(View.VISIBLE);
             holder.rollUp.setVisibility(View.VISIBLE);
             holder.dropDown.setVisibility(View.GONE);
@@ -106,9 +105,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    isExpanded = !isExpanded;
-                    Log.v("test activity", "clicked" + textViewLot.getText()+isExpanded);
-                    ItemAdapter.this.notifyDataSetChanged();
+                    Item item = itemList.get(getAdapterPosition());
+                    item.setExpanded(!item.isExpanded());
+                    notifyItemChanged(getAdapterPosition());
                 }
             });
         }

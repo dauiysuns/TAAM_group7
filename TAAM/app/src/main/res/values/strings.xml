@@ -64,7 +64,7 @@
     <string name="collection_management">Collection Management</string>
     <string name="report">Report</string>
     <string name="add">Add</string>
-    <string name="lot">Lot#: </string>
+    <string name="lot">Lot</string>
     <string name="name">Name: </string>
     <string name="category">Category: </string>
     <string name="period">Period: </string>
@@ -89,4 +89,6 @@
         <item>Period with Description and Picture only</item>
         <item>All Items</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
