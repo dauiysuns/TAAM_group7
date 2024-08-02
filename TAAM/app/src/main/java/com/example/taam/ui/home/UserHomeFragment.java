@@ -36,4 +36,9 @@ public class UserHomeFragment extends BaseHomeFragment {
 
         buttonAdmin.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new LoginFragmentView()));
     }
+
+    @Override
+    public void onComplete() {
+
+    }
 }
