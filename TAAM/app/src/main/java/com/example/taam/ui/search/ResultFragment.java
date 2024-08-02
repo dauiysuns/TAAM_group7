@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.example.taam.R;
 import com.example.taam.database.DataModel;
 import com.example.taam.database.DataView;
 import com.example.taam.database.Item;
+import com.example.taam.database.ItemAdapter;
 import com.example.taam.ui.view.ViewFragment;
 
 import java.util.ArrayList;
@@ -119,7 +122,16 @@ public class ResultFragment extends Fragment implements DataView {
         lotMatches.addAll(periodMatches);
 
         //display results
-        TableLayout table = getView().findViewById(R.id.table);
+        ItemAdapter itemAdapter = new ItemAdapter(lotMatches);
+        RecyclerView recyclerView = getView().findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(itemAdapter);
+
+        DataModel dataModel = new DataModel(this);
+        //dataModel.displayItem(itemList.get(0).getLot());
+        dataModel.displayAllItems();
+
+        /*TableLayout table = getView().findViewById(R.id.table);
         TableLayout.LayoutParams layout = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < lotMatches.size(); i++) {
             TableRow row = new TableRow(getContext());
@@ -140,6 +152,6 @@ public class ResultFragment extends Fragment implements DataView {
             d.setText(lotMatches.get(i).description);
             row.addView(d);
             table.addView(row, layout);
-        }
+        }*/
     }
 }
