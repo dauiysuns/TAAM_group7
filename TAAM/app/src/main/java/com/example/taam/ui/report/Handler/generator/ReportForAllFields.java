@@ -1,6 +1,9 @@
 package com.example.taam.ui.report.Handler.generator;
 
+import android.net.Uri;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.example.taam.database.Item;
 import com.google.android.gms.tasks.OnFailureListener;
