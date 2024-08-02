@@ -86,7 +86,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         ImageView dropDown, rollUp;
         RecyclerView mediaRecyclerView;
         CheckBox checkBox;
-        boolean isExpanded = false;
+//        boolean isExpanded = false;
         Group groupExpand;
 
         public ItemViewHolder(@NonNull View itemView) {
