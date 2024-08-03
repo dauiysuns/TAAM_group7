@@ -68,8 +68,10 @@
     <string name="name">Name: </string>
     <string name="category">Category: </string>
     <string name="period">Period: </string>
-    <string name="description">Description: </string>
-    <string name="pictureOrVideo">Picture/Video: </string>
+    <string name="descriptionPreview">Description (Shortened Preview): </string>
+    <string name="descriptionFull">Description: </string>
+    <string name="pictureOrVideoPreview">Picture/Video (1 media item preview): </string>
+    <string name="pictureOrVideoFull">Picture/Video: </string>
     <string name="yes">YES</string>
     <string name="cancel">CANCEL</string>
     <string name="new_entry">New entry</string>

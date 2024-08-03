@@ -85,25 +85,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/description"
-        android:textStyle="bold"
+        android:text="@string/descriptionPreview"
         android:textColor="@color/cardview_dark_background"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewPeriodLabel" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mediaRecyclerView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/border_drawable"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPictureOrVideoLabel"
-        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textViewDescription"
@@ -117,6 +105,19 @@
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDescriptionLabel" />
+
+    <LinearLayout
+        android:id="@+id/mediaContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_drawable"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPictureOrVideoLabel"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textViewPeriodLabel"
@@ -136,9 +137,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="@string/pictureOrVideo"
-        android:textStyle="bold"
+        android:text="@string/pictureOrVideoPreview"
         android:textColor="@color/cardview_dark_background"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.061"
         app:layout_constraintStart_toStartOf="parent"
@@ -170,7 +171,7 @@
         android:id="@+id/groupExpand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="textViewCategoryLabel,textViewCategory,textViewPeriodLabel,textViewDescriptionLabel,mediaRecyclerView,textViewDescription,textViewPeriod,textViewPictureOrVideoLabel" />
+        app:constraint_referenced_ids="textViewCategoryLabel,textViewCategory,mediaContainer,textViewPeriodLabel,textViewDescriptionLabel,mediaRecyclerView,textViewDescription,textViewPeriod,textViewPictureOrVideoLabel" />
 
     <ImageView
         android:id="@+id/rollUp"

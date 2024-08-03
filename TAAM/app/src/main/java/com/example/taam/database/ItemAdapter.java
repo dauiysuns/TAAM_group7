@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -66,12 +67,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         else{
             holder.textViewDescription.setText(itemDescription);
         }
-
-        // set up Media recyclerView
-        ArrayList<HashMap<String, String>> mediaItems = item.mediaUrls;
-        MediaAdapter mediaAdapter = new MediaAdapter(mediaItems, context);
-        holder.mediaRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        holder.mediaRecyclerView.setAdapter(mediaAdapter);
+        // Clear the previous media items before adding new ones to prevent duplicates or strange behavior
+        holder.mediaContainer.removeAllViews();
+        // set up linearLayout that displays images/videos
+        MediaAdapter mediaAdapter = new MediaAdapter(item.mediaUrls, context, holder.mediaContainer);
+        mediaAdapter.addMediaItems(1); // display only one media item
 
         holder.checkBox.setOnClickListener(v -> item.setSelected(holder.checkBox.isChecked()));
     }
@@ -84,7 +84,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView textViewLot, textViewName, textViewCategory, textViewPeriod, textViewDescription;
         ImageView dropDown, rollUp;
-        RecyclerView mediaRecyclerView;
+        LinearLayout mediaContainer;
         CheckBox checkBox;
 //        boolean isExpanded = false;
         Group groupExpand;
@@ -97,7 +97,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             textViewCategory = itemView.findViewById(R.id.textViewCategory);
             textViewPeriod = itemView.findViewById(R.id.textViewPeriod);
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
-            mediaRecyclerView = itemView.findViewById(R.id.mediaRecyclerView);
+            mediaContainer = itemView.findViewById(R.id.mediaContainer);
             checkBox = itemView.findViewById(R.id.checkBox);
             dropDown = itemView.findViewById(R.id.dropDown);
             rollUp = itemView.findViewById(R.id.rollUp);

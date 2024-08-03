@@ -4,16 +4,14 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.example.taam.R;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -21,95 +19,75 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class MediaAdapter {
     private ArrayList<HashMap<String, String>> mediaUrls;
     private Context context;
-    private final int TYPE_IMAGE = 0;
-    private final int TYPE_VIDEO = 1;
+    private LinearLayout mediaContainer;
+    private LayoutInflater inflater;
 
-    public MediaAdapter(ArrayList<HashMap<String, String>> mediaUrls, Context context){
+    public MediaAdapter(ArrayList<HashMap<String, String>> mediaUrls, Context context, LinearLayout mediaContainer) {
         this.mediaUrls = mediaUrls;
         this.context = context;
+        this.mediaContainer = mediaContainer;
     }
 
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == TYPE_IMAGE){
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_holder, parent, false);
-            return new ImageViewHolder(view);
+    public void addMediaItems(int number) {
+        inflater = LayoutInflater.from(context);
+
+        // add default image if there are no media content
+        if(mediaUrls.isEmpty()){
+            addImage("gs://taam-cfc94.appspot.com/uploads/not available.jpg");
+            return;
         }
-        else{
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_holder, parent, false);
-            return new VideoViewHolder(view);
-        }
-    }
 
-    @Override
-    public int getItemViewType(int position) {
-        if(mediaUrls.get(position).containsKey("image")){
-            return TYPE_IMAGE;
-        }
-        return TYPE_VIDEO;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        HashMap<String, String> mediaItem = mediaUrls.get(position);
-        if (holder.getItemViewType() == TYPE_IMAGE) {
-            ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
-            String imageUrl = mediaItem.get("image");
-
-            // the URL needs to be a Firebase Storage URL (need to start with gs://)
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageRef = storage.getReferenceFromUrl(imageUrl);
-            storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                Glide.with(context)
-                        .load(uri)
-                        .override(700,700) // or set fixed dimensions like .override(600, 600)
-                        .into(imageViewHolder.imageView);
-            }).addOnFailureListener(exception -> {
-                Log.v("Load Image", "Error while loading image");
-            });
-
-        } else {
-            VideoViewHolder videoViewHolder = (VideoViewHolder) holder;
-            String videoUrl = mediaItem.get("video");
-
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageRef = storage.getReferenceFromUrl(videoUrl);
-            storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                videoViewHolder.videoView.setVideoURI(uri);
-                MediaController mediaController = new MediaController(context);
-                mediaController.setAnchorView(videoViewHolder.videoView);
-                videoViewHolder.videoView.setMediaController(mediaController);
-                videoViewHolder.videoView.setOnPreparedListener(mp -> videoViewHolder.videoView.start());
-            }).addOnFailureListener(exception -> {
-                Log.e("Video", "Failed to get video URL.", exception);
-            });
+        for(int i = 0; i < number; i++){
+            HashMap<String, String> mediaItem = mediaUrls.get(i);
+            if (mediaItem.containsKey("image")) {
+                String imageUrl = mediaItem.get("image");
+                addImage(imageUrl);
+            } else if (mediaItem.containsKey("video")) {
+                String videoUrl = mediaItem.get("video");
+                addVideo(videoUrl);
+            }
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return mediaUrls.size();
+    private void addImage(String imageUrl){
+        View view = inflater.inflate(R.layout.image_holder, mediaContainer, false);
+        ImageView imageView = view.findViewById(R.id.imageView);
+
+        // the url needs to begin with gs://
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl(imageUrl);
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(context)
+                    .load(uri)
+                    .override(700, 700)
+                    .into(imageView);
+        }).addOnFailureListener(exception -> {
+            Log.v("Load Image", "Error while loading image");
+        });
+
+        mediaContainer.addView(view);
     }
 
-    public class ImageViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
+    private void addVideo(String videoUrl){
+        View view = inflater.inflate(R.layout.video_holder, mediaContainer, false);
+        VideoView videoView = view.findViewById(R.id.videoView);
 
-        public ImageViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imageView = itemView.findViewById(R.id.imageView);
-        }
-    }
+        // Load video using Firebase Storage
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl(videoUrl);
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            videoView.setVideoURI(uri);
+            MediaController mediaController = new MediaController(context);
+            mediaController.setAnchorView(videoView);
+            videoView.setMediaController(mediaController);
+            videoView.setOnPreparedListener(mp -> videoView.start());
+        }).addOnFailureListener(exception -> {
+            Log.e("Video", "Failed to get video URL.", exception);
+        });
 
-    public class VideoViewHolder extends RecyclerView.ViewHolder {
-        VideoView videoView;
-
-        public VideoViewHolder(@NonNull View itemView) {
-            super(itemView);
-            videoView = itemView.findViewById(R.id.videoView);
-        }
+        mediaContainer.addView(view);
     }
 }

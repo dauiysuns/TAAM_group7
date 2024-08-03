@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,7 +27,7 @@ public class ViewFragment extends Fragment implements DataView {
     private String selectedLotNumber;
     private TextView textViewLot, textViewName, textViewCategory, textViewPeriod, textViewDescription;
     private MediaAdapter mediaAdapter;
-    private RecyclerView mediaRecyclerView;
+    private LinearLayout mediaContainer;
     private ImageButton closeButton;
     private DataModel dm;
     private ArrayList<HashMap<String, String>> mediaUrls;
@@ -45,7 +46,7 @@ public class ViewFragment extends Fragment implements DataView {
         textViewCategory = view.findViewById(R.id.textViewCategory);
         textViewPeriod = view.findViewById(R.id.textViewPeriod);
         textViewDescription = view.findViewById(R.id.textViewDescription);
-        mediaRecyclerView = view.findViewById(R.id.mediaRecyclerView);
+        mediaContainer = view.findViewById(R.id.mediaContainer);
 
         closeButton = view.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
@@ -69,9 +70,8 @@ public class ViewFragment extends Fragment implements DataView {
         if(item.mediaUrls != null){
             mediaUrls = item.mediaUrls;
         }
-        mediaAdapter = new MediaAdapter(mediaUrls, getContext());
-        mediaRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mediaRecyclerView.setAdapter(mediaAdapter);
+        mediaAdapter = new MediaAdapter(mediaUrls, getContext(), mediaContainer);
+        mediaAdapter.addMediaItems(mediaUrls.size()); // display all media items
     }
 
     @Override
