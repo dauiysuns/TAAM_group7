@@ -71,7 +71,7 @@
     <string name="descriptionPreview">Description (Shortened Preview): </string>
     <string name="descriptionFull">Description: </string>
     <string name="pictureOrVideoPreview">Picture/Video (1 media item preview): </string>
-    <string name="pictureOrVideoFull">Picture/Video: </string>
+    <string name="pictureOrVideoFull">Picture/Video (Click on media for full screen view): </string>
     <string name="yes">YES</string>
     <string name="cancel">CANCEL</string>
     <string name="new_entry">New entry</string>
@@ -81,6 +81,8 @@
     <string name="cancel_not_bold">Cancel</string>
     <string name="generate">Generate</string>
     <string name="generate_report">Generate report</string>
+    <string name="full_screen_image">Full Screen Image Display</string>
+    <string name="full_screen_video">Full Screen Video Display</string>
 
     <string-array name="report_options_array">
         <item>Lot number</item>

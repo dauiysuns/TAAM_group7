@@ -1,6 +1,9 @@
 package com.example.taam.ui.view;
 
+import static com.example.taam.ui.FragmentLoader.loadFragment;
+
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,8 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.example.taam.R;
+import com.example.taam.ui.FragmentLoader;
+import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -24,6 +29,8 @@ public class MediaAdapter {
     private Context context;
     private LinearLayout mediaContainer;
     private LayoutInflater inflater;
+    private View view;
+    private final String defaultImage = "gs://taam-cfc94.appspot.com/uploads/not available.jpg";
 
     public MediaAdapter(ArrayList<HashMap<String, String>> mediaUrls, Context context, LinearLayout mediaContainer) {
         this.mediaUrls = mediaUrls;
@@ -36,7 +43,7 @@ public class MediaAdapter {
 
         // add default image if there are no media content
         if(mediaUrls.isEmpty()){
-            addImage("gs://taam-cfc94.appspot.com/uploads/not available.jpg");
+            addImage(defaultImage);
             return;
         }
 
@@ -49,11 +56,12 @@ public class MediaAdapter {
                 String videoUrl = mediaItem.get("video");
                 addVideo(videoUrl);
             }
+            mediaContainer.addView(view);
         }
     }
 
     private void addImage(String imageUrl){
-        View view = inflater.inflate(R.layout.image_holder, mediaContainer, false);
+        view = inflater.inflate(R.layout.image_holder, mediaContainer, false);
         ImageView imageView = view.findViewById(R.id.imageView);
 
         // the url needs to begin with gs://
@@ -64,30 +72,28 @@ public class MediaAdapter {
                     .load(uri)
                     .override(700, 700)
                     .into(imageView);
-        }).addOnFailureListener(exception -> {
-            Log.v("Load Image", "Error while loading image");
-        });
 
-        mediaContainer.addView(view);
+            imageView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, FullScreenImageActivity.class);
+                intent.putExtra("imageUrl", uri.toString());
+                context.startActivity(intent);
+            });
+        });
     }
 
     private void addVideo(String videoUrl){
-        View view = inflater.inflate(R.layout.video_holder, mediaContainer, false);
+        view = inflater.inflate(R.layout.video_holder, mediaContainer, false);
         VideoView videoView = view.findViewById(R.id.videoView);
 
         // Load video using Firebase Storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(videoUrl);
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-            videoView.setVideoURI(uri);
-            MediaController mediaController = new MediaController(context);
-            mediaController.setAnchorView(videoView);
-            videoView.setMediaController(mediaController);
-            videoView.setOnPreparedListener(mp -> videoView.start());
-        }).addOnFailureListener(exception -> {
-            Log.e("Video", "Failed to get video URL.", exception);
+            videoView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, FullScreenVideoActivity.class);
+                intent.putExtra("videoUrl", uri.toString());
+                context.startActivity(intent);
+            });
         });
-
-        mediaContainer.addView(view);
     }
 }
