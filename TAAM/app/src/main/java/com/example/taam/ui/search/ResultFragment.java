@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.taam.R;
 import com.example.taam.database.DataModel;
@@ -37,6 +38,8 @@ public class ResultFragment extends Fragment implements DataView {
     ArrayList<Item> nameMatches = new ArrayList<>();
     ArrayList<Item> categoryMatches = new ArrayList<>();
     ArrayList<Item> periodMatches = new ArrayList<>();
+    RecyclerView recyclerView;
+    ArrayList<Item> itemList = new ArrayList<>();
 
     //added by me
     public ResultFragment(String lotNumber, String name, String category, String period) {
@@ -60,21 +63,18 @@ public class ResultFragment extends Fragment implements DataView {
         backButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
         TextView textViewLot = view.findViewById(R.id.textViewLot);
-        textViewLot.setText("Lot #:" + lotNumber);
+        textViewLot.setText(String.format("Lot #:%s", lotNumber));
         TextView textViewName = view.findViewById(R.id.textViewName);
-        textViewName.setText("Name: " + name);
+        textViewName.setText(String.format("Name: %s", name));
         TextView textViewCategory = view.findViewById(R.id.textViewCategory);
-        textViewCategory.setText("Category: " + category);
+        textViewCategory.setText(String.format("Category: %s", category));
         TextView textViewPeriod = view.findViewById(R.id.textViewPeriod);
-        textViewPeriod.setText("Period: " + period);
+        textViewPeriod.setText(String.format("Period: %s", period));
+
+        recyclerView = view.findViewById(R.id.recyclerView);
 
         Button viewButton = view.findViewById(R.id.buttonView);
-        viewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadFragment(new ViewFragment(lotNumber));
-            }
-        });
+        viewButton.setOnClickListener(v -> viewItem());
 
         dm.displayAllItems();
 
@@ -116,7 +116,7 @@ public class ResultFragment extends Fragment implements DataView {
         lotMatches.addAll(nameMatches);
         lotMatches.addAll(categoryMatches);
         lotMatches.addAll(periodMatches);
-        ArrayList<Item> itemList = new ArrayList<>();
+        //ArrayList<Item> itemList = new ArrayList<>();
         for (int i = 0; i < lotMatches.size(); i++) {
             Item item = lotMatches.get(i);
             if (itemList.isEmpty()) {
@@ -137,11 +137,30 @@ public class ResultFragment extends Fragment implements DataView {
 
         //display results
         ItemAdapter itemAdapter = new ItemAdapter(itemList);
-        RecyclerView recyclerView = getView().findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(itemAdapter);
 
         DataModel dataModel = new DataModel(this);
         dataModel.displayAllItems();
+    }
+
+    protected void viewItem() {
+        int count = 0;
+        Item selected = null;
+        for (Item item : itemList) {
+            if (item.isSelected()) {
+                count += 1;
+                selected = item;
+            }
+            if (count > 1) {
+                Toast.makeText(getContext(), "More than 1 item is selected.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        if (count == 1) {
+            loadFragment(new ViewFragment(selected.getLot()));
+        } else {
+            Toast.makeText(getContext(), "Please first select an item to view.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
