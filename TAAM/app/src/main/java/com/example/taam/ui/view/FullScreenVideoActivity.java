@@ -43,7 +43,7 @@ public class FullScreenVideoActivity extends AppCompatActivity {
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
 
-        videoView.setOnCompletionListener(mp -> showStoppedIcon(true));
+        videoView.setOnCompletionListener(mp -> showPlayIcon(true));
     }
 
     private void setUpCloseButton(){
@@ -51,7 +51,7 @@ public class FullScreenVideoActivity extends AppCompatActivity {
         closeButton.setOnClickListener(v -> finish());
     }
 
-    private void showStoppedIcon(boolean show) {
+    private void showPlayIcon(boolean show) {
         if(show){
             playIcon.setVisibility(VideoView.VISIBLE);
         }
@@ -61,16 +61,17 @@ public class FullScreenVideoActivity extends AppCompatActivity {
     }
 
     private void setUpPlayFeatures() {
-        playIcon.setOnClickListener(v -> {
-            videoView.start();
-            showStoppedIcon(false);
-        });
-
         videoView.setOnClickListener(v -> {
-            if(playIcon.getVisibility() == View.GONE){
+            if(videoView.isPlaying()){
                 videoView.pause();
-                showStoppedIcon(true);
+                showPlayIcon(true);
             }
+            else{
+                videoView.start();
+                showPlayIcon(false);
+            }
+            // update progress bar to show same playing state as video
+            mediaController.show();
         });
     }
 
