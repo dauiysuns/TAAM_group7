@@ -181,6 +181,20 @@
             android:translationY="240dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonRemoveCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_toEndOf="@id/spinnerCategory"
+            android:clickable="true"
+            android:contentDescription="remove category"
+            android:focusable="true"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@android:drawable/ic_menu_delete"
+            android:translationY="240dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/buttonAddPeriod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -193,5 +207,20 @@
             android:scaleY=".4"
             android:src="@android:drawable/ic_input_add"
             android:translationY="300dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonRemovePeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_toEndOf="@id/spinnerPeriod"
+            android:clickable="true"
+            android:contentDescription="remove period"
+            android:focusable="true"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@android:drawable/ic_menu_delete"
+            android:translationY="300dp" />
+
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

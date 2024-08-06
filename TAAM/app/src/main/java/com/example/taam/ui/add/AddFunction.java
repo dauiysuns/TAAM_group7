@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -56,7 +57,7 @@ import com.google.firebase.storage.UploadTask;
 
 
 
-public class AddFunction extends Fragment {
+public class AddFunction extends Fragment implements DataView{
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
     private ArrayList<HashMap<String, String>> mediaUrls; //added categories and periods as ArrayLists
@@ -93,6 +94,8 @@ public class AddFunction extends Fragment {
         Button buttonSubmit = view.findViewById(R.id.buttonSubmit);
         FloatingActionButton buttonAddCategory = view.findViewById(R.id.buttonAddCategory);
         FloatingActionButton buttonAddPeriod = view.findViewById(R.id.buttonAddPeriod);
+        FloatingActionButton buttonRemoveCategory = view.findViewById(R.id.buttonRemoveCategory);
+        FloatingActionButton buttonRemovePeriod = view.findViewById(R.id.buttonRemovePeriod);
 
         progressBar = view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
@@ -118,6 +121,8 @@ public class AddFunction extends Fragment {
         buttonSubmit.setOnClickListener(v -> addItem());
         buttonAddCategory.setOnClickListener(v -> showAddDialog("Category"));
         buttonAddPeriod.setOnClickListener(v -> showAddDialog("Period"));
+        buttonRemoveCategory.setOnClickListener(v -> showRemoveDialog("Category"));
+        buttonRemovePeriod.setOnClickListener(v -> showRemoveDialog("Period"));
 
         return view;
     }
@@ -143,6 +148,55 @@ public class AddFunction extends Fragment {
             } else {
                 Toast.makeText(getContext(), "Empty " + type + " cannot be added!", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private void showRemoveDialog(String type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Are you sure you want to remove this " + type  + " and all its items?");
+
+//        final EditText input = new EditText(requireContext());
+//        builder.setView(input);
+
+        builder.setPositiveButton("Remove", (dialog, which) -> {
+            DataModel dm = new DataModel(this);
+            String selected;
+            if (type != null) {
+                if (type.equals("Category")) {
+                    selected = spinnerCategory.getSelectedItem().toString();
+                    if (!CategorySpinner.isUserAddedCategory(selected)) {
+                        Toast.makeText(getContext(), selected + "default category cannot be deleted", Toast.LENGTH_SHORT).show();
+                    }
+                    DataModel.ref.child("newCategories").child(selected).removeValue();
+                    ((ArrayAdapter<String>)spinnerCategory.getAdapter()).notifyDataSetChanged();
+
+                } else {
+                    selected = spinnerPeriod.getSelectedItem().toString();
+                    DataModel.ref.child("newPeriods").child(selected).removeValue();
+                    ((ArrayAdapter<String>)spinnerPeriod.getAdapter()).notifyDataSetChanged();
+                }
+
+                dm.getItemsByCategory(type.toLowerCase(), selected, requireContext());
+                Toast.makeText(getContext(), selected + "removed successfully", Toast.LENGTH_SHORT).show();
+            }
+            //String label = input.getText().toString().trim();
+//            if (!label.isEmpty()) {
+//                if(type.equals("Category")){
+//                    CategorySpinner.addCategory(getContext(), label, spinnerCategory);
+//                    Toast.makeText(getContext(), "New Category added successfully", Toast.LENGTH_SHORT).show();
+//                } else{
+//                    PeriodSpinner.addPeriod(getContext(), label, spinnerPeriod);
+//                    Toast.makeText(getContext(), "New Period added successfully", Toast.LENGTH_SHORT).show();
+//                }
+//            } else {
+//                Toast.makeText(getContext(), "Empty " + type + " cannot be added!", Toast.LENGTH_SHORT).show();
+//            }
+
+
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -273,5 +327,20 @@ public class AddFunction extends Fragment {
         spinnerPeriod.setSelection(0);
         mediaUrls.clear();
         progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void updateView(Item item) {
+        DataModel.removeItem(item);
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+
+    }
+
+    @Override
+    public void onComplete() {
+
     }
 }

@@ -151,7 +151,7 @@ public class DataModel {
     }
 
     public static void storeNewCategoryOrPeriod(String path, String category){
-        ref.child(path).push().setValue(category);
+        ref.child(path).child(category).setValue("null");
     }
 
     public static void loadNewCategoriesOrPeriods(String path, ArrayList<String> list, ArrayList<String> added) {
@@ -159,7 +159,7 @@ public class DataModel {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
-                    String category = categorySnapshot.getValue(String.class);
+                    String category = categorySnapshot.getKey();
                     list.add(category);
                     added.add(category);
                 }
