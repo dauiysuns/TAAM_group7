@@ -76,7 +76,8 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
         generate.setOnClickListener(v -> {
             if(byItemText.getVisibility() == View.VISIBLE){
                 userInput = byItemText.getText().toString();
-            } else if (userInput.equals("")) {
+            }
+            if (userInput.equals("")) {
                 Toast.makeText(getContext(), "Please enter an input", Toast.LENGTH_SHORT).show();
             }else{
                 permissionHandler.handlePermissions();
@@ -164,14 +165,12 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
             textViewForItem.setVisibility(View.GONE);
             categorySpinner.setVisibility(View.GONE);
             periodSpinner.setVisibility(View.GONE);
-            userInput = "";
         } else{
             byItemText.setText("");
             byItemText.setVisibility(View.VISIBLE);
             textViewForItem.setVisibility(View.VISIBLE);
             categorySpinner.setVisibility(View.GONE);
             periodSpinner.setVisibility(View.GONE);
-            userInput = "";
         }
     }
 }
