@@ -163,5 +163,12 @@
             android:text="@string/submit"
             android:translationX="275dp"
             android:translationY="600dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="86dp"
+            android:layout_height="79dp"
+            android:clickable="true"
+            android:src="@android:drawable/ic_input_add" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

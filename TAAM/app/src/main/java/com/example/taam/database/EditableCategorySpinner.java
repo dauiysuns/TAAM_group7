@@ -14,6 +14,7 @@ import java.util.Collections;
 
 public class EditableCategorySpinner {
     public static ArrayList<String> categoryList;
+    private static String[] defaultCategories;
 
     private EditableCategorySpinner(){
     }
@@ -29,8 +30,8 @@ public class EditableCategorySpinner {
     }
 
     private static void insertDefaultCategories(Context context){
-        String[] categoriesArray = context.getResources().getStringArray(R.array.categories_array);
-        categoryList = new ArrayList<>(Arrays.asList(categoriesArray));
+        defaultCategories = context.getResources().getStringArray(R.array.categories_array);
+        categoryList = new ArrayList<>(Arrays.asList(defaultCategories));
     }
 
     public static void setUpSpinnerListener(Spinner spinner){
@@ -51,6 +52,11 @@ public class EditableCategorySpinner {
 
     // this spinner is used for report, search
     public static void setUpNonEditableSpinner(){
+
+    }
+
+    // usedfor removing categories, default categories should not be removed
+    public static boolean inDefaultCategories(){
 
     }
 }
