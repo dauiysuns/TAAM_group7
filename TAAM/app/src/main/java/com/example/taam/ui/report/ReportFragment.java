@@ -76,8 +76,7 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
         generate.setOnClickListener(v -> {
             if(byItemText.getVisibility() == View.VISIBLE){
                 userInput = byItemText.getText().toString();
-            }
-            if (userInput.equals("")) {
+            } else if (userInput.equals("")) {
                 Toast.makeText(getContext(), "Please enter an input", Toast.LENGTH_SHORT).show();
             }else{
                 permissionHandler.handlePermissions();
@@ -153,22 +152,26 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
             textViewForItem.setVisibility(View.VISIBLE);
             byItemText.setVisibility(View.GONE);
             periodSpinner.setVisibility(View.GONE);
+            userInput = categorySpinner.getItemAtPosition(0).toString().toLowerCase();
         } else if (selected.equals("Period") || selected.equals("Period with Description and Picture only")) {
             periodSpinner.setVisibility(View.VISIBLE);
             textViewForItem.setVisibility(View.VISIBLE);
             byItemText.setVisibility(View.GONE);
             categorySpinner.setVisibility(View.GONE);
+            userInput = periodSpinner.getItemAtPosition(0).toString().toLowerCase();
         } else if (selected.equals("All Items")) {
             byItemText.setVisibility(View.GONE);
             textViewForItem.setVisibility(View.GONE);
             categorySpinner.setVisibility(View.GONE);
             periodSpinner.setVisibility(View.GONE);
+            userInput = "";
         } else{
             byItemText.setText("");
             byItemText.setVisibility(View.VISIBLE);
             textViewForItem.setVisibility(View.VISIBLE);
             categorySpinner.setVisibility(View.GONE);
             periodSpinner.setVisibility(View.GONE);
+            userInput = "";
         }
     }
 }
