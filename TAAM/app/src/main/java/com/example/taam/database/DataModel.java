@@ -1,5 +1,6 @@
 package com.example.taam.database;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,8 +21,14 @@ public class DataModel {
     public static DatabaseReference ref = FirebaseDatabase
             .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
             .getReference();
-    DataView view;
+    public static DatabaseReference categoryReference = FirebaseDatabase
+            .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
+            .getReference("addedCategories");
+    public static DatabaseReference periodReference = FirebaseDatabase
+            .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
+            .getReference("addedPeriods");
     public static StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploads");
+    DataView view;
 
     public DataModel(DataView view) {
         this.view = view;
@@ -122,7 +129,7 @@ public class DataModel {
         ref.child("period").child(item.period).child(item.getLot()).removeValue();
     }
 
-    public static void addItem(Item item, android.content.Context context, DataView.AddItemCallback callback) {
+    public static void addItem(Item item, Context context, DataView.AddItemCallback callback) {
         final DatabaseReference itemRef = ref.child("items/" + item.getLot());
 
         itemRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -150,11 +157,11 @@ public class DataModel {
     }
 
     public static void storeNewCategory(String category){
-        ref.child("newCategories").push().setValue(category);
+        categoryReference.push().setValue(category);
     }
 
     public static void loadNewCategories(ArrayList<String> categoryList, ArrayList<String> addedCategories) {
-        ref.child("newCategories").addListenerForSingleValueEvent(new ValueEventListener() {
+        categoryReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
