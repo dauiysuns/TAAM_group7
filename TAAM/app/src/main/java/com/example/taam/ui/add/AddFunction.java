@@ -10,7 +10,10 @@ import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -55,6 +58,8 @@ import com.google.firebase.storage.UploadTask;
 
 
 public class AddFunction extends Fragment {
+    public static ArrayList<String> categoryList = new ArrayList<>();
+    public static ArrayList<String> periodList = new ArrayList<>();
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
     private ArrayList<HashMap<String, String>> mediaUrls;
@@ -70,6 +75,8 @@ public class AddFunction extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Collections.addAll(categoryList, "jade", "another category");
+        Collections.addAll(periodList, "xia", "another period");
         //onCreateView is what happens when you initialize the fragment/activity! So when the user goes to the "AddFunction" screen, we need to setup all these "views" (the components of the screen, like text boxes and buttons) and fill them in with the necessary content (dropdown menu options, what actions to take if a user clicks something). Basically, the instruction manual for how the fragment will work.
 
         //assigns an xml view to this fragment
@@ -92,15 +99,20 @@ public class AddFunction extends Fragment {
 
         //filling the spinners with options (from arrays):
         //category spinner
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(requireContext(),
-                R.array.categories_array, android.R.layout.simple_spinner_item);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(adapter1);
+//        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(requireContext(),
+//                R.array.categories_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> spinnerAdapterCat = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, categoryList);
+        spinnerAdapterCat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(spinnerAdapterCat);
         //period spinner
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(requireContext(),
-                R.array.periods_array, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPeriod.setAdapter(adapter2);
+//        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(requireContext(),
+//                R.array.periods_array, android.R.layout.simple_spinner_item);
+//        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerPeriod.setAdapter(adapter2);
+
+        ArrayAdapter<String> spinnerAdapterPeriod = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, periodList);
+        spinnerAdapterPeriod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPeriod.setAdapter(spinnerAdapterPeriod);
 
         mediaUrls = new ArrayList<>();
 
