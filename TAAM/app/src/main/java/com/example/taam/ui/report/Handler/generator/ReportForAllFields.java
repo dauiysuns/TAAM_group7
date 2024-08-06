@@ -173,9 +173,9 @@ public class ReportForAllFields implements PDFGenerator {
                     downloadFile(media.get("image"), cell);
                 }
                 if (video != null) {
-                    downloadVideo(media.get("video"), cell);
-//                    cell.add(new Paragraph(video));
-//                    checkPendingDownloads();
+                    //downloadVideo(media.get("video"), cell);
+                    cell.add(new Paragraph(video));
+                    checkPendingDownloads();
                 }
             }
             if (mediaUrls.isEmpty()) {
