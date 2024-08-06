@@ -3,6 +3,8 @@ package com.example.taam.ui.add;
 import static android.app.Activity.RESULT_OK;
 
 import com.example.taam.database.DataView;
+import com.example.taam.database.EditableCategorySpinner;
+import com.example.taam.database.EditablePeriodSpinner;
 import com.example.taam.database.Item;
 import com.example.taam.database.DataModel;
 import com.example.taam.ui.FragmentLoader;
@@ -58,8 +60,6 @@ import com.google.firebase.storage.UploadTask;
 
 
 public class AddFunction extends Fragment {
-    public static ArrayList<String> categoryList = new ArrayList<>();
-    public static ArrayList<String> periodList = new ArrayList<>();
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
     private ArrayList<HashMap<String, String>> mediaUrls;
@@ -75,8 +75,7 @@ public class AddFunction extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Collections.addAll(categoryList, "jade", "another category");
-        Collections.addAll(periodList, "xia", "another period");
+
         //onCreateView is what happens when you initialize the fragment/activity! So when the user goes to the "AddFunction" screen, we need to setup all these "views" (the components of the screen, like text boxes and buttons) and fill them in with the necessary content (dropdown menu options, what actions to take if a user clicks something). Basically, the instruction manual for how the fragment will work.
 
         //assigns an xml view to this fragment
@@ -87,9 +86,12 @@ public class AddFunction extends Fragment {
         editTextLotNumber = view.findViewById(R.id.editTextLotNumber);
         editTextName = view.findViewById(R.id.editTextName);
         editTextDescription = view.findViewById(R.id.editTextDescription);
-        //spinners
+        //set up category and period spinners
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         spinnerPeriod = view.findViewById(R.id.spinnerPeriod);
+        EditableCategorySpinner.setUpSpinnerAdapter(requireContext(), spinnerCategory);
+        EditablePeriodSpinner.setUpSpinnerAdapter(requireContext(), spinnerPeriod);
+
         //buttons
         Button buttonUploadMedia = view.findViewById(R.id.buttonUploadMedia);
         Button buttonSubmit = view.findViewById(R.id.buttonSubmit);
@@ -97,22 +99,6 @@ public class AddFunction extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
-        //filling the spinners with options (from arrays):
-        //category spinner
-//        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(requireContext(),
-//                R.array.categories_array, android.R.layout.simple_spinner_item);
-        ArrayAdapter<String> spinnerAdapterCat = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, categoryList);
-        spinnerAdapterCat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(spinnerAdapterCat);
-        //period spinner
-//        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(requireContext(),
-//                R.array.periods_array, android.R.layout.simple_spinner_item);
-//        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerPeriod.setAdapter(adapter2);
-
-        ArrayAdapter<String> spinnerAdapterPeriod = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, periodList);
-        spinnerAdapterPeriod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPeriod.setAdapter(spinnerAdapterPeriod);
 
         mediaUrls = new ArrayList<>();
 

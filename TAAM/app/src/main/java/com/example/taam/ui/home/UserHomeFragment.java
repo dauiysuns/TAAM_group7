@@ -33,6 +33,6 @@ public class UserHomeFragment extends BaseHomeFragment {
             // Implement search functionality
         });
 
-        buttonAdmin.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new LoginFragmentView()));
+        buttonAdmin.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new AdminHomeFragment()));
     }
 }
