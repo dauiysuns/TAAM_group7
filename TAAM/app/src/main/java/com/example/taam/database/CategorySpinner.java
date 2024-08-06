@@ -19,7 +19,6 @@ public class CategorySpinner {
     private CategorySpinner(){}
 
     public static Spinner getSpinner(Context context, Spinner spinner){
-        // if we are setting up the Spinner for the first time, fill it with default categories + any user added categories
         if(categoryList == null){
             insertCategories();
         }

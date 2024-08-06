@@ -19,7 +19,6 @@ public class PeriodSpinner {
     private PeriodSpinner(){}
 
     public static Spinner getSpinner(Context context, Spinner spinner){
-        // if we are setting up the Spinner for the first time, fill it with default periods
         if(periodList == null){
             insertPeriods();
         }
