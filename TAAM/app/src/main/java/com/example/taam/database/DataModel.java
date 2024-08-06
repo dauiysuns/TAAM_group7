@@ -10,7 +10,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class DataModel {
@@ -18,6 +21,7 @@ public class DataModel {
             .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
             .getReference();
     DataView view;
+    public static StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
     public DataModel(DataView view) {
         this.view = view;
@@ -144,4 +148,27 @@ public class DataModel {
             }
         });
     }
+
+    public static void storeNewCategory(String category){
+        ref.child("newCategories").push().setValue(category);
+    }
+
+    public static void loadNewCategories(ArrayList<String> categoryList, ArrayList<String> addedCategories) {
+        ref.child("newCategories").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
+                    String category = categorySnapshot.getValue(String.class);
+                    categoryList.add(category);
+                    addedCategories.add(category);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("DataModel", "Failed to load user added categories: " + error.getMessage());
+            }
+        });
+    }
+
 }

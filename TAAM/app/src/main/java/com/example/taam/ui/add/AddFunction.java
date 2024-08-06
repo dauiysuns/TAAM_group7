@@ -42,7 +42,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import android.net.Uri;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.activity.result.ActivityResult;
@@ -66,6 +68,7 @@ public class AddFunction extends Fragment {
     ProgressBar progressBar;
     private ActivityResultLauncher<Intent> uploadMediaLauncher;
     private String mediaType;
+    StorageReference storageReference = DataModel.storageReference;
 
 
     @Nullable
@@ -91,8 +94,8 @@ public class AddFunction extends Fragment {
         //buttons
         Button buttonUploadMedia = view.findViewById(R.id.buttonUploadMedia);
         Button buttonSubmit = view.findViewById(R.id.buttonSubmit);
-        Button buttonAddCategory = view.findViewById(R.id.buttonAddCategory);
-        Button buttonAddPeriod = view.findViewById(R.id.buttonAddPeriod);
+        FloatingActionButton buttonAddCategory = view.findViewById(R.id.buttonAddCategory);
+        FloatingActionButton buttonAddPeriod = view.findViewById(R.id.buttonAddPeriod);
 
         progressBar = view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
@@ -181,9 +184,11 @@ public class AddFunction extends Fragment {
             String label = input.getText().toString().trim();
             if (!label.isEmpty()) {
                 if(type.equals("Category")){
-                    CategorySpinner.addCategory(label);
+                    CategorySpinner.addCategory(getContext(), label, spinnerCategory);
+                    Toast.makeText(getContext(), "New Category added successfully", Toast.LENGTH_SHORT).show();
                 } else{
-                    PeriodSpinner.addPeriod(label);
+                    PeriodSpinner.addPeriod(label, spinnerPeriod);
+                    Toast.makeText(getContext(), "New Period added successfully", Toast.LENGTH_SHORT).show();
                 }
                 //DataModel.addLabelToDatabase(type, label, ref, requireContext());
                 //loadSpinner(spinnerList, type, ref);
