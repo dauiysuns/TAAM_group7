@@ -11,7 +11,7 @@
 2. 
 ## App Screenshots
 
-## Additional Information
+## Testing Info
 If you want to run the Junit Tests, You have to edit Configs:
 
 ![image](https://github.com/user-attachments/assets/a2c3d6dd-ee03-4505-807b-b23d1b200b38)
