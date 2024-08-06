@@ -17,7 +17,8 @@ If you want to run the Junit Tests, You have to edit Configs:
 ![image](https://github.com/user-attachments/assets/a2c3d6dd-ee03-4505-807b-b23d1b200b38)
 
 And then specify "Packages and classes to include in coverage data":
-<img src="https://github.com/user-attachments/assets/38c2b2f5-d0af-49d6-b2b9-53fde56a2955" width="100" height="100">
+
+<img src="https://github.com/user-attachments/assets/38c2b2f5-d0af-49d6-b2b9-53fde56a2955" width="250" height="250">
 
 
 ## Team Members
