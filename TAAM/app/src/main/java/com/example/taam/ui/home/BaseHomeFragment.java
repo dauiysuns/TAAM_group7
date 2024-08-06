@@ -30,7 +30,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
 
     protected Button buttonView, buttonSearch, buttonBack, buttonAdd, buttonRemove, buttonReport;
     protected RecyclerView recyclerView;
-    private ItemAdapter itemAdapter;
+    protected ItemAdapter itemAdapter;
     protected List<Item> itemList;
     private DataModel dm;
 
