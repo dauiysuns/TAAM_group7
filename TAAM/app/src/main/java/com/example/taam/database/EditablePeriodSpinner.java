@@ -16,7 +16,8 @@ public class EditablePeriodSpinner {
     private EditablePeriodSpinner(){
     }
 
-    public static void setUpSpinnerAdapter(Context context, Spinner spinner){
+    // this spinner is used for AddFunction
+    public static void setUpEditableSpinner(Context context, Spinner spinner){
         insertDefaultPeriods(context);
         Collections.addAll(periodList, "Another Period");
         ArrayAdapter<String> spinnerAdapterCat = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, periodList);
@@ -27,5 +28,10 @@ public class EditablePeriodSpinner {
     private static void insertDefaultPeriods(Context context){
         String[] categoriesArray = context.getResources().getStringArray(R.array.periods_array);
         periodList = new ArrayList<>(Arrays.asList(categoriesArray));
+    }
+
+    // this spinner is used for report, search
+    public static void setUpNonEditableSpinner(){
+
     }
 }

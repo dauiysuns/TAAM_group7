@@ -89,8 +89,9 @@ public class AddFunction extends Fragment {
         //set up category and period spinners
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         spinnerPeriod = view.findViewById(R.id.spinnerPeriod);
-        EditableCategorySpinner.setUpSpinnerAdapter(requireContext(), spinnerCategory);
-        EditablePeriodSpinner.setUpSpinnerAdapter(requireContext(), spinnerPeriod);
+        EditableCategorySpinner.setUpEditableSpinner(requireContext(), spinnerCategory);
+        EditablePeriodSpinner.setUpEditableSpinner(requireContext(), spinnerPeriod);
+
 
         //buttons
         Button buttonUploadMedia = view.findViewById(R.id.buttonUploadMedia);
