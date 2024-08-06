@@ -59,17 +59,21 @@ public class ReportForAllFields implements PDFGenerator {
                     cell.add(img.scaleAbsolute(100f, 100f));
                     //checkPendingDownloads();
                     pendingDownloads--;
+                    checkPendingDownloads();
                 } catch (MalformedURLException e) {
                     Log.e("Firebase", "Error creating URL", e);
                     pendingDownloads--;
+                    checkPendingDownloads();
                 }
             }).addOnFailureListener(exception -> {
                 Log.e("Firebase", "Error downloading file", exception);
                 pendingDownloads--;
+                checkPendingDownloads();
             });
         } catch (IOException e) {
             Log.e("Firebase", "Error creating local file", e);
             pendingDownloads--;
+            checkPendingDownloads();
         }
     }
 
@@ -83,6 +87,7 @@ public class ReportForAllFields implements PDFGenerator {
                 String videoUrl = uri.toString();
                 cell.add(new Paragraph(videoUrl).setWidth(100f));
                 pendingDownloads--;
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
