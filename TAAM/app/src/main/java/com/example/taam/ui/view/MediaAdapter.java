@@ -1,23 +1,15 @@
 package com.example.taam.ui.view;
 
-import static com.example.taam.ui.FragmentLoader.loadFragment;
-
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.VideoView;
-
-import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.example.taam.R;
-import com.example.taam.ui.FragmentLoader;
-import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -81,20 +73,30 @@ public class MediaAdapter {
         mediaContainer.addView(view);
     }
 
-    private void addVideo(String videoUrl){
+    private void addVideo(String videoUrl) {
         View view = inflater.inflate(R.layout.video_holder, mediaContainer, false);
         VideoView videoView = view.findViewById(R.id.videoView);
 
-        // load video and set up listener for responding to user
+        // Load and prepare the video
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(videoUrl);
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            videoView.setVideoURI(uri);
+
+            // Automatically play video when it becomes visible
+            videoView.setOnPreparedListener(mp -> {
+                mp.setLooping(true);
+                videoView.start();
+            });
+
             videoView.setOnClickListener(v -> {
                 Intent intent = new Intent(context, FullScreenVideoActivity.class);
                 intent.putExtra("videoUrl", uri.toString());
                 context.startActivity(intent);
             });
         });
+
         mediaContainer.addView(view);
     }
+
 }

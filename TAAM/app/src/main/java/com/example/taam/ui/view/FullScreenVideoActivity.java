@@ -1,13 +1,11 @@
 package com.example.taam.ui.view;
 
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +15,6 @@ import com.example.taam.R;
 public class FullScreenVideoActivity extends AppCompatActivity {
 
     private VideoView videoView;
-    private MediaController mediaController;
     private ImageView playIcon;
     private static final int CHECK_INTERVAL = 100;
 
@@ -26,73 +23,66 @@ public class FullScreenVideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.full_video_view);
 
-        // set up fields
+        // Set up fields
         videoView = findViewById(R.id.fullScreenVideoView);
-        mediaController = new MediaController(this);
         playIcon = findViewById(R.id.playIcon);
 
         setUpVideo();
         setUpCloseButton();
         setUpClickableVideoView();
         checkPlayState();
+
+        // Automatically play video when it becomes visible
+        videoView.setOnPreparedListener(mp -> {
+            mp.setLooping(true);
+            videoView.start();
+            showPlayIcon(false); // Ensure play icon is hidden when video starts
+        });
     }
 
-    private void setUpVideo(){
-        // set up videoView using video url from Intent
+    private void setUpVideo() {
+        // Set up videoView using video url from Intent
         String videoUrl = getIntent().getStringExtra("videoUrl");
         Uri videoUri = Uri.parse(videoUrl);
         videoView.setVideoURI(videoUri);
 
-        // Set up media controller for videoView
-        mediaController.setAnchorView(videoView);
-        videoView.setMediaController(mediaController);
-        videoView.setOnCompletionListener(mp -> showPlayIcon(true));
+        // Hide media controller
+        videoView.setMediaController(null);
     }
 
-    // displays or hides play icon
+    // Displays/hides play icon with animation
     private void showPlayIcon(boolean show) {
-        if(show){
-            playIcon.setVisibility(VideoView.VISIBLE);
-        }
-        else{
-            playIcon.setVisibility(VideoView.GONE);
-        }
+        playIcon.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    // allows changes of playing state using videoView to be reflected on the media controller
+    // Allows changes of playing state using videoView to be reflected on the play icon
     private void setUpClickableVideoView() {
         videoView.setOnClickListener(v -> {
-            if(videoView.isPlaying()){
+            if (videoView.isPlaying()) {
                 videoView.pause();
                 showPlayIcon(true);
-            }
-            else{
+            } else {
                 videoView.start();
                 showPlayIcon(false);
             }
-            mediaController.show();
         });
     }
 
-    // allows changes of playing state using media controller to be reflected on the play icon
+    // Checks play state and updates the play icon
     private void checkPlayState() {
         Handler handler = new Handler(Looper.getMainLooper());
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (videoView.isPlaying()) {
-                    showPlayIcon(false);
-                } else {
-                    showPlayIcon(true);
-                }
+                showPlayIcon(!videoView.isPlaying());
                 handler.postDelayed(this, CHECK_INTERVAL); // Re-run every CHECK_INTERVAL milliseconds
             }
         };
         handler.post(runnable);
     }
 
-    // allows user to return to previous activity
-    private void setUpCloseButton(){
+    // Allows user to return to the previous activity
+    private void setUpCloseButton() {
         ImageView closeButton = findViewById(R.id.closeVideo);
         closeButton.setOnClickListener(v -> finish());
     }
