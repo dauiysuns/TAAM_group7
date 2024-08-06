@@ -33,6 +33,12 @@ public class PeriodSpinner {
         DataModel.loadNewCategoriesOrPeriods("newPeriods", periodList, addedPeriods);
     }
 
+    public static void removeUserAddedPeriod(String period){
+        periodList.remove(period);
+        addedPeriods.remove(period);
+        spinnerAdapter.notifyDataSetChanged();
+    }
+
     private static void setUpAdapter(Context context, Spinner spinner){
         spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, periodList);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

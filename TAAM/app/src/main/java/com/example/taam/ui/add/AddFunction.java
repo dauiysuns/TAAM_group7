@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,7 +128,7 @@ public class AddFunction extends Fragment implements DataView{
         return view;
     }
 
-    //pt 1) functionality for adding new categories/periods
+    //pt 1) functionality for adding/removing new categories/periods
     private void showAddDialog(String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Add new " + type);
@@ -151,16 +152,12 @@ public class AddFunction extends Fragment implements DataView{
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
         builder.show();
     }
 
     private void showRemoveDialog(String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Are you sure you want to remove this " + type  + " and all its items?");
-
-//        final EditText input = new EditText(requireContext());
-//        builder.setView(input);
 
         builder.setPositiveButton("Remove", (dialog, which) -> {
             DataModel dm = new DataModel(this);
@@ -169,38 +166,28 @@ public class AddFunction extends Fragment implements DataView{
                 if (type.equals("Category")) {
                     selected = spinnerCategory.getSelectedItem().toString();
                     if (!CategorySpinner.isUserAddedCategory(selected)) {
-                        Toast.makeText(getContext(), selected + "default category cannot be deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Default category " + selected + " cannot be deleted", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                     DataModel.ref.child("newCategories").child(selected).removeValue();
-                    ((ArrayAdapter<String>)spinnerCategory.getAdapter()).notifyDataSetChanged();
+                    CategorySpinner.removeUserAddedCategory(selected);
 
                 } else {
                     selected = spinnerPeriod.getSelectedItem().toString();
+                    if (!PeriodSpinner.isUserAddedPeriod(selected)) {
+                        Toast.makeText(getContext(), "Default period " + selected + " cannot be deleted", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     DataModel.ref.child("newPeriods").child(selected).removeValue();
-                    ((ArrayAdapter<String>)spinnerPeriod.getAdapter()).notifyDataSetChanged();
+                    PeriodSpinner.removeUserAddedPeriod(selected);
                 }
 
                 dm.getItemsByCategory(type.toLowerCase(), selected, requireContext());
-                Toast.makeText(getContext(), selected + "removed successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), selected + " removed successfully", Toast.LENGTH_SHORT).show();
             }
-            //String label = input.getText().toString().trim();
-//            if (!label.isEmpty()) {
-//                if(type.equals("Category")){
-//                    CategorySpinner.addCategory(getContext(), label, spinnerCategory);
-//                    Toast.makeText(getContext(), "New Category added successfully", Toast.LENGTH_SHORT).show();
-//                } else{
-//                    PeriodSpinner.addPeriod(getContext(), label, spinnerPeriod);
-//                    Toast.makeText(getContext(), "New Period added successfully", Toast.LENGTH_SHORT).show();
-//                }
-//            } else {
-//                Toast.makeText(getContext(), "Empty " + type + " cannot be added!", Toast.LENGTH_SHORT).show();
-//            }
-
-
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
         builder.show();
     }
 
@@ -336,11 +323,11 @@ public class AddFunction extends Fragment implements DataView{
 
     @Override
     public void showError(String errorMessage) {
-
+        Log.v("AddFunction", errorMessage);
     }
 
     @Override
     public void onComplete() {
-
+        Log.v("Remove category/period", "Success");
     }
 }
