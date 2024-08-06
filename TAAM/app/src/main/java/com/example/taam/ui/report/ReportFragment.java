@@ -165,12 +165,14 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
             textViewForItem.setVisibility(View.GONE);
             categorySpinner.setVisibility(View.GONE);
             periodSpinner.setVisibility(View.GONE);
+            userInput = "";
         } else{
             byItemText.setText("");
             byItemText.setVisibility(View.VISIBLE);
             textViewForItem.setVisibility(View.VISIBLE);
             categorySpinner.setVisibility(View.GONE);
             periodSpinner.setVisibility(View.GONE);
+            userInput = "";
         }
     }
 }
