@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.taam.R;
+import com.example.taam.ui.add.AddFunction;
 import com.example.taam.ui.login.LoginFragmentView;
 import com.example.taam.ui.search.SearchFragment;
 
@@ -22,7 +23,7 @@ public class UserHomeFragment extends BaseHomeFragment {
         buttonView = view.findViewById(R.id.view_button);
         buttonSearch = view.findViewById(R.id.search_button);
         buttonAdmin = view.findViewById(R.id.admin_button);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.mediaRecyclerView);
     }
 
     @Override

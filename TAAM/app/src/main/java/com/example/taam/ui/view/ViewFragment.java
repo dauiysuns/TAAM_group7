@@ -11,18 +11,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taam.database.Item;
 import com.example.taam.R;
 import com.example.taam.database.DataModel;
 import com.example.taam.database.DataView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class ViewFragment extends Fragment implements DataView {
     private String selectedLotNumber;
     private TextView textViewLot, textViewName, textViewCategory, textViewPeriod, textViewDescription;
-    //private ImageView imageViewPicOrVid;
+    private MediaAdapter mediaAdapter;
+    private RecyclerView mediaRecyclerView;
     private ImageButton closeButton;
     private DataModel dm;
+    private ArrayList<HashMap<String, String>> mediaUrls;
 
     public ViewFragment(String selectedLotNumber){
         this.selectedLotNumber = selectedLotNumber;
@@ -38,13 +45,14 @@ public class ViewFragment extends Fragment implements DataView {
         textViewCategory = view.findViewById(R.id.textViewCategory);
         textViewPeriod = view.findViewById(R.id.textViewPeriod);
         textViewDescription = view.findViewById(R.id.textViewDescription);
-        // imageViewPicOrVid = itemView.findViewById(R.id.imageViewPicOrVid);
+        mediaRecyclerView = view.findViewById(R.id.mediaRecyclerView);
 
         closeButton = view.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
         dm = new DataModel(this);
-        dm.displayItem(selectedLotNumber);
+        mediaUrls = new ArrayList<>();
+        dm.getItemByLot(selectedLotNumber);
 
         return view;
     }
@@ -56,6 +64,14 @@ public class ViewFragment extends Fragment implements DataView {
         textViewCategory.setText(item.category);
         textViewPeriod.setText(item.period);
         textViewDescription.setText(item.description);
+
+        // if an item has no picture/video then mediaUrls is null
+        if(item.mediaUrls != null){
+            mediaUrls = item.mediaUrls;
+        }
+        mediaAdapter = new MediaAdapter(mediaUrls, getContext());
+        mediaRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mediaRecyclerView.setAdapter(mediaAdapter);
     }
 
     @Override
@@ -64,7 +80,6 @@ public class ViewFragment extends Fragment implements DataView {
     }
 
     @Override
-    public void onComplete() {
-
+    public void onComplete(){
     }
 }

@@ -1,5 +1,6 @@
 package com.example.taam.database;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,18 +11,24 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taam.R;
+import com.example.taam.ui.view.MediaAdapter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
-    public List<Item> itemList;
+    private List<Item> itemList;
     private final int maxDescriptionLength = 350;
+    private Context context;
 
-    public ItemAdapter(List<Item> itemList) {
+    public ItemAdapter(List<Item> itemList, Context context) {
         this.itemList = itemList;
+        this.context = context;
     }
 
     @NonNull
@@ -61,7 +68,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             holder.textViewDescription.setText(itemDescription);
         }
 
-        // getting image/video code missing here
+        // set up Media recyclerView
+        ArrayList<HashMap<String, String>> mediaItems = item.mediaUrls;
+        MediaAdapter mediaAdapter = new MediaAdapter(mediaItems, context);
+        holder.mediaRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        holder.mediaRecyclerView.setAdapter(mediaAdapter);
 
         holder.checkBox.setOnClickListener(v -> item.setSelected(holder.checkBox.isChecked()));
     }
@@ -74,7 +85,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView textViewLot, textViewName, textViewCategory, textViewPeriod, textViewDescription;
         ImageView dropDown, rollUp;
-        //ImageView imageViewPicOrVid;
+        RecyclerView mediaRecyclerView;
         CheckBox checkBox;
         boolean isExpanded = false;
         Group groupExpand;
@@ -87,7 +98,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             textViewCategory = itemView.findViewById(R.id.textViewCategory);
             textViewPeriod = itemView.findViewById(R.id.textViewPeriod);
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
-           // imageViewPicOrVid = itemView.findViewById(R.id.imageViewPicOrVid);
+            mediaRecyclerView = itemView.findViewById(R.id.mediaRecyclerView);
             checkBox = itemView.findViewById(R.id.checkBox);
             dropDown = itemView.findViewById(R.id.dropDown);
             rollUp = itemView.findViewById(R.id.rollUp);

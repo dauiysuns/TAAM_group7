@@ -15,4 +15,8 @@ public interface DataView {
     void updateView(Item item);
     void showError(String errorMessage);
     void onComplete();
+
+    public interface AddItemCallback{
+        void onComplete(boolean success);
+    }
 }

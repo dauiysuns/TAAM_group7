@@ -2,6 +2,7 @@ package com.example.taam.ui.home;
 
 import static com.example.taam.ui.FragmentLoader.loadFragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,9 +30,9 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
 
     protected Button buttonView, buttonSearch, buttonBack, buttonAdd, buttonRemove, buttonReport;
     protected RecyclerView recyclerView;
-    public ItemAdapter itemAdapter;
-    public List<Item> itemList;
-    public DataModel dm;
+    private ItemAdapter itemAdapter;
+    protected List<Item> itemList;
+    private DataModel dm;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         // setting up recycler view
         dm = new DataModel(this);
         itemList = new ArrayList<>();
-        itemAdapter = new ItemAdapter(itemList);
+        itemAdapter = new ItemAdapter(itemList, getContext());
 
         // initialize buttons and RecyclerView
         initializeViews(view);
@@ -61,9 +62,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(itemAdapter);
 
-        dm.displayAllItems();
-
-        // For demo purposes, adding items
+        dm.getAllItems();
 
         return view;
     }
@@ -86,7 +85,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
     public void reset() {
         itemList.clear();
         itemAdapter.notifyDataSetChanged();
-        dm.displayAllItems();
+        dm.getAllItems();
     }
 
     protected void viewItem() {
@@ -109,8 +108,9 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onComplete() {
-
+        itemAdapter.notifyDataSetChanged();
     }
 }

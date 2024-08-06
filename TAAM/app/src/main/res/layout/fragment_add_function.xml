@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.add.AddFunction">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="79dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Add a TextInputEditText or similar here if needed -->
+    </com.google.android.material.textfield.TextInputLayout>
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:id="@+id/textViewAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewAdd"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/new_entry"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textViewLotNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewName"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/lot"
+            android:textSize="16sp"
+            android:translationY="60dp" />
+        <EditText
+            android:id="@+id/editTextLotNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/textViewLotNumber"
+            android:layout_alignBottom="@id/textViewLotNumber"
+            android:layout_toEndOf="@id/textViewLotNumber"
+            android:autofillHints=""
+            android:hint="@string/enter_lot_number"
+            android:inputType="number"
+            android:translationY="60dp" />
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="8dp"
+            android:text="@string/name"
+            android:textSize="16sp"
+            android:translationY="60dp" />
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/textViewName"
+            android:layout_alignBottom="@id/textViewName"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="-44dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="-1dp"
+            android:autofillHints=""
+            android:hint="@string/enter_the_name"
+            android:inputType="textPersonName"
+            android:translationX="30dp"
+            android:translationY="60dp" />
+        <TextView
+            android:id="@+id/textViewCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="8dp"
+            android:text="@string/category"
+            android:textSize="16sp"
+            android:translationY="260dp" />
+        <Spinner
+            android:id="@+id/spinnerCategory"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/textViewCategory"
+            android:layout_alignBottom="@id/textViewCategory"
+            android:layout_toEndOf="@id/textViewCategory"
+            android:spinnerMode="dropdown"
+            android:translationY="260dp" />
+        <TextView
+            android:id="@+id/textViewPeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/period"
+            android:textSize="16sp"
+            android:translationY="300dp" />
+        <Spinner
+            android:id="@+id/spinnerPeriod"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/textViewPeriod"
+            android:layout_alignBottom="@id/textViewPeriod"
+            android:layout_toEndOf="@id/textViewPeriod"
+            android:spinnerMode="dropdown"
+            android:translationY="300dp" />
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/description"
+            android:textSize="16sp"
+            android:translationY="130dp" />
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            android:layout_alignBaseline="@id/textViewDescription"
+            android:layout_alignTop="@id/textViewDescription"
+            android:layout_alignBottom="@id/textViewDescription"
+            android:layout_toEndOf="@id/textViewDescription"
+            android:autofillHints=""
+            android:hint="@string/enter_the_description"
+            android:inputType="text|textLongMessage"
+            android:translationY="130dp" />
+        <Button
+            android:id="@+id/buttonUploadMedia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:text="@string/upload_photos_videos"
+            android:translationX="30dp"
+            android:translationY="350dp" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationX="90dp"
+            android:translationY="410dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            android:translationX="275dp"
+            android:translationY="600dp" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
