@@ -66,20 +66,29 @@ public class ResultFragment extends BaseHomeFragment {
         buttonView.setOnClickListener(v -> viewItem());
     }
 
-    //RN THE THINGS ARE LIKE OR, IM TRYING TO MAKE IT LIKE AND, so opposite of whtas here rn
     @Override
     public void updateView(Item item) {
-        if (item != null && item.period != null && item.period.equalsIgnoreCase(period)) {
-            periodMatches.add(item);
+        if (item == null) return;
+
+        // Initialize match flag to true
+        boolean matchesAllCriteria = lotNumber == null || lotNumber.equals(item.getLot()) || lotNumber.isEmpty();
+
+        // Check each criterion and set flag accordingly
+        if (name != null && !name.equals(item.getName()) && !name.isEmpty()) {
+            matchesAllCriteria = false;
         }
-        if (item != null && item.category != null && item.category.equalsIgnoreCase(category)) {
-            categoryMatches.add(item);
+        if (category != null && !category.equals(item.getCategory()) && !category.isEmpty()) {
+            matchesAllCriteria = false;
         }
-        if (item != null && item.getLot() != null &&  item.getLot().equalsIgnoreCase(lotNumber)) {
-            lotMatches.add(item);
+        if (period != null && !period.equals(item.getPeriod()) && !period.isEmpty()) {
+            matchesAllCriteria = false;
         }
-        if (item != null && item.name != null && item.name.equalsIgnoreCase(name)) {
-            nameMatches.add(item);
+
+        // Add item to the list if it matches all criteria
+        if (matchesAllCriteria) {
+            if (!lotMatches.contains(item)) {
+                lotMatches.add(item);
+            }
         }
     }
 
@@ -90,9 +99,9 @@ public class ResultFragment extends BaseHomeFragment {
 
     @Override
     public void onComplete() {
-        lotMatches.addAll(nameMatches);
-        lotMatches.addAll(categoryMatches);
-        lotMatches.addAll(periodMatches);
+//        lotMatches.addAll(nameMatches);
+//        lotMatches.addAll(categoryMatches);
+//        lotMatches.addAll(periodMatches);
 
         itemList.clear();
         for (Item item : lotMatches) {
