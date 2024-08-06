@@ -62,4 +62,6 @@ dependencies {
     implementation("com.itextpdf:io:7.1.16")
     implementation("androidx.activity:activity-ktx:1.2.0") // Or later version
     implementation("androidx.fragment:fragment-ktx:1.3.0") // Or later version
+    testImplementation("org.mockito:mockito-core:4.8.0")  // Update to the latest version
+    testImplementation("org.robolectric:robolectric:4.10.3")
 }

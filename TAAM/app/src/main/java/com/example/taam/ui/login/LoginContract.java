@@ -2,6 +2,7 @@ package com.example.taam.ui.login;
 
 public interface LoginContract {
      interface Presenter {
+         void tryLogin(String email, String password);
          void loginSuccessPresenter();
          void loginFailurePresenter(String error);
          void emptyEmailPresenter();
@@ -9,17 +10,12 @@ public interface LoginContract {
     }
 
     interface Model {
-        interface loginFinishedListener {
-            void onUsernameError(String error);
-            void onPasswordError(String error);
-            void isSuccess();
-            void isFailure(String error);
-        }
+        void modelLoginAttempt(String user, String email, Presenter presenter);
     }
 
     interface View {
         void loginSuccessView();
-        void loginFailureView(String error);
+        void loginFailureView();
         void invalidInputView();
     }
 }

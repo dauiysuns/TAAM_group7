@@ -16,8 +16,9 @@ import androidx.fragment.app.Fragment;
 import com.example.taam.R;
 import com.example.taam.ui.home.AdminHomeFragment;
 import com.example.taam.ui.signup.SignupFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginFragmentView extends Fragment {
+public class LoginFragmentView extends Fragment implements LoginContract.View {
     private LoginFragmentPresenter presenter;
 
     public LoginFragmentView() {
@@ -26,7 +27,9 @@ public class LoginFragmentView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new LoginFragmentPresenter(this);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        LoginFragmentModel model = new LoginFragmentModel(firebaseAuth);
+        presenter = new LoginFragmentPresenter(this, model);
     }
 
 //    @Override
