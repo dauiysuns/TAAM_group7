@@ -67,16 +67,16 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
         setUpSpinnerListener(periodSpinner);
 
         generate.setOnClickListener(v -> {
-            if(byItemText.getVisibility() == View.VISIBLE){
+            if (byItemText.getVisibility() == View.VISIBLE) {
                 userInput = byItemText.getText().toString();
+                if (userInput.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter an input", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
-            if (userInput.equals("")) {
-                Toast.makeText(getContext(), "Please enter an input", Toast.LENGTH_SHORT).show();
-            }else{
-                permissionHandler.handlePermissions();
-            }
-
+            permissionHandler.handlePermissions();
         });
+
 
         cancel.setOnClickListener(v -> FragmentLoader.loadFragment(getParentFragmentManager(), new AdminHomeFragment()));
 
@@ -158,7 +158,6 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
             textViewForItem.setVisibility(View.GONE);
             categorySpinner.setVisibility(View.GONE);
             periodSpinner.setVisibility(View.GONE);
-            userInput = "";
         } else{
             byItemText.setText("");
             byItemText.setVisibility(View.VISIBLE);
