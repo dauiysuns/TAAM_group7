@@ -30,7 +30,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
 
     protected Button buttonView, buttonSearch, buttonBack, buttonAdd, buttonRemove, buttonReport;
     protected RecyclerView recyclerView;
-    private ItemAdapter itemAdapter;
+    protected ItemAdapter itemAdapter;
     protected List<Item> itemList;
     private DataModel dm;
 
@@ -107,6 +107,7 @@ public abstract class BaseHomeFragment extends Fragment implements DataView {
             Toast.makeText(getContext(), "Please first select an item to view.", Toast.LENGTH_SHORT).show();
         }
     }
+
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onComplete() {
