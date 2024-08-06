@@ -10,23 +10,44 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PeriodSpinner {
-    public static ArrayList<String> periodList;
+    private static ArrayList<String> periodList;
+    private static String[] defaultPeriods = {"Xia", "Shang", "Zhou", "Chuanqiu", "Zhanggou", "Qin", "Hang", "Shangou", "Ji", "South and North", "Shui", "Tang", "Liao", "Song", "Jin", "Yuan", "Ming", "Qing", "Modern"};
+    private static ArrayAdapter<String> spinnerAdapter;
 
-    private PeriodSpinner(){
+    private PeriodSpinner(){}
+
+    public static Spinner getSpinner(Context context, Spinner spinner){
+        // if we are setting up the Spinner for the first time, fill it with default periods
+        if(periodList == null){
+            insertDefaultPeriods();
+        }
+        setUpAdapter(context, spinner);
+        return spinner;
     }
 
-    // this spinner is used for AddFunction
-    public static void setUpEditableSpinner(Context context, Spinner spinner){
-        insertDefaultPeriods(context);
-        ArrayAdapter<String> spinnerAdapterCat = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, periodList);
-        spinnerAdapterCat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAdapterCat);
+    private static void insertDefaultPeriods(){
+        periodList = new ArrayList<>(Arrays.asList(defaultPeriods));
     }
 
-    private static void insertDefaultPeriods(Context context){
-        String[] categoriesArray = context.getResources().getStringArray(R.array.periods_array);
-        periodList = new ArrayList<>(Arrays.asList(categoriesArray));
+    private static void setUpAdapter(Context context, Spinner spinner){
+        spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, periodList);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
     }
 
+    public static void addPeriod(String period){
+        periodList.add(period);
+        spinnerAdapter.notifyDataSetChanged();
+    }
+
+    // check whether the given period is a default one (cannot remove default period)
+    public static boolean isDefaultPeriod(String period){
+        for(String current : defaultPeriods){
+            if(current.equals(period)){
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

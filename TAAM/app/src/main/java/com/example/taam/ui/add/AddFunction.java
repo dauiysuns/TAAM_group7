@@ -2,11 +2,11 @@ package com.example.taam.ui.add;
 
 import static android.app.Activity.RESULT_OK;
 
+import com.example.taam.database.CategorySpinner;
 import com.example.taam.database.DataView;
-import com.example.taam.database.EditableCategorySpinner;
-import com.example.taam.database.EditablePeriodSpinner;
 import com.example.taam.database.Item;
 import com.example.taam.database.DataModel;
+import com.example.taam.database.PeriodSpinner;
 import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,10 +42,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import android.net.Uri;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.activity.result.ActivityResult;
@@ -55,7 +52,6 @@ import android.content.Intent;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 
@@ -89,8 +85,8 @@ public class AddFunction extends Fragment {
         //loading spinners and ArrayLists
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         spinnerPeriod = view.findViewById(R.id.spinnerPeriod);
-        CategorySpinner.setUpEditableSpinner(requireContext(), spinnerCategory);
-        PeriodSpinner.setUpEditableSpinner(requireContext(), spinnerPeriod);
+        spinnerCategory = CategorySpinner.getSpinner(requireContext(), spinnerCategory);
+        spinnerPeriod = PeriodSpinner.getSpinner(requireContext(), spinnerPeriod);
 
         //buttons
         Button buttonUploadMedia = view.findViewById(R.id.buttonUploadMedia);
@@ -120,8 +116,8 @@ public class AddFunction extends Fragment {
         //setting up buttons with functionalities (method calls) using lambda
         buttonUploadMedia.setOnClickListener(v -> askMediaType());
         buttonSubmit.setOnClickListener(v -> addItem());
-        buttonAddCategory.setOnClickListener(v -> showAddDialog("Category", categoryReference, categories));
-        buttonAddPeriod.setOnClickListener(v -> showAddDialog("Period", periodReference, periods));
+        buttonAddCategory.setOnClickListener(v -> showAddDialog("Category"));
+        buttonAddPeriod.setOnClickListener(v -> showAddDialog("Period"));
 
         return view;
     }
@@ -185,9 +181,9 @@ public class AddFunction extends Fragment {
             String label = input.getText().toString().trim();
             if (!label.isEmpty()) {
                 if(type.equals("Category")){
-                    EditableCategorySpinner.categoryList.add(label);
+                    CategorySpinner.addCategory(label);
                 } else{
-                    EditablePeriodSpinner.periodList.add(label);
+                    PeriodSpinner.addPeriod(label);
                 }
                 //DataModel.addLabelToDatabase(type, label, ref, requireContext());
                 //loadSpinner(spinnerList, type, ref);
