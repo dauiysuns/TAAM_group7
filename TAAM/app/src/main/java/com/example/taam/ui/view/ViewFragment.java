@@ -29,7 +29,6 @@ public class ViewFragment extends Fragment implements DataView {
     private MediaAdapter mediaAdapter;
     private LinearLayout mediaContainer;
     private ImageButton closeButton;
-    private DataModel dm;
     private ArrayList<HashMap<String, String>> mediaUrls;
 
     public ViewFragment(String selectedLotNumber){
@@ -40,24 +39,27 @@ public class ViewFragment extends Fragment implements DataView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view, container, false);
+        setUpUI(view);
 
+        // connect to database and obtain information for selected item to display
+        DataModel dm = new DataModel(this);
+        dm.getItemByLot(selectedLotNumber);
+
+        return view;
+    }
+
+    private void setUpUI(View view){
         textViewLot = view.findViewById(R.id.textViewLot);
         textViewName = view.findViewById(R.id.textViewName);
         textViewCategory = view.findViewById(R.id.textViewCategory);
         textViewPeriod = view.findViewById(R.id.textViewPeriod);
         textViewDescription = view.findViewById(R.id.textViewDescription);
         mediaContainer = view.findViewById(R.id.mediaContainer);
-
         closeButton = view.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
-
-        dm = new DataModel(this);
-        mediaUrls = new ArrayList<>();
-        dm.getItemByLot(selectedLotNumber);
-
-        return view;
     }
 
+    // updates UI elements based on information obtained from database
     @Override
     public void updateView(Item item) {
         textViewLot.setText(item.getLot());
@@ -65,11 +67,7 @@ public class ViewFragment extends Fragment implements DataView {
         textViewCategory.setText(item.category);
         textViewPeriod.setText(item.period);
         textViewDescription.setText(item.description);
-
-        // if an item has no picture/video then mediaUrls is null
-        if(item.mediaUrls != null){
-            mediaUrls = item.mediaUrls;
-        }
+        mediaUrls = item.mediaUrls;
         mediaAdapter = new MediaAdapter(mediaUrls, getContext(), mediaContainer);
         mediaAdapter.addMediaItems(mediaUrls.size()); // display all media items
     }
@@ -80,6 +78,5 @@ public class ViewFragment extends Fragment implements DataView {
     }
 
     @Override
-    public void onComplete(){
-    }
+    public void onComplete(){ Log.v("View", "Item information obtained successfully."); }
 }

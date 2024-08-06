@@ -146,6 +146,7 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
         generatePdf();
     }
 
+    // change user input option based on type of report selected
     @Override
     public void onItemSelected(String selected) {
         if (selected.equals("Category") || selected.equals("Category with Description and Picture only") ){

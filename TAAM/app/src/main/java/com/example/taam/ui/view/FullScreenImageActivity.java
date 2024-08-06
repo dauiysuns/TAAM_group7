@@ -18,18 +18,16 @@ public class FullScreenImageActivity extends AppCompatActivity {
         setUpCloseButton();
     }
 
+    // loads image using image URL from the Intent
     private void setUpImage(){
         ImageView imageView = findViewById(R.id.fullScreenImageView);
-
-        // Get the image URL from the Intent
         String imageUrl = getIntent().getStringExtra("imageUrl");
-
-        // Load the image using Glide or any other image loading library
         Glide.with(this)
                 .load(imageUrl)
                 .into(imageView);
     }
 
+    // allows user to return to previous activity
     private void setUpCloseButton(){
         ImageView closeButton = findViewById(R.id.closeImage);
         closeButton.setOnClickListener(v -> finish());

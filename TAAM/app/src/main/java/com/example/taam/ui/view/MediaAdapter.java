@@ -29,7 +29,6 @@ public class MediaAdapter {
     private Context context;
     private LinearLayout mediaContainer;
     private LayoutInflater inflater;
-    private View view;
     private final String defaultImage = "gs://taam-cfc94.appspot.com/uploads/not available.jpg";
 
     public MediaAdapter(ArrayList<HashMap<String, String>> mediaUrls, Context context, LinearLayout mediaContainer) {
@@ -47,6 +46,7 @@ public class MediaAdapter {
             return;
         }
 
+        // otherwise, add desired number of media items dynamically based on their type
         for(int i = 0; i < number; i++){
             HashMap<String, String> mediaItem = mediaUrls.get(i);
             if (mediaItem.containsKey("image")) {
@@ -56,15 +56,14 @@ public class MediaAdapter {
                 String videoUrl = mediaItem.get("video");
                 addVideo(videoUrl);
             }
-            mediaContainer.addView(view);
         }
     }
 
     private void addImage(String imageUrl){
-        view = inflater.inflate(R.layout.image_holder, mediaContainer, false);
+        View view = inflater.inflate(R.layout.image_holder, mediaContainer, false);
         ImageView imageView = view.findViewById(R.id.imageView);
 
-        // the url needs to begin with gs://
+        // load image and set up listener to respond to user action
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(imageUrl);
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -79,13 +78,14 @@ public class MediaAdapter {
                 context.startActivity(intent);
             });
         });
+        mediaContainer.addView(view);
     }
 
     private void addVideo(String videoUrl){
-        view = inflater.inflate(R.layout.video_holder, mediaContainer, false);
+        View view = inflater.inflate(R.layout.video_holder, mediaContainer, false);
         VideoView videoView = view.findViewById(R.id.videoView);
 
-        // Load video using Firebase Storage
+        // load video and set up listener for responding to user
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(videoUrl);
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -95,5 +95,6 @@ public class MediaAdapter {
                 context.startActivity(intent);
             });
         });
+        mediaContainer.addView(view);
     }
 }
