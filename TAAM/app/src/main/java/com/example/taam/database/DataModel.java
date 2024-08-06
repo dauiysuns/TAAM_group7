@@ -21,12 +21,12 @@ public class DataModel {
     public static DatabaseReference ref = FirebaseDatabase
             .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
             .getReference();
-    public static DatabaseReference categoryReference = FirebaseDatabase
-            .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
-            .getReference("addedCategories");
-    public static DatabaseReference periodReference = FirebaseDatabase
-            .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
-            .getReference("addedPeriods");
+//    public static DatabaseReference categoryReference = FirebaseDatabase
+//            .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
+//            .getReference("addedCategories");
+//    public static DatabaseReference periodReference = FirebaseDatabase
+//            .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
+//            .getReference("addedPeriods");
     public static StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploads");
     DataView view;
 
@@ -157,11 +157,11 @@ public class DataModel {
     }
 
     public static void storeNewCategory(String category){
-        categoryReference.push().setValue(category);
+        ref.child("newCategories").push().setValue(category);
     }
 
     public static void loadNewCategories(ArrayList<String> categoryList, ArrayList<String> addedCategories) {
-        categoryReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child("newCategories").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
