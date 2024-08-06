@@ -12,8 +12,6 @@ import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -44,7 +42,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import android.net.Uri;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.activity.result.ActivityResult;
@@ -63,19 +64,17 @@ import com.google.firebase.storage.UploadTask;
 public class AddFunction extends Fragment {
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
-    private ArrayList<HashMap<String, String>> mediaUrls;
+    private ArrayList<HashMap<String, String>> mediaUrls; //added categories and periods as ArrayLists
+
     private Uri uri;
     ProgressBar progressBar;
     private ActivityResultLauncher<Intent> uploadMediaLauncher;
     private String mediaType;
 
-    //ngl i don't know really know what these are... i just be using them ?? maybe
-    StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         //onCreateView is what happens when you initialize the fragment/activity! So when the user goes to the "AddFunction" screen, we need to setup all these "views" (the components of the screen, like text boxes and buttons) and fill them in with the necessary content (dropdown menu options, what actions to take if a user clicks something). Basically, the instruction manual for how the fragment will work.
 
         //assigns an xml view to this fragment
@@ -86,22 +85,21 @@ public class AddFunction extends Fragment {
         editTextLotNumber = view.findViewById(R.id.editTextLotNumber);
         editTextName = view.findViewById(R.id.editTextName);
         editTextDescription = view.findViewById(R.id.editTextDescription);
-        //set up category and period spinners
+
+        //loading spinners and ArrayLists
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         spinnerPeriod = view.findViewById(R.id.spinnerPeriod);
-        EditableCategorySpinner.setUpEditableSpinner(requireContext(), spinnerCategory);
-        EditablePeriodSpinner.setUpEditableSpinner(requireContext(), spinnerPeriod);
-
+        CategorySpinner.setUpEditableSpinner(requireContext(), spinnerCategory);
+        PeriodSpinner.setUpEditableSpinner(requireContext(), spinnerPeriod);
 
         //buttons
         Button buttonUploadMedia = view.findViewById(R.id.buttonUploadMedia);
         Button buttonSubmit = view.findViewById(R.id.buttonSubmit);
-
-
+        Button buttonAddCategory = view.findViewById(R.id.buttonAddCategory);
+        Button buttonAddPeriod = view.findViewById(R.id.buttonAddPeriod);
 
         progressBar = view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
-
 
         mediaUrls = new ArrayList<>();
 
@@ -119,41 +117,109 @@ public class AddFunction extends Fragment {
             }
         });
 
-        //setting up buttons with functionalities (method calls)
-        buttonUploadMedia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                askMediaType();
-            }
-        });
+        //setting up buttons with functionalities (method calls) using lambda
+        buttonUploadMedia.setOnClickListener(v -> askMediaType());
+        buttonSubmit.setOnClickListener(v -> addItem());
+        buttonAddCategory.setOnClickListener(v -> showAddDialog("Category", categoryReference, categories));
+        buttonAddPeriod.setOnClickListener(v -> showAddDialog("Period", periodReference, periods));
 
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addItem();
-            }
-        });
         return view;
     }
 
-    //functionality for uploading media
+
+    //pt 1) functionality for the spinners (populating and adding new labels)
+
+    //loading in the arraylists made for a spinner by querying the database (for the categories and periods spinners) DONE!!!!
+//    private void loadSpinner(ArrayList<HashMap<String, String>> spinnerList, String type, DatabaseReference ref) {
+//        ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                spinnerList.clear();
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                    HashMap<String, String> map = new HashMap<>();
+//                    String labelName = dataSnapshot.child("label name").getValue(String.class);
+//                    String origin = dataSnapshot.child("origin").getValue(String.class);
+//                    if (labelName != null && origin != null) {
+//                        map.put("label name", labelName);
+//                        map.put("origin", origin);
+//                        spinnerList.add(map);
+//                    }
+//                }
+//                updateSpinner(spinnerList, type);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Toast.makeText(getContext(), "Failed to load " + type + " spinner", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+    //helper for updateSpinner() to create an adapter (for populating the spinners)
+//    private ArrayList<String> getKeys(ArrayList<HashMap<String, String>> spinnerList) {
+//        ArrayList<String> keys = new ArrayList<>();
+//        for (HashMap<String, String> map : spinnerList) {
+//            keys.add(map.get("label name"));
+//        }
+//        return keys;
+//    }
+    //repopulates a spinner based on a given arraylist with an adapter (! ! does not access database)
+//    private void updateSpinner(ArrayList<HashMap<String, String>> spinnerList, String type) {
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, getKeys(spinnerList));
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        if (type.equals("Category")) {
+//            spinnerCategory.setAdapter(adapter);
+//        }
+//        else if (type.equals("Period")) {
+//            spinnerPeriod.setAdapter(adapter);
+//        }
+//    }
+
+    private void showAddDialog(String type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Add new " + type);
+
+        final EditText input = new EditText(requireContext());
+        builder.setView(input);
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String label = input.getText().toString().trim();
+            if (!label.isEmpty()) {
+                if(type.equals("Category")){
+                    EditableCategorySpinner.categoryList.add(label);
+                } else{
+                    EditablePeriodSpinner.periodList.add(label);
+                }
+                //DataModel.addLabelToDatabase(type, label, ref, requireContext());
+                //loadSpinner(spinnerList, type, ref);
+            } else {
+                Toast.makeText(getContext(), "Empty " + type + " cannot be added!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+
+    //pt 2) functionality for uploading media
 
     //helper function 1: dialog popup to ask if uploading photo or video
     private void askMediaType(){
-    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-    builder.setTitle("please select media type to upload");
-    builder.setItems(new CharSequence[]{"Image", "Video"}, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int choice) {
-            if (choice == 0) { //chose to upload image
-                launchUploadMediaIntent("image/*", "image");
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("please select media type to upload");
+        builder.setItems(new CharSequence[]{"Image", "Video"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int choice) {
+                if (choice == 0) { //chose to upload image
+                    launchUploadMediaIntent("image/*", "image");
+                }
+                else { //chose to upload video
+                    launchUploadMediaIntent("video/*", "video");
+                }
             }
-            else { //chose to upload video
-                launchUploadMediaIntent("video/*", "video");
-            }
-        }
-    });
-    builder.show();
+        });
+        builder.show();
     }
 
     //helper function 2: to get file extension of an uploaded media using the Uri
@@ -204,13 +270,10 @@ public class AddFunction extends Fragment {
         }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
-
-
-
 
     //functionality for submitting/adding an entry to database
     private void addItem() {
@@ -235,15 +298,15 @@ public class AddFunction extends Fragment {
             Toast.makeText(getContext(), "Lot# must be an actual number!", Toast.LENGTH_SHORT).show();
             return;
         }
+        DatabaseReference itemRef = DataModel.ref.child("items").child(lot);
 
         //create the Item using current fields to add to db (+ add any uploaded media)
         Item newEntry = new Item(lot, name, category, period, description, mediaUrls);
-
         //using DataModel functions, add item to database
         DataModel.addItem(newEntry, getContext(), new DataView.AddItemCallback() {
             @Override
             public void onComplete(boolean success) {
-                if(success){
+                if (success) {
                     Toast.makeText(getContext(), "Entry " + newEntry.getLot() + " added successfully!", Toast.LENGTH_SHORT).show();
                     clearFields();
                     FragmentLoader.loadFragment(getParentFragmentManager(), new AdminHomeFragment());
