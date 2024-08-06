@@ -131,7 +131,7 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
 
     @Override
     public void onPDFGenerated() {
-        pdfHandler.viewPdf();
+        //pdfHandler.viewPdf();
     }
 
     @Override

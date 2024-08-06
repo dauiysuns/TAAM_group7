@@ -57,18 +57,19 @@ public class ReportForAllFields implements PDFGenerator {
                 try {
                     Image img = new Image(ImageDataFactory.create(absolutePath));
                     cell.add(img.scaleAbsolute(100f, 100f));
-                    checkPendingDownloads();
+                    //checkPendingDownloads();
+                    pendingDownloads--;
                 } catch (MalformedURLException e) {
                     Log.e("Firebase", "Error creating URL", e);
-                    checkPendingDownloads();
+                    pendingDownloads--;
                 }
             }).addOnFailureListener(exception -> {
                 Log.e("Firebase", "Error downloading file", exception);
-                checkPendingDownloads();
+                pendingDownloads--;
             });
         } catch (IOException e) {
             Log.e("Firebase", "Error creating local file", e);
-            checkPendingDownloads();
+            pendingDownloads--;
         }
     }
 
@@ -81,19 +82,18 @@ public class ReportForAllFields implements PDFGenerator {
                 // Got the download URL
                 String videoUrl = uri.toString();
                 cell.add(new Paragraph(videoUrl).setWidth(100f));
-                checkPendingDownloads();
+                pendingDownloads--;
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle any errors
-                checkPendingDownloads();
+                pendingDownloads--;
             }
         });
     }
 
-    protected void checkPendingDownloads() {
-        pendingDownloads--;
+    public void checkPendingDownloads() {
         if (pendingDownloads == 0) {
             //table.addCell(cell);
             applyChanges();
@@ -165,23 +165,21 @@ public class ReportForAllFields implements PDFGenerator {
             Cell cell = new Cell().addStyle(cellStyle);
             table.addCell(cell);
             for (HashMap<String, String> media : mediaUrls) {
-                pendingDownloads++;
+
                 String image = media.get("image");
                 String video = media.get("video");
                 //table.addCell(new Cell().addStyle(cellStyle));
                 if (image != null) {
+                    pendingDownloads++;
                     downloadFile(media.get("image"), cell);
                 }
                 if (video != null) {
                     //downloadVideo(media.get("video"), cell);
                     cell.add(new Paragraph(video));
-                    checkPendingDownloads();
                 }
             }
             if (mediaUrls.isEmpty()) {
                 cell.add(new Paragraph("None"));
-                pendingDownloads++;
-                checkPendingDownloads();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
