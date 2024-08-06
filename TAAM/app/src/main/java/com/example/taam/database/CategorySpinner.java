@@ -28,11 +28,10 @@ public class CategorySpinner {
     }
 
     private static void insertCategories(){
-        // insert default categories
+        // insert default and user added categories
         categoryList = new ArrayList<>(Arrays.asList(defaultCategories));
-        // insert user added categories, if any
         addedCategories = new ArrayList<>();
-        DataModel.loadNewCategories(categoryList, addedCategories);
+        DataModel.loadNewCategoriesOrPeriods("newCategories", categoryList, addedCategories);
     }
 
     private static void setUpAdapter(Context context, Spinner spinner){
@@ -48,7 +47,7 @@ public class CategorySpinner {
         }
         categoryList.add(category);
         addedCategories.add(category);
-        DataModel.storeNewCategory(category);
+        DataModel.storeNewCategoryOrPeriod("newCategories", category);
 
         // set the spinner to the new added category
         spinnerAdapter.notifyDataSetChanged();
@@ -57,8 +56,8 @@ public class CategorySpinner {
     }
 
     // check whether the given category is a new one (cannot remove default categories)
-    public static boolean isNewCategory(String category){
-        return addedCategories.contains(category); // dont need this method
+    public static boolean isUserAddedCategory(String category){
+        return addedCategories.contains(category);
     }
 
 }

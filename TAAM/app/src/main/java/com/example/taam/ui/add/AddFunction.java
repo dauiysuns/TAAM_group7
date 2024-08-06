@@ -13,7 +13,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -22,12 +21,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -45,7 +42,6 @@ import android.net.Uri;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.activity.result.ActivityResult;
@@ -126,54 +122,7 @@ public class AddFunction extends Fragment {
         return view;
     }
 
-
-    //pt 1) functionality for the spinners (populating and adding new labels)
-
-    //loading in the arraylists made for a spinner by querying the database (for the categories and periods spinners) DONE!!!!
-//    private void loadSpinner(ArrayList<HashMap<String, String>> spinnerList, String type, DatabaseReference ref) {
-//        ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                spinnerList.clear();
-//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                    HashMap<String, String> map = new HashMap<>();
-//                    String labelName = dataSnapshot.child("label name").getValue(String.class);
-//                    String origin = dataSnapshot.child("origin").getValue(String.class);
-//                    if (labelName != null && origin != null) {
-//                        map.put("label name", labelName);
-//                        map.put("origin", origin);
-//                        spinnerList.add(map);
-//                    }
-//                }
-//                updateSpinner(spinnerList, type);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Toast.makeText(getContext(), "Failed to load " + type + " spinner", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-    //helper for updateSpinner() to create an adapter (for populating the spinners)
-//    private ArrayList<String> getKeys(ArrayList<HashMap<String, String>> spinnerList) {
-//        ArrayList<String> keys = new ArrayList<>();
-//        for (HashMap<String, String> map : spinnerList) {
-//            keys.add(map.get("label name"));
-//        }
-//        return keys;
-//    }
-    //repopulates a spinner based on a given arraylist with an adapter (! ! does not access database)
-//    private void updateSpinner(ArrayList<HashMap<String, String>> spinnerList, String type) {
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, getKeys(spinnerList));
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        if (type.equals("Category")) {
-//            spinnerCategory.setAdapter(adapter);
-//        }
-//        else if (type.equals("Period")) {
-//            spinnerPeriod.setAdapter(adapter);
-//        }
-//    }
-
+    //pt 1) functionality for adding new categories/periods
     private void showAddDialog(String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Add new " + type);
@@ -188,11 +137,9 @@ public class AddFunction extends Fragment {
                     CategorySpinner.addCategory(getContext(), label, spinnerCategory);
                     Toast.makeText(getContext(), "New Category added successfully", Toast.LENGTH_SHORT).show();
                 } else{
-                    PeriodSpinner.addPeriod(label, spinnerPeriod);
+                    PeriodSpinner.addPeriod(getContext(), label, spinnerPeriod);
                     Toast.makeText(getContext(), "New Period added successfully", Toast.LENGTH_SHORT).show();
                 }
-                //DataModel.addLabelToDatabase(type, label, ref, requireContext());
-                //loadSpinner(spinnerList, type, ref);
             } else {
                 Toast.makeText(getContext(), "Empty " + type + " cannot be added!", Toast.LENGTH_SHORT).show();
             }

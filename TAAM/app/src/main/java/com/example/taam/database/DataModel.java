@@ -21,12 +21,6 @@ public class DataModel {
     public static DatabaseReference ref = FirebaseDatabase
             .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
             .getReference();
-//    public static DatabaseReference categoryReference = FirebaseDatabase
-//            .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
-//            .getReference("addedCategories");
-//    public static DatabaseReference periodReference = FirebaseDatabase
-//            .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
-//            .getReference("addedPeriods");
     public static StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploads");
     DataView view;
 
@@ -156,26 +150,25 @@ public class DataModel {
         });
     }
 
-    public static void storeNewCategory(String category){
-        ref.child("newCategories").push().setValue(category);
+    public static void storeNewCategoryOrPeriod(String path, String category){
+        ref.child(path).push().setValue(category);
     }
 
-    public static void loadNewCategories(ArrayList<String> categoryList, ArrayList<String> addedCategories) {
-        ref.child("newCategories").addListenerForSingleValueEvent(new ValueEventListener() {
+    public static void loadNewCategoriesOrPeriods(String path, ArrayList<String> list, ArrayList<String> added) {
+        ref.child(path).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
                     String category = categorySnapshot.getValue(String.class);
-                    categoryList.add(category);
-                    addedCategories.add(category);
+                    list.add(category);
+                    added.add(category);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("DataModel", "Failed to load user added categories: " + error.getMessage());
+                Log.e("DataModel", error.getMessage());
             }
         });
     }
-
 }

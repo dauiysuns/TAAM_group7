@@ -3,6 +3,7 @@ package com.example.taam.database;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.taam.R;
 
@@ -27,10 +28,10 @@ public class PeriodSpinner {
     }
 
     private static void insertPeriods(){
-        // insert default periods
+        // insert default and user added periods
         periodList = new ArrayList<>(Arrays.asList(defaultPeriods));
-        // insert user added categories, if any
-
+        addedPeriods = new ArrayList<>();
+        DataModel.loadNewCategoriesOrPeriods("newPeriods", periodList, addedPeriods);
     }
 
     private static void setUpAdapter(Context context, Spinner spinner){
@@ -39,22 +40,23 @@ public class PeriodSpinner {
         spinner.setAdapter(spinnerAdapter);
     }
 
-    public static void addPeriod(String period, Spinner spinner){
+    public static void addPeriod(Context context, String period, Spinner spinner){
+        if(periodList.contains(period)){
+            Toast.makeText(context, "This period already exists", Toast.LENGTH_SHORT).show();
+            return;
+        }
         periodList.add(period);
-        spinnerAdapter.notifyDataSetChanged();
+        DataModel.storeNewCategoryOrPeriod("newPeriods", period);
+
         // set the spinner to the new added period
+        spinnerAdapter.notifyDataSetChanged();
         int position = spinnerAdapter.getPosition(period);
         spinner.setSelection(position);
     }
 
     // check whether the given period is a default one (cannot remove default period)
-    public static boolean isDefaultPeriod(String period){
-        for(String current : defaultPeriods){
-            if(current.equals(period)){
-                return true;
-            }
-        }
-        return false;
+    public static boolean isUserAddedPeriod(String period){
+        return addedPeriods.contains(period);
     }
 
 }
