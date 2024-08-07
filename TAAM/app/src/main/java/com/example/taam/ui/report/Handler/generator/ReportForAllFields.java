@@ -56,7 +56,10 @@ public class ReportForAllFields implements PDFGenerator {
 
                 try {
                     Image img = new Image(ImageDataFactory.create(absolutePath));
-                    cell.add(img.scaleAbsolute(100f, 100f));
+                    float desiredWidth = 100f;
+                    float aspectRatio = img.getImageHeight() / img.getImageWidth();
+                    float desiredHeight = desiredWidth * aspectRatio;
+                    cell.add(img.scaleToFit(desiredWidth, desiredHeight));
                     //checkPendingDownloads();
                     pendingDownloads--;
                     checkPendingDownloads();
@@ -135,7 +138,7 @@ public class ReportForAllFields implements PDFGenerator {
     }
 
     public void generateTable(Style headerStyle){
-        float[] columnWidths = {1, 3, 3, 2, 4, 4};
+        float[] columnWidths = {1, 3, 3, 2, 3, 3};
 
         table = new Table(UnitValue.createPercentArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
@@ -180,7 +183,7 @@ public class ReportForAllFields implements PDFGenerator {
                 }
                 if (video != null) {
                     //downloadVideo(media.get("video"), cell);
-                    cell.add(new Paragraph(video));
+                    cell.add(new Paragraph(video).setMaxWidth(100f));
                 }
             }
             if (mediaUrls.isEmpty()) {
