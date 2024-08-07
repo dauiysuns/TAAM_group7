@@ -49,6 +49,10 @@
     <string name="generate_report">Generate report</string>
     <string name="full_screen_image">Full Screen Image Display</string>
     <string name="full_screen_video">Full Screen Video Display</string>
+    <string name="add_period">add period</string>
+    <string name="add_category">add category</string>
+    <string name="remove_category">remove category</string>
+    <string name="remove_period">remove period</string>
 
     <string-array name="report_options_array">
         <item>Lot number</item>

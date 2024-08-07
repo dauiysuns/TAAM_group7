@@ -61,7 +61,7 @@ import com.google.firebase.storage.UploadTask;
 public class AddFunction extends Fragment implements DataView{
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
-    private ArrayList<HashMap<String, String>> mediaUrls; //added categories and periods as ArrayLists
+    private ArrayList<HashMap<String, String>> mediaUrls;
 
     private Uri uri;
     ProgressBar progressBar;
@@ -73,26 +73,18 @@ public class AddFunction extends Fragment implements DataView{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //onCreateView is what happens when you initialize the fragment/activity! So when the user goes to the "AddFunction" screen, we need to setup all these "views" (the components of the screen, like text boxes and buttons) and fill them in with the necessary content (dropdown menu options, what actions to take if a user clicks something). Basically, the instruction manual for how the fragment will work.
-
-        //assigns an xml view to this fragment
         View view = inflater.inflate(R.layout.fragment_add_function, container, false);
-
-        //setting up the components in the xml file
-        //text boxes
         editTextLotNumber = view.findViewById(R.id.editTextLotNumber);
         editTextName = view.findViewById(R.id.editTextName);
         editTextDescription = view.findViewById(R.id.editTextDescription);
-
-        //loading spinners and ArrayLists
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         spinnerPeriod = view.findViewById(R.id.spinnerPeriod);
         CategorySpinner.getSpinner(requireContext(), spinnerCategory);
         PeriodSpinner.getSpinner(requireContext(), spinnerPeriod);
 
-        //buttons
         Button buttonUploadMedia = view.findViewById(R.id.buttonUploadMedia);
         Button buttonSubmit = view.findViewById(R.id.buttonSubmit);
+
         FloatingActionButton buttonAddCategory = view.findViewById(R.id.buttonAddCategory);
         FloatingActionButton buttonAddPeriod = view.findViewById(R.id.buttonAddPeriod);
         FloatingActionButton buttonRemoveCategory = view.findViewById(R.id.buttonRemoveCategory);
@@ -103,7 +95,6 @@ public class AddFunction extends Fragment implements DataView{
 
         mediaUrls = new ArrayList<>();
 
-        //setting up media upload launcher
         uploadMediaLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult o) {
@@ -117,7 +108,6 @@ public class AddFunction extends Fragment implements DataView{
             }
         });
 
-        //setting up buttons with functionalities (method calls) using lambda
         buttonUploadMedia.setOnClickListener(v -> askMediaType());
         buttonSubmit.setOnClickListener(v -> addItem());
         buttonAddCategory.setOnClickListener(v -> showAddDialog("Category"));
@@ -128,7 +118,6 @@ public class AddFunction extends Fragment implements DataView{
         return view;
     }
 
-    //pt 1) functionality for adding/removing new categories/periods
     private void showAddDialog(String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Add new " + type);
@@ -192,19 +181,16 @@ public class AddFunction extends Fragment implements DataView{
     }
 
 
-    //pt 2) functionality for uploading media
-
-    //helper function 1: dialog popup to ask if uploading photo or video
     private void askMediaType(){
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("please select media type to upload");
         builder.setItems(new CharSequence[]{"Image", "Video"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int choice) {
-                if (choice == 0) { //chose to upload image
+                if (choice == 0) {
                     launchUploadMediaIntent("image/*", "image");
                 }
-                else { //chose to upload video
+                else {
                     launchUploadMediaIntent("video/*", "video");
                 }
             }
@@ -212,14 +198,14 @@ public class AddFunction extends Fragment implements DataView{
         builder.show();
     }
 
-    //helper function 2: to get file extension of an uploaded media using the Uri
+
     private String getFileExtension(Uri uri){
         ContentResolver contentResolver = requireContext().getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(contentResolver.getType(uri));
     }
-    //change name
-    //helper function 3: sets up intent and launches the uploader
+
+
     private void launchUploadMediaIntent(String type, String mediaType) {
         Intent intent = new Intent();
         intent.setType(type);
@@ -228,7 +214,7 @@ public class AddFunction extends Fragment implements DataView{
         uploadMediaLauncher.launch(intent);
     }
 
-    //the method that actually uploads the media using the 3 helpers
+
     private void uploadMedia(Uri uri, String mediaType) {
         final StorageReference mediaReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
 
@@ -265,7 +251,7 @@ public class AddFunction extends Fragment implements DataView{
         });
     }
 
-    //functionality for submitting/adding an entry to database
+
     private void addItem() {
         //getting strings for each field (to enter into db)
         String name = editTextName.getText().toString().trim();
@@ -274,13 +260,11 @@ public class AddFunction extends Fragment implements DataView{
         String category = spinnerCategory.getSelectedItem().toString().toLowerCase();
         String period = spinnerPeriod.getSelectedItem().toString().toLowerCase();
 
-        //1st check: all text/spinner fields have been filled/selected
         if (name.isEmpty() || lot.isEmpty() || description.isEmpty() || category.isEmpty() || period.isEmpty()) {
             Toast.makeText(getContext(), "Please fill out all fields!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        //2nd check: lot is an actual number
         try {
             Double.parseDouble(lot);
         }
@@ -288,11 +272,8 @@ public class AddFunction extends Fragment implements DataView{
             Toast.makeText(getContext(), "Lot# must be an actual number!", Toast.LENGTH_SHORT).show();
             return;
         }
-        DatabaseReference itemRef = DataModel.ref.child("items").child(lot);
 
-        //create the Item using current fields to add to db (+ add any uploaded media)
         Item newEntry = new Item(lot, name, category, period, description, mediaUrls);
-        //using DataModel functions, add item to database
         DataModel.addItem(newEntry, getContext(), new DataView.AddItemCallback() {
             @Override
             public void onComplete(boolean success) {
@@ -306,7 +287,6 @@ public class AddFunction extends Fragment implements DataView{
     }
 
     private void clearFields(){
-        //clear all fields
         editTextName.setText("");
         editTextLotNumber.setText("");
         editTextDescription.setText("");

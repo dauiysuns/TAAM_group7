@@ -103,7 +103,7 @@ public class LoginFragmentPresenterTest {
 //    @Test
 //    public void testLoginFailure() {
 //        String email = "demo@demo.com";
-//        String password = "demodem";
+//        String password = "demodemo";
 //
 //        // Mock failed login
 //        when(firebaseAuth.signInWithEmailAndPassword(email, password)).thenReturn(mockTask);
