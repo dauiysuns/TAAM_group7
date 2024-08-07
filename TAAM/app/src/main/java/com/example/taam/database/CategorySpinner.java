@@ -29,8 +29,12 @@ public class CategorySpinner {
     public static void getSearchSpinner(Context context, Spinner spinner){
         ArrayList<String> newList = new ArrayList<>();
         newList.add("None");
-        insertCategories();
-        newList.addAll(categoryList);
+        if(categoryList == null){
+            newList.addAll(Arrays.asList(defaultCategories));
+            DataModel.loadNewCategoriesOrPeriods("newCategories", newList);
+        } else{
+            newList.addAll(categoryList);
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, newList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

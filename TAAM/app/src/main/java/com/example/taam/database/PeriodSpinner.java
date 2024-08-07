@@ -29,11 +29,12 @@ public class PeriodSpinner {
     public static void getSearchSpinner(Context context, Spinner spinner){
         ArrayList<String> newList = new ArrayList<>();
         newList.add("None");
-        insertPeriods();
-        newList.addAll(periodList);
-//        newList.addAll(Arrays.asList(defaultPeriods));
-//        DataModel.loadNewCategoriesOrPeriods("newPeriods", newList, new ArrayList<>());
-
+        if(periodList == null){
+            newList.addAll(Arrays.asList(defaultPeriods));
+            DataModel.loadNewCategoriesOrPeriods("newPeriods", newList);
+        } else{
+            newList.addAll(periodList);
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, newList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

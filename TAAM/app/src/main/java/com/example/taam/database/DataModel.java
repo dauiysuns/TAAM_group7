@@ -172,4 +172,21 @@ public class DataModel {
             }
         });
     }
+
+    public static void loadNewCategoriesOrPeriods(String path, ArrayList<String> list) {
+        ref.child(path).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
+                    String category = categorySnapshot.getKey();
+                    list.add(category);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("DataModel", error.getMessage());
+            }
+        });
+    }
 }
