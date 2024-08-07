@@ -1,6 +1,7 @@
 # CSCB07Project TAAM
 To get started as an Admin? Sign up or use:
 > User: demo@demo.com
+> 
 > Password: demodemo
 
 ## Requirements
