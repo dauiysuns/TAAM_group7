@@ -1,5 +1,5 @@
 # CSCB07Project TAAM
-Welcome to TAAM, the Toronto Asian Art Museum Collecion Management app! Using TAAM, a user can browse and search any of the items in the museum using their phone. 
+Welcome to TAAM, the Toronto Asian Art Museum Collecion Management app! Using TAAM, a user can browse or search for any of the items in the museum using their phone. 
 Are you an admin? 
 To get started as an Admin, Sign up or use:
 > User: demo@demo.com
