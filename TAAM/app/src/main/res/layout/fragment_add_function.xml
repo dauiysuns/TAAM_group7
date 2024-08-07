@@ -11,7 +11,6 @@
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="79dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -148,14 +147,7 @@
             android:text="@string/upload_photos_videos"
             android:translationX="30dp"
             android:translationY="350dp" />
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:translationX="90dp"
-            android:translationY="410dp"
-            android:visibility="gone"
-            tools:visibility="visible" />
+
         <Button
             android:id="@+id/buttonSubmit"
             android:layout_width="wrap_content"
@@ -163,5 +155,72 @@
             android:text="@string/submit"
             android:translationX="275dp"
             android:translationY="600dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateDrawable="@android:drawable/progress_indeterminate_horizontal"
+            android:progressDrawable="@android:drawable/progress_horizontal"
+            android:translationX="60dp"
+            android:translationY="410dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonAddCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@id/spinnerCategory"
+            android:clickable="true"
+            android:contentDescription="add category"
+            android:focusable="true"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@android:drawable/ic_input_add"
+            android:translationY="240dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonRemoveCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_toEndOf="@id/spinnerCategory"
+            android:clickable="true"
+            android:contentDescription="remove category"
+            android:focusable="true"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@android:drawable/ic_menu_delete"
+            android:translationY="240dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonAddPeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@id/spinnerPeriod"
+            android:clickable="true"
+            android:contentDescription="add period"
+            android:focusable="true"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@android:drawable/ic_input_add"
+            android:translationY="300dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonRemovePeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_toEndOf="@id/spinnerPeriod"
+            android:clickable="true"
+            android:contentDescription="remove period"
+            android:focusable="true"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@android:drawable/ic_menu_delete"
+            android:translationY="300dp" />
+
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

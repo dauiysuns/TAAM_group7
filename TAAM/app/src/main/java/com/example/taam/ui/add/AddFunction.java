@@ -2,9 +2,11 @@ package com.example.taam.ui.add;
 
 import static android.app.Activity.RESULT_OK;
 
+import com.example.taam.database.CategorySpinner;
 import com.example.taam.database.DataView;
 import com.example.taam.database.Item;
 import com.example.taam.database.DataModel;
+import com.example.taam.database.PeriodSpinner;
 import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.home.AdminHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +42,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import android.net.Uri;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.activity.result.ActivityResult;
@@ -48,24 +53,22 @@ import android.content.Intent;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 
 
 
-public class AddFunction extends Fragment {
+public class AddFunction extends Fragment implements DataView{
     private EditText editTextName, editTextLotNumber, editTextDescription;
     private Spinner spinnerCategory, spinnerPeriod;
-    private ArrayList<HashMap<String, String>> mediaUrls;
+    private ArrayList<HashMap<String, String>> mediaUrls; //added categories and periods as ArrayLists
 
     private Uri uri;
     ProgressBar progressBar;
     private ActivityResultLauncher<Intent> uploadMediaLauncher;
     private String mediaType;
+    StorageReference storageReference = DataModel.storageReference;
 
-    //ngl i don't know really know what these are... i just be using them ?? maybe
-    StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
     @Nullable
     @Override
@@ -80,27 +83,23 @@ public class AddFunction extends Fragment {
         editTextLotNumber = view.findViewById(R.id.editTextLotNumber);
         editTextName = view.findViewById(R.id.editTextName);
         editTextDescription = view.findViewById(R.id.editTextDescription);
-        //spinners
+
+        //loading spinners and ArrayLists
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         spinnerPeriod = view.findViewById(R.id.spinnerPeriod);
+        spinnerCategory = CategorySpinner.getSpinner(requireContext(), spinnerCategory);
+        spinnerPeriod = PeriodSpinner.getSpinner(requireContext(), spinnerPeriod);
+
         //buttons
         Button buttonUploadMedia = view.findViewById(R.id.buttonUploadMedia);
         Button buttonSubmit = view.findViewById(R.id.buttonSubmit);
+        FloatingActionButton buttonAddCategory = view.findViewById(R.id.buttonAddCategory);
+        FloatingActionButton buttonAddPeriod = view.findViewById(R.id.buttonAddPeriod);
+        FloatingActionButton buttonRemoveCategory = view.findViewById(R.id.buttonRemoveCategory);
+        FloatingActionButton buttonRemovePeriod = view.findViewById(R.id.buttonRemovePeriod);
 
         progressBar = view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
-
-        //filling the spinners with options (from arrays):
-        //category spinner
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(requireContext(),
-                R.array.categories_array, android.R.layout.simple_spinner_item);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(adapter1);
-        //period spinner
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(requireContext(),
-                R.array.periods_array, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPeriod.setAdapter(adapter2);
 
         mediaUrls = new ArrayList<>();
 
@@ -118,41 +117,99 @@ public class AddFunction extends Fragment {
             }
         });
 
-        //setting up buttons with functionalities (method calls)
-        buttonUploadMedia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                askMediaType();
-            }
-        });
+        //setting up buttons with functionalities (method calls) using lambda
+        buttonUploadMedia.setOnClickListener(v -> askMediaType());
+        buttonSubmit.setOnClickListener(v -> addItem());
+        buttonAddCategory.setOnClickListener(v -> showAddDialog("Category"));
+        buttonAddPeriod.setOnClickListener(v -> showAddDialog("Period"));
+        buttonRemoveCategory.setOnClickListener(v -> showRemoveDialog("Category"));
+        buttonRemovePeriod.setOnClickListener(v -> showRemoveDialog("Period"));
 
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addItem();
-            }
-        });
         return view;
     }
 
-    //functionality for uploading media
+    //pt 1) functionality for adding/removing new categories/periods
+    private void showAddDialog(String type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Add new " + type);
+
+        final EditText input = new EditText(requireContext());
+        builder.setView(input);
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String label = input.getText().toString().trim();
+            if (!label.isEmpty()) {
+                if(type.equals("Category")){
+                    CategorySpinner.addCategory(getContext(), label, spinnerCategory);
+                    Toast.makeText(getContext(), "New Category added successfully", Toast.LENGTH_SHORT).show();
+                } else{
+                    PeriodSpinner.addPeriod(getContext(), label, spinnerPeriod);
+                    Toast.makeText(getContext(), "New Period added successfully", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "Empty " + type + " cannot be added!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private void showRemoveDialog(String type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Are you sure you want to remove this " + type  + " and all its items?");
+
+        builder.setPositiveButton("Remove", (dialog, which) -> {
+            DataModel dm = new DataModel(this);
+            String selected;
+            if (type != null) {
+                if (type.equals("Category")) {
+                    selected = spinnerCategory.getSelectedItem().toString();
+                    if (!CategorySpinner.isUserAddedCategory(selected)) {
+                        Toast.makeText(getContext(), "Default category " + selected + " cannot be deleted", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    DataModel.ref.child("newCategories").child(selected).removeValue();
+                    CategorySpinner.removeUserAddedCategory(selected);
+
+                } else {
+                    selected = spinnerPeriod.getSelectedItem().toString();
+                    if (!PeriodSpinner.isUserAddedPeriod(selected)) {
+                        Toast.makeText(getContext(), "Default period " + selected + " cannot be deleted", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    DataModel.ref.child("newPeriods").child(selected).removeValue();
+                    PeriodSpinner.removeUserAddedPeriod(selected);
+                }
+
+                dm.getItemsByCategory(type.toLowerCase(), selected, requireContext());
+                Toast.makeText(getContext(), selected + " removed successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+
+    //pt 2) functionality for uploading media
 
     //helper function 1: dialog popup to ask if uploading photo or video
     private void askMediaType(){
-    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-    builder.setTitle("please select media type to upload");
-    builder.setItems(new CharSequence[]{"Image", "Video"}, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int choice) {
-            if (choice == 0) { //chose to upload image
-                launchUploadMediaIntent("image/*", "image");
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("please select media type to upload");
+        builder.setItems(new CharSequence[]{"Image", "Video"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int choice) {
+                if (choice == 0) { //chose to upload image
+                    launchUploadMediaIntent("image/*", "image");
+                }
+                else { //chose to upload video
+                    launchUploadMediaIntent("video/*", "video");
+                }
             }
-            else { //chose to upload video
-                launchUploadMediaIntent("video/*", "video");
-            }
-        }
-    });
-    builder.show();
+        });
+        builder.show();
     }
 
     //helper function 2: to get file extension of an uploaded media using the Uri
@@ -203,13 +260,10 @@ public class AddFunction extends Fragment {
         }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
-
-
-
 
     //functionality for submitting/adding an entry to database
     private void addItem() {
@@ -234,15 +288,15 @@ public class AddFunction extends Fragment {
             Toast.makeText(getContext(), "Lot# must be an actual number!", Toast.LENGTH_SHORT).show();
             return;
         }
+        DatabaseReference itemRef = DataModel.ref.child("items").child(lot);
 
         //create the Item using current fields to add to db (+ add any uploaded media)
         Item newEntry = new Item(lot, name, category, period, description, mediaUrls);
-
         //using DataModel functions, add item to database
         DataModel.addItem(newEntry, getContext(), new DataView.AddItemCallback() {
             @Override
             public void onComplete(boolean success) {
-                if(success){
+                if (success) {
                     Toast.makeText(getContext(), "Entry " + newEntry.getLot() + " added successfully!", Toast.LENGTH_SHORT).show();
                     clearFields();
                     FragmentLoader.loadFragment(getParentFragmentManager(), new AdminHomeFragment());
@@ -260,5 +314,20 @@ public class AddFunction extends Fragment {
         spinnerPeriod.setSelection(0);
         mediaUrls.clear();
         progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void updateView(Item item) {
+        DataModel.removeItem(item);
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+        Log.v("AddFunction", errorMessage);
+    }
+
+    @Override
+    public void onComplete() {
+        Log.v("Remove category/period", "Success");
     }
 }
