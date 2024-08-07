@@ -18,8 +18,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -68,12 +66,9 @@ public class LoginFragmentPresenterTest {
         String password = "demodemo";
 
         when(firebaseAuth.signInWithEmailAndPassword(email, password)).thenReturn(mockTask);
-        when(mockTask.addOnCompleteListener(any())).thenAnswer(new Answer<Object>() {
-
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                presenter.loginSuccessPresenter();
-                return null;
-            }
+        when(mockTask.addOnCompleteListener(any())).thenAnswer(invocation -> {
+            presenter.loginSuccessPresenter();
+            return null;
         });
 
         presenter.tryLogin(email, password);
@@ -87,12 +82,9 @@ public class LoginFragmentPresenterTest {
         String password = "demodemo";
 
         when(firebaseAuth.signInWithEmailAndPassword(email, password)).thenReturn(mockTask);
-        when(mockTask.addOnCompleteListener(any())).thenAnswer(new Answer<Object>() {
-
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                presenter.loginFailurePresenter("error");
-                return null;
-            }
+        when(mockTask.addOnCompleteListener(any())).thenAnswer(invocation -> {
+            presenter.loginFailurePresenter("error");
+            return null;
         });
 
         presenter.tryLogin(email, password);

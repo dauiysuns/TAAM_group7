@@ -11,14 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.taam.R;
 import com.example.taam.ui.login.LoginFragmentView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignupFragment extends Fragment {
@@ -42,12 +38,7 @@ public class SignupFragment extends Fragment {
         emailText = view.findViewById(R.id.email_text);
         passwordText = view.findViewById(R.id.password_text);
 
-        signup_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signup();
-            }
-        });
+        signup_button.setOnClickListener(view1 -> signup());
 
         return view;
     }
@@ -69,22 +60,19 @@ public class SignupFragment extends Fragment {
 
         // Create a new user with email and password
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign-up successful!
-                            Toast.makeText(getActivity(), "Sign-up successful!", Toast.LENGTH_SHORT).show();
-                            loadFragment(getParentFragmentManager(), new LoginFragmentView());
-                        } else {
-                            // Sign-up failed
-                            String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-                            new AlertDialog.Builder(getActivity())
-                                    .setTitle("Sign-up Failed")
-                                    .setMessage("Error: " + errorMessage)
-                                    .setPositiveButton(android.R.string.ok, null)
-                                    .show();
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Sign-up successful!
+                        Toast.makeText(getActivity(), "Sign-up successful!", Toast.LENGTH_SHORT).show();
+                        loadFragment(getParentFragmentManager(), new LoginFragmentView());
+                    } else {
+                        // Sign-up failed
+                        String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle("Sign-up Failed")
+                                .setMessage("Error: " + errorMessage)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show();
                     }
                 });
     }
