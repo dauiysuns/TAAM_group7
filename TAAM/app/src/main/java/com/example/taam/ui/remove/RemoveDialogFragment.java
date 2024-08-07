@@ -21,7 +21,6 @@ public class RemoveDialogFragment extends DialogFragment{
     private List<Item> selected;
     private BaseHomeFragment homeFragment;
 
-
     public RemoveDialogFragment(ArrayList<Item> selected, BaseHomeFragment homeFragment){
         this.selected = selected;
         this.homeFragment = homeFragment;

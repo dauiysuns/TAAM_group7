@@ -118,7 +118,7 @@ public class PDFHandler implements DataView, DownloadCompleteListener {
 
     @Override
     public void showError(String errorMessage) {
-        // TODO: Handle error
+        Log.v("PDFHandler", errorMessage);
     }
 
     @Override

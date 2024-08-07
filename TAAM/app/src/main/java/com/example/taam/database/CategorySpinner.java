@@ -4,9 +4,6 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.example.taam.R;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 

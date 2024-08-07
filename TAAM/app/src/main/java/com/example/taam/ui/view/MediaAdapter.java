@@ -95,7 +95,6 @@ public class MediaAdapter {
                 context.startActivity(intent);
             });
         });
-
         mediaContainer.addView(view);
     }
 

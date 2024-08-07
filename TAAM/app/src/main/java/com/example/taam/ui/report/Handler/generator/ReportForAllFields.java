@@ -1,16 +1,9 @@
 package com.example.taam.ui.report.Handler.generator;
 
-import android.net.Uri;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
-
 import com.example.taam.database.Item;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -37,7 +30,6 @@ public class ReportForAllFields implements PDFGenerator {
     protected StorageReference storageRef = storage.getReference();
     protected Document document;
     protected Table table;
-    //private Cell cell;
     protected DownloadCompleteListener downloadCompleteListener;
     protected int pendingDownloads = 0;
 
@@ -46,7 +38,6 @@ public class ReportForAllFields implements PDFGenerator {
     }
 
     public void downloadFile(String urlPath, Cell cell) {
-        //pendingDownloads++;
         StorageReference fileRef = storage.getReferenceFromUrl(urlPath);
         try {
             File localFile = File.createTempFile("image", "jpg");
@@ -60,7 +51,6 @@ public class ReportForAllFields implements PDFGenerator {
                     float aspectRatio = img.getImageHeight() / img.getImageWidth();
                     float desiredHeight = desiredWidth * aspectRatio;
                     cell.add(img.scaleToFit(desiredWidth, desiredHeight));
-                    //checkPendingDownloads();
                     pendingDownloads--;
                     checkPendingDownloads();
                 } catch (MalformedURLException e) {
@@ -80,30 +70,8 @@ public class ReportForAllFields implements PDFGenerator {
         }
     }
 
-    public void downloadVideo(String urlPath, Cell cell) {
-        //pendingDownloads++;
-        StorageReference fileRef = storage.getReferenceFromUrl(urlPath);
-        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Got the download URL
-                String videoUrl = uri.toString();
-                cell.add(new Paragraph(videoUrl).setWidth(100f));
-                pendingDownloads--;
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                pendingDownloads--;
-            }
-        });
-    }
-
     public void checkPendingDownloads() {
         if (pendingDownloads == 0) {
-            //table.addCell(cell);
             applyChanges();
             if (downloadCompleteListener != null) {
                 downloadCompleteListener.onDownloadComplete();
@@ -176,13 +144,11 @@ public class ReportForAllFields implements PDFGenerator {
 
                 String image = media.get("image");
                 String video = media.get("video");
-                //table.addCell(new Cell().addStyle(cellStyle));
                 if (image != null) {
                     pendingDownloads++;
                     downloadFile(media.get("image"), cell);
                 }
                 if (video != null) {
-                    //downloadVideo(media.get("video"), cell);
                     cell.add(new Paragraph(video).setMaxWidth(100f));
                 }
             }

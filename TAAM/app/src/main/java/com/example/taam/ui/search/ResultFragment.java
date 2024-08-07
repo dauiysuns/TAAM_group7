@@ -21,9 +21,6 @@ public class ResultFragment extends BaseHomeFragment {
     String period;
     DataModel dm;
     ArrayList<Item> lotMatches = new ArrayList<>();
-//    ArrayList<Item> nameMatches = new ArrayList<>();
-//    ArrayList<Item> categoryMatches = new ArrayList<>();
-//    ArrayList<Item> periodMatches = new ArrayList<>();
 
     //added by me
     public ResultFragment(String lotNumber, String name, String category, String period) {
@@ -99,10 +96,6 @@ public class ResultFragment extends BaseHomeFragment {
 
     @Override
     public void onComplete() {
-//        lotMatches.addAll(nameMatches);
-//        lotMatches.addAll(categoryMatches);
-//        lotMatches.addAll(periodMatches);
-
         itemList.clear();
         for (Item item : lotMatches) {
             if (!itemList.contains(item)) {
@@ -111,10 +104,6 @@ public class ResultFragment extends BaseHomeFragment {
 
         }
         lotMatches.clear();
-//        periodMatches.clear();
-//        categoryMatches.clear();
-//        nameMatches.clear();
-
         itemAdapter.notifyDataSetChanged();
     }
 }
