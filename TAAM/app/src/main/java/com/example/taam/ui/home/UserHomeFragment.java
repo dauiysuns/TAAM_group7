@@ -35,7 +35,7 @@ public class UserHomeFragment extends BaseHomeFragment {
             loadFragment(getParentFragmentManager(), new SearchFragment());
         });
 
-        buttonAdmin.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new AdminHomeFragment()));
+        buttonAdmin.setOnClickListener(v -> loadFragment(getParentFragmentManager(), new LoginFragmentView()));
     }
 
     @Override
