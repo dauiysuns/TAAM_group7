@@ -34,13 +34,12 @@ public class LoginFragmentPresenterTest {
     @Mock
     Task<AuthResult> mockTask;
 
-    private LoginFragmentModel model;
     private LoginFragmentPresenter presenter;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        model = new LoginFragmentModel(firebaseAuth);
+        LoginFragmentModel model = new LoginFragmentModel(firebaseAuth);
         presenter = new LoginFragmentPresenter(view, model);
     }
 
