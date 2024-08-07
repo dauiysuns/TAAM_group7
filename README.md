@@ -5,7 +5,7 @@ To get started as an Admin? Sign up or use:
 > Password: demodemo
 
 ## Requirements
-This project was written for Android with API versions 34/35. Preferably using Pixel 6-8
+This project was written for Android with API versions 34/35. Preferably using Pixel 6-8.
 
 ## Features
 ### Users:
