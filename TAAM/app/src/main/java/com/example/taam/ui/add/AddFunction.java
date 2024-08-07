@@ -87,8 +87,8 @@ public class AddFunction extends Fragment implements DataView{
         //loading spinners and ArrayLists
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         spinnerPeriod = view.findViewById(R.id.spinnerPeriod);
-        spinnerCategory = CategorySpinner.getSpinner(requireContext(), spinnerCategory);
-        spinnerPeriod = PeriodSpinner.getSpinner(requireContext(), spinnerPeriod);
+        CategorySpinner.getSpinner(requireContext(), spinnerCategory);
+        PeriodSpinner.getSpinner(requireContext(), spinnerPeriod);
 
         //buttons
         Button buttonUploadMedia = view.findViewById(R.id.buttonUploadMedia);
