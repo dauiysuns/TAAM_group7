@@ -50,9 +50,9 @@ Here is a reference of coverage running on my PC:
 
 And then specify login package in "Packages and classes to include in coverage data":
 
-<img src="https://github.com/user-attachments/assets/38c2b2f5-d0af-49d6-b2b9-53fde56a2955" width="25%">
+<img src="https://github.com/user-attachments/assets/38c2b2f5-d0af-49d6-b2b9-53fde56a2955" width="55%">
 <img src="https://github.com/user-attachments/assets/76a75caa-6451-47b8-9291-b707fd5a2e36" width="25%">
-
+<img src="https://github.com/user-attachments/assets/7f1f2ac1-924b-46af-8c68-3eb7f7b8e523" width="50%">
 
 
 And try Cleaning & Rebuilding the project.
