@@ -113,7 +113,7 @@ public class PDFHandler implements DataView, DownloadCompleteListener {
 
     @Override
     public void onComplete() {
-
+        generator.checkPendingDownloads();
     }
 
     @Override

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -82,15 +83,6 @@
             android:translationX="34dp"
             android:translationY="520dp" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:translationX="110dp"
-            android:translationY="570dp"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
         <Button
             android:id="@+id/buttonSubmit"
             android:layout_width="wrap_content"
@@ -98,6 +90,72 @@
             android:text="@string/submit"
             android:translationX="265dp"
             android:translationY="610dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateDrawable="@android:drawable/progress_indeterminate_horizontal"
+            android:progressDrawable="@android:drawable/progress_horizontal"
+            android:translationX="60dp"
+            android:translationY="410dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonAddCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@id/spinnerCategory"
+            android:clickable="true"
+            android:contentDescription="add category"
+            android:focusable="true"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@android:drawable/ic_input_add"
+            android:translationY="240dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonRemoveCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_toEndOf="@id/spinnerCategory"
+            android:clickable="true"
+            android:contentDescription="remove category"
+            android:focusable="true"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@android:drawable/ic_menu_delete"
+            android:translationY="240dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonAddPeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@id/spinnerPeriod"
+            android:clickable="true"
+            android:contentDescription="add period"
+            android:focusable="true"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@android:drawable/ic_input_add"
+            android:translationY="300dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonRemovePeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_toEndOf="@id/spinnerPeriod"
+            android:clickable="true"
+            android:contentDescription="remove period"
+            android:focusable="true"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@android:drawable/ic_menu_delete"
+            android:translationY="300dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="277dp"

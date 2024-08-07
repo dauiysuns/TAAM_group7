@@ -1,23 +1,27 @@
 package com.example.taam.database;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class DataModel {
     public static DatabaseReference ref = FirebaseDatabase
             .getInstance("https://taam-cfc94-default-rtdb.firebaseio.com/")
             .getReference();
+    public static StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploads");
     DataView view;
 
     public DataModel(DataView view) {
@@ -120,7 +124,7 @@ public class DataModel {
         ref.child("period").child(item.period).child(item.getLot()).removeValue();
     }
 
-    public static void addItem(Item item, android.content.Context context, DataView.AddItemCallback callback) {
+    public static void addItem(Item item, Context context, DataView.AddItemCallback callback) {
         final DatabaseReference itemRef = ref.child("items/" + item.getLot());
 
         itemRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -143,6 +147,28 @@ public class DataModel {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.v("error", databaseError.getMessage());
+            }
+        });
+    }
+
+    public static void storeNewCategoryOrPeriod(String path, String category){
+        ref.child(path).child(category).setValue("null");
+    }
+
+    public static void loadNewCategoriesOrPeriods(String path, ArrayList<String> list, ArrayList<String> added) {
+        ref.child(path).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot categorySnapshot : snapshot.getChildren()) {
+                    String category = categorySnapshot.getKey();
+                    list.add(category);
+                    added.add(category);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("DataModel", error.getMessage());
             }
         });
     }

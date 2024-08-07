@@ -22,6 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.taam.R;
+import com.example.taam.database.CategorySpinner;
+import com.example.taam.database.PeriodSpinner;
 import com.example.taam.ui.FragmentLoader;
 import com.example.taam.ui.home.AdminHomeFragment;
 import com.example.taam.ui.report.Handler.PDFHandler;
@@ -58,32 +60,23 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
 
         new SpinnerFragment(requireContext(), spinner, this).setupSpinner();
 
-        //category spinner
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(requireContext(),
-                R.array.categories_array, android.R.layout.simple_spinner_item);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categorySpinner.setAdapter(adapter1);
-
-        //period spinner
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(requireContext(),
-                R.array.periods_array, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        periodSpinner.setAdapter(adapter2);
-
+        //set up category and period spinners
+        CategorySpinner.getSpinner(getContext(), categorySpinner);
+        PeriodSpinner.getSpinner(getContext(), periodSpinner);
         setUpSpinnerListener(categorySpinner);
         setUpSpinnerListener(periodSpinner);
 
         generate.setOnClickListener(v -> {
-            if(byItemText.getVisibility() == View.VISIBLE){
+            if (byItemText.getVisibility() == View.VISIBLE) {
                 userInput = byItemText.getText().toString();
+                if (userInput.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter an input", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
-            if (userInput.equals("")) {
-                Toast.makeText(getContext(), "Please enter an input", Toast.LENGTH_SHORT).show();
-            }else{
-                permissionHandler.handlePermissions();
-            }
-
+            permissionHandler.handlePermissions();
         });
+
 
         cancel.setOnClickListener(v -> FragmentLoader.loadFragment(getParentFragmentManager(), new AdminHomeFragment()));
 
@@ -138,7 +131,7 @@ public class ReportFragment extends Fragment implements PDFHandler.PDFCallback, 
 
     @Override
     public void onPDFGenerated() {
-        pdfHandler.viewPdf();
+        //pdfHandler.viewPdf();
     }
 
     @Override
