@@ -1,31 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.add.AddFunction">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relativeLayout"
         android:layout_width="382dp"
         android:layout_height="677dp"
-        android:layout_marginTop="24dp"
         android:background="@drawable/container_form_contact"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="-6dp"
+            android:layout_marginTop="-6dp"
+
+            android:layout_marginEnd="-6dp"
+            android:layout_marginBottom="-6dp"
+            android:background="@drawable/background_spinner"
+            app:layout_constraintBottom_toBottomOf="@+id/spinnerCategory"
+            app:layout_constraintEnd_toEndOf="@+id/spinnerCategory"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/spinnerCategory"
+            app:layout_constraintTop_toTopOf="@+id/spinnerCategory"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <Spinner
+            android:id="@+id/spinnerPeriod"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:dropDownVerticalOffset="53dp"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAddPeriod"
+            app:layout_constraintHorizontal_bias="0.738"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerCategory" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout4"
             android:layout_width="277dp"
-            android:layout_height="57dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="34dp"
-            android:layout_marginTop="63dp">
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.238"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextName"
@@ -45,34 +78,9 @@
             android:fontFamily="sans-serif-medium"
             android:padding="16dp"
             android:text="@string/new_entry"
-            android:textSize="16sp" />
-
-        <Spinner
-            android:id="@+id/spinnerCategory"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="34dp"
-            android:layout_marginEnd="145dp"
-            android:dropDownVerticalOffset="40dp"
-            android:minHeight="48dp"
-            android:spinnerMode="dropdown"
-            android:translationY="230dp" />
-
-        <Spinner
-            android:id="@+id/spinnerPeriod"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="34dp"
-            android:layout_marginTop="304dp"
-            android:layout_marginEnd="145dp"
-            android:dropDownVerticalOffset="53dp"
-            android:minHeight="48dp"
-            android:spinnerMode="dropdown" />
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/buttonUploadMedia"
@@ -80,101 +88,145 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:text="@string/upload_photos_videos"
-            android:translationX="34dp"
-            android:translationY="520dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.144"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout5"
+            app:layout_constraintVertical_bias="0.119" />
 
         <Button
             android:id="@+id/buttonSubmit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="32dp"
             android:text="@string/submit"
-            android:translationX="265dp"
-            android:translationY="610dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <ProgressBar
             android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminateDrawable="@android:drawable/progress_indeterminate_horizontal"
-            android:progressDrawable="@android:drawable/progress_horizontal"
-            android:translationX="60dp"
-            android:translationY="410dp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/buttonAddCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_toEndOf="@id/spinnerCategory"
-            android:clickable="true"
-            android:contentDescription="add category"
-            android:focusable="true"
-            android:scaleX=".4"
-            android:scaleY=".4"
-            android:src="@android:drawable/ic_input_add"
-            android:translationY="240dp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/buttonRemoveCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
-            android:layout_toEndOf="@id/spinnerCategory"
-            android:clickable="true"
-            android:contentDescription="remove category"
-            android:focusable="true"
-            android:scaleX=".4"
-            android:scaleY=".4"
-            android:src="@android:drawable/ic_menu_delete"
-            android:translationY="240dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonSubmit"
+            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonUploadMedia"
+            app:layout_constraintVertical_bias="0.175" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/buttonAddPeriod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_toEndOf="@id/spinnerPeriod"
             android:clickable="true"
             android:contentDescription="add period"
             android:focusable="true"
-            android:scaleX=".4"
-            android:scaleY=".4"
+            android:scaleX=".7"
+            android:scaleY=".7"
             android:src="@android:drawable/ic_input_add"
-            android:translationY="300dp" />
+            app:layout_constraintEnd_toStartOf="@+id/buttonRemovePeriod"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddCategory" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:layout_marginStart="-6dp"
+            android:layout_marginTop="-6dp"
+            android:layout_marginEnd="-6dp"
+            android:layout_marginBottom="-6dp"
+            android:background="@drawable/background_spinner"
+            app:layout_constraintBottom_toBottomOf="@+id/spinnerPeriod"
+            app:layout_constraintEnd_toEndOf="@+id/spinnerPeriod"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/spinnerPeriod"
+            app:layout_constraintTop_toTopOf="@+id/spinnerPeriod"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonAddCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textInputLayout3"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/buttonRemoveCategory"
+            android:layout_toEndOf="@+id/spinnerCategory"
+            android:clickable="true"
+            android:contentDescription="add category"
+            android:focusable="true"
+            android:scaleX=".7"
+            android:scaleY=".7"
+            android:src="@android:drawable/ic_input_add"
+            app:layout_constraintEnd_toStartOf="@+id/buttonRemoveCategory"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonRemoveCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="20dp"
+            android:clickable="true"
+            android:contentDescription="remove category"
+            android:focusable="true"
+            android:scaleX=".7"
+            android:scaleY=".7"
+            android:src="@android:drawable/ic_menu_delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/buttonRemovePeriod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
             android:layout_toEndOf="@id/spinnerPeriod"
             android:clickable="true"
             android:contentDescription="remove period"
             android:focusable="true"
-            android:scaleX=".4"
-            android:scaleY=".4"
+            android:scaleX=".7"
+            android:scaleY=".7"
             android:src="@android:drawable/ic_menu_delete"
-            android:translationY="300dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonRemoveCategory" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="277dp"
-            android:layout_height="57dp"
+        <Spinner
+            android:id="@+id/spinnerCategory"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="33dp"
-            android:layout_marginTop="63dp" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="24dp"
+            android:dropDownVerticalOffset="40dp"
+            android:minHeight="48dp"
+            android:outlineProvider="paddedBounds"
+            android:spinnerMode="dropdown"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAddCategory"
+            app:layout_constraintHorizontal_bias="0.738"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout3"
-            android:layout_width="match_parent"
+            android:layout_width="277dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textInputLayout4"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="34dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="67dp">
+            android:layout_marginTop="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.238"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextLotNumber"
@@ -195,10 +247,12 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="192dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintHorizontal_bias="0.555"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerPeriod">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextDescription"
@@ -207,19 +261,5 @@
                 android:hint="@string/enter_the_description" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="107dp"
-            android:layout_height="27dp"
-            android:layout_above="@+id/textInputLayout5"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="21dp"
-            android:layout_marginTop="371dp"
-            android:layout_marginBottom="2dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/descriptionFull"
-            android:textSize="16sp" />
-
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,21 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <TextView
+        android:id="@+id/textViewAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewAdd"
+        android:layout_marginTop="44dp"
+        android:fontFamily="sans-serif-medium"
+        android:padding="16dp"
+        android:text="@string/search"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
         android:id="@+id/closeButton"
         android:layout_width="36dp"
@@ -33,7 +48,7 @@
         android:id="@+id/textInputLayout6"
         android:layout_width="285dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
+        android:layout_marginTop="124dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
