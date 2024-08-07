@@ -35,6 +35,7 @@ public class DataModel {
                 Item item = snapshot.getValue(Item.class);
                 if (item != null) {
                     view.updateView(item);
+                    view.onComplete();
                 } else {
                     view.showError("Item not found");
                 }

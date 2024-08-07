@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.taam.R;
-import com.example.taam.ui.add.AddFunction;
 import com.example.taam.ui.login.LoginFragmentView;
 import com.example.taam.ui.search.SearchFragment;
 

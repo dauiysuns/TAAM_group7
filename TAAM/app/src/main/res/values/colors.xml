@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Light mode colors -->
+    <color name="toolbar_title_color_light">#FFFFFF</color> <!-- White -->
+    <!-- Dark mode colors -->
+    <color name="toolbar_title_color_dark">#000000</color> <!-- Black -->
 </resources>
