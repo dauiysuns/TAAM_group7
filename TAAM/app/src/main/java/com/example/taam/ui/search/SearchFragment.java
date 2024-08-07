@@ -45,21 +45,18 @@ public class SearchFragment extends Fragment {
 
 
         Button resultButton = view.findViewById(R.id.buttonResult);
-        resultButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String lotNumber = lotText.getText().toString();
-                String name = nameText.getText().toString();
-                String category = categorySpinner.getSelectedItem().toString().toLowerCase();
-                if(category.equals("none")){
-                    category = "";
-                }
-                String period = periodSpinner.getSelectedItem().toString().toLowerCase();
-                if(period.equals("none")){
-                    period = "";
-                }
-                FragmentLoader.loadFragment(getParentFragmentManager(), new ResultFragment(lotNumber, name, category, period));
+        resultButton.setOnClickListener(v -> {
+            String lotNumber = lotText.getText().toString();
+            String name = nameText.getText().toString();
+            String category = categorySpinner.getSelectedItem().toString().toLowerCase();
+            if(category.equals("none")){
+                category = "";
             }
+            String period = periodSpinner.getSelectedItem().toString().toLowerCase();
+            if(period.equals("none")){
+                period = "";
+            }
+            FragmentLoader.loadFragment(getParentFragmentManager(), new ResultFragment(lotNumber, name, category, period));
         });
 
         // Inflate the layout for this fragment
