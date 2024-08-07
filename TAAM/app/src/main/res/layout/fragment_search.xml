@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.search.SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <TextView
         android:id="@+id/textViewAdd"
         android:layout_width="wrap_content"
@@ -83,42 +81,68 @@
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_weight="1"
+        android:text="@string/category"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout8"
         android:layout_width="285dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/background_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout7">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextCategory"
+        <Spinner
+            android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/dropdownMenuCategory"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true"  />
+            android:layout_weight="1"
+            android:dropDownVerticalOffset="40dp"
+            android:outlineProvider="paddedBounds"
+            android:spinnerMode="dropdown" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_weight="1"
+        android:text="@string/period"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.171"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout8" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout9"
         android:layout_width="285dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/background_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout8">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextPeriod"
+        <Spinner
+            android:id="@+id/spinner2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/dropdownMenuPeriod"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:dropDownVerticalOffset="40dp"
+            android:outlineProvider="paddedBounds"
+            android:spinnerMode="dropdown" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

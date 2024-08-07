@@ -10,8 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import com.example.taam.R;
+import com.example.taam.database.CategorySpinner;
+import com.example.taam.database.PeriodSpinner;
 import com.example.taam.ui.FragmentLoader;
 
 public class SearchFragment extends Fragment {
@@ -35,8 +38,11 @@ public class SearchFragment extends Fragment {
 
         EditText lotText = view.findViewById(R.id.editTextLot);
         EditText nameText = view.findViewById(R.id.editTextName);
-        EditText categoryText = view.findViewById(R.id.editTextCategory);
-        EditText periodText = view.findViewById(R.id.editTextPeriod);
+        Spinner categorySpinner = view.findViewById(R.id.spinner);
+        CategorySpinner.getSearchSpinner(getContext(), categorySpinner);
+        Spinner periodSpinner = view.findViewById(R.id.spinner2);
+        PeriodSpinner.getSearchSpinner(getContext(), periodSpinner);
+
 
         Button resultButton = view.findViewById(R.id.buttonResult);
         resultButton.setOnClickListener(new View.OnClickListener() {
@@ -44,8 +50,14 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                 String lotNumber = lotText.getText().toString();
                 String name = nameText.getText().toString();
-                String category = categoryText.getText().toString();
-                String period = periodText.getText().toString();
+                String category = categorySpinner.getSelectedItem().toString();
+                if(category.equals("None")){
+                    category = "";
+                }
+                String period = periodSpinner.getSelectedItem().toString();
+                if(period.equals("None")){
+                    period = "";
+                }
                 FragmentLoader.loadFragment(getParentFragmentManager(), new ResultFragment(lotNumber, name, category, period));
             }
         });

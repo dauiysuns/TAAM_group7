@@ -13,43 +13,6 @@
     <string name="upload_photos_videos">Upload photos/videos</string>
     <string name="submit">Submit</string>
 
-    <!--period dropdown-->
-    <string-array name="categories_array">
-        <item>Jade</item>
-        <item>Paintings</item>
-        <item>Calligraphy</item>
-        <item>Rubbings</item>
-        <item>Bronze</item>
-        <item>Brass and Copper</item>
-        <item>Gold and Silvers</item>
-        <item>Lacquer</item>
-        <item>Enamels</item>
-    </string-array>
-
-    <!--category dropdown-->
-    <string-array name="periods_array">
-        <item>Xia</item>
-        <item>Shang</item>
-        <item>Zhou</item>
-        <item>Chuanqiu</item>
-        <item>Zhanggou</item>
-        <item>Qin</item>
-        <item>Hang</item>
-        <item>Shangou</item>
-        <item>Ji</item>
-        <item>South and North</item>
-        <item>Shui</item>
-        <item>Tang</item>
-        <item>Liao</item>
-        <item>Song</item>
-        <item>Jin</item>
-        <item>Yuan</item>
-        <item>Ming</item>
-        <item>Qing</item>
-        <item>Modern</item>
-    </string-array>
-
-
     <!--Login/Signup Strings-->
     <string name="login">Login</string>
     <string name="signup">Sign up</string>
@@ -64,7 +27,7 @@
     <string name="collection_management">Collection Management</string>
     <string name="report">Report</string>
     <string name="add">Add</string>
-    <string name="lot">Lot</string>
+    <string name="lot">Lot: </string>
     <string name="name">Name: </string>
     <string name="category">Category: </string>
     <string name="period">Period: </string>
@@ -96,6 +59,4 @@
         <item>Period with Description and Picture only</item>
         <item>All Items</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

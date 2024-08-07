@@ -26,6 +26,21 @@ public class PeriodSpinner {
         return spinner;
     }
 
+    // add None option
+    public static Spinner getSearchSpinner(Context context, Spinner spinner){
+
+        ArrayList<String> newList = new ArrayList<>();
+        newList.add("None");
+        insertPeriods();
+        newList.addAll(periodList);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, newList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        return spinner;
+    }
+
     private static void insertPeriods(){
         // insert default and user added periods
         periodList = new ArrayList<>(Arrays.asList(defaultPeriods));

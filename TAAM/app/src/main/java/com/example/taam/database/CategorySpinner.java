@@ -26,6 +26,21 @@ public class CategorySpinner {
         return spinner;
     }
 
+    // add None option
+    public static Spinner getSearchSpinner(Context context, Spinner spinner){
+
+        ArrayList<String> newList = new ArrayList<>();
+        newList.add("None");
+        insertCategories();
+        newList.addAll(categoryList);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, newList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        return spinner;
+    }
+
     private static void insertCategories(){
         // insert default and user added categories
         categoryList = new ArrayList<>(Arrays.asList(defaultCategories));
