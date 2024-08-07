@@ -21,9 +21,9 @@ public class ResultFragment extends BaseHomeFragment {
     String period;
     DataModel dm;
     ArrayList<Item> lotMatches = new ArrayList<>();
-    ArrayList<Item> nameMatches = new ArrayList<>();
-    ArrayList<Item> categoryMatches = new ArrayList<>();
-    ArrayList<Item> periodMatches = new ArrayList<>();
+//    ArrayList<Item> nameMatches = new ArrayList<>();
+//    ArrayList<Item> categoryMatches = new ArrayList<>();
+//    ArrayList<Item> periodMatches = new ArrayList<>();
 
     //added by me
     public ResultFragment(String lotNumber, String name, String category, String period) {
@@ -74,13 +74,13 @@ public class ResultFragment extends BaseHomeFragment {
         boolean matchesAllCriteria = lotNumber == null || lotNumber.equals(item.getLot()) || lotNumber.isEmpty();
 
         // Check each criterion and set flag accordingly
-        if (name != null && !name.equals(item.getName()) && !name.isEmpty()) {
+        if (name != null && !item.getName().contains(name)) {
             matchesAllCriteria = false;
         }
-        if (category != null && !category.equals(item.getCategory()) && !category.isEmpty()) {
+        if (category != null && !category.equalsIgnoreCase(item.getCategory()) && !category.isEmpty()) {
             matchesAllCriteria = false;
         }
-        if (period != null && !period.equals(item.getPeriod()) && !period.isEmpty()) {
+        if (period != null && !period.equalsIgnoreCase(item.getPeriod()) && !period.isEmpty()) {
             matchesAllCriteria = false;
         }
 
@@ -111,9 +111,9 @@ public class ResultFragment extends BaseHomeFragment {
 
         }
         lotMatches.clear();
-        periodMatches.clear();
-        categoryMatches.clear();
-        nameMatches.clear();
+//        periodMatches.clear();
+//        categoryMatches.clear();
+//        nameMatches.clear();
 
         itemAdapter.notifyDataSetChanged();
     }
