@@ -39,7 +39,7 @@ Anything a User can do +
 6. Back button logs you out of Admin
 
 ## Testing Info [Read!]
-The compatibility of running test seems to be very delicate and  PC specific.
+The compatibility of running tests seems to be very delicate and  PC specific.
 Here is a reference of coverage running on my PC: 
 
 <img src="https://github.com/user-attachments/assets/f3a06e96-ef62-46e3-af19-24b6fb792552" height="50%">
