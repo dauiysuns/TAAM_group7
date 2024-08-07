@@ -1,16 +1,23 @@
 # CSCB07Project TAAM
+To get started as an Admin? Sign up or use:
+> User: demo@demo.com
+> Password: demodemo
 
 ## Requirements
 This project was written for Android with API versions 34/35.
 
 ## Features
 ### Users:
-1. User Authentication:
+1. Scroll through the items in the museum
+2. Viewing a specific item
+3. Searching for specific items
+4. May choose to login/signup as an Admin (User Authentication)
 
 ### Admins:
-1. User Authentication
-2. 
+1. Can add a new item,
+   - choose any number of image/videos and add new categories
 3. 
+4. 
 
 ## Testing Info
 If you run into issues with the Junit Tests, you may have to edit Configs:
