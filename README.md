@@ -1,8 +1,11 @@
 # CSCB07Project TAAM
-To get started as an Admin? Sign up or use:
+Welcome to TAAM, the Toronto Asian Art Museum Collecion Management app! Using TAAM, a user can browse and search any of the items in the museum using their phone. 
+Are you an admin? 
+To get started as an Admin, Sign up or use:
 > User: demo@demo.com
 > 
 > Password: demodemo
+As an Admin, you have more responsibility over the collections database. You can add or remove items, as well as generate reports on a select collection (see more below).
 
 ## Requirements
 This project was written for Android with API versions 34/35. Preferably using Pixel 6-8.
