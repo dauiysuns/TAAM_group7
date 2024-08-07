@@ -1,6 +1,7 @@
 # CSCB07Project TAAM
 
 ## Requirements
+This project was written for Android with API versions 34/35.
 
 ## Features
 ### Users:
@@ -9,7 +10,7 @@
 ### Admins:
 1. User Authentication
 2. 
-## App Screenshots
+3. 
 
 ## Testing Info
 If you run into issues with the Junit Tests, you may have to edit Configs:
