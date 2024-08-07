@@ -24,7 +24,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = Build.VERSION_CODES.P, manifest = Config.NONE)
+@Config(sdk = Build.VERSION_CODES.P)
 public class LoginFragmentPresenterTest {
 
     @Mock

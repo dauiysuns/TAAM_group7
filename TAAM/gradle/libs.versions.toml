@@ -16,7 +16,9 @@ firebaseAuth = "23.0.0"
 firebaseInappmessaging = "21.0.0"
 firebaseStorage = "21.0.0"
 mockitoCore = "5.12.0"
+mockitoCoreVersion = "4.8.0"
 robolectric = "4.13"
+robolectricVersion = "4.10.3"
 
 [libraries]
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
@@ -37,8 +39,8 @@ lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-view
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-inappmessaging = { group = "com.google.firebase", name = "firebase-inappmessaging", version.ref = "firebaseInappmessaging" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+mockito-core-v480 = { module = "org.mockito:mockito-core", version.ref = "mockitoCoreVersion" }
+robolectric-v4103 = { module = "org.robolectric:robolectric", version.ref = "robolectricVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
