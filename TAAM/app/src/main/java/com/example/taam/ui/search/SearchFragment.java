@@ -50,12 +50,12 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                 String lotNumber = lotText.getText().toString();
                 String name = nameText.getText().toString();
-                String category = categorySpinner.getSelectedItem().toString();
-                if(category.equals("None")){
+                String category = categorySpinner.getSelectedItem().toString().toLowerCase();
+                if(category.equals("none")){
                     category = "";
                 }
-                String period = periodSpinner.getSelectedItem().toString();
-                if(period.equals("None")){
+                String period = periodSpinner.getSelectedItem().toString().toLowerCase();
+                if(period.equals("none")){
                     period = "";
                 }
                 FragmentLoader.loadFragment(getParentFragmentManager(), new ResultFragment(lotNumber, name, category, period));

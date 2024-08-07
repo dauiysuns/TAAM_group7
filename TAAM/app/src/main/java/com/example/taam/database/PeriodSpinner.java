@@ -31,6 +31,9 @@ public class PeriodSpinner {
         newList.add("None");
         insertPeriods();
         newList.addAll(periodList);
+//        newList.addAll(Arrays.asList(defaultPeriods));
+//        DataModel.loadNewCategoriesOrPeriods("newPeriods", newList, new ArrayList<>());
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, newList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
