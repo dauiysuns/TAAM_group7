@@ -39,7 +39,7 @@ The compatibility of running test seems to be very delicate and  PC specific.
 Here is a reference of coverage running on my PC: 
 <img src="https://github.com/user-attachments/assets/f3a06e96-ef62-46e3-af19-24b6fb792552" height="50%">
 
-❗If you run into issues with the Junit Tests, you may have to edit Configs:
+❗❗❗ If you run into issues with the Junit Tests, you may have to edit Configs:
 
 ![image](https://github.com/user-attachments/assets/a2c3d6dd-ee03-4505-807b-b23d1b200b38)
 
