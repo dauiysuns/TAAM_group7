@@ -5,6 +5,7 @@ To get started as an Admin, Sign up or use:
 > User: demo@demo.com
 > 
 > Password: demodemo
+
 As an Admin, you have more responsibility over the collections database. You can add or remove items, as well as generate reports on a select collection (see more below).
 
 ## Requirements
